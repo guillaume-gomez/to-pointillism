@@ -19,8 +19,18 @@ cv.onRuntimeInitialized = () => {
       cv.resize(src, dst, new cv.Size(500, 500), 0, 0, cv.INTER_AREA);
       const roiRect: Rect = new cv.Rect(0, 0, 200, 200);
       const roi = dst.roi(roiRect);
-      cv.imshow('canvasOutput', roi);
+
+      // algorithm used for final example
+      //convert to grayscale
+      let grey: Mat = new cv.Mat(roi.cols, roi.rows, cv.CV_8UC4);
+      cv.cvtColor(roi, grey, cv.COLOR_BGR2GRAY)
+      
+      cv.imshow('canvasOutput', grey);
+
+      // clean up
+      dst.delete();
       roi.delete();
+      grey.delete();
     };
   }
 };
