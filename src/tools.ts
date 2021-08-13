@@ -30,7 +30,25 @@ export function toGray(imageSource: Mat) : Mat {
 }
 
 
-export function generateColorPalette(image: HTMLImageElement) {
+export function generateColorPalette(image: HTMLImageElement) : number[][] {
   let colorThief = new ColorThief();
   return colorThief.getPalette(image, 20);
+}
+
+
+export function drawPalette(canvasId: string, palette: number[][]) : void {
+  let canvas = document.getElementById(canvasId) as HTMLCanvasElement;
+  if (!canvas.getContext) {
+    throw "cannot find canvas to draw palette";
+  }
+  let context = canvas.getContext('2d') as CanvasRenderingContext2D;
+
+  const widthColor = canvas.width / palette.length;
+  const heightColor = widthColor;
+ 
+  palette.forEach(([red, green, blue], index) => {
+    context.fillStyle = `rgb(${red}, ${green}, ${blue})`;
+    context.fillRect(widthColor * index, 0, widthColor, heightColor);
+  });
+
 }

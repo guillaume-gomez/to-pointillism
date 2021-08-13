@@ -1,6 +1,5 @@
 import cv, { Mat, Rect } from "opencv-ts";
-import { generateColorPalette, toGray } from "./tools"
-//import ColorPalette from "./ColorPalette";
+import { generateColorPalette, toGray, drawPalette } from "./tools";
 
 cv.onRuntimeInitialized = () => {
   const imgElement = document.getElementById('imageSrc') as HTMLImageElement;
@@ -13,7 +12,8 @@ cv.onRuntimeInitialized = () => {
         (imgElement as HTMLImageElement).src = URL.createObjectURL(e.target.files[0]);
         // use timeout to make sure the data is properly compute
         setTimeout(() => {
-          console.log(generateColorPalette(imgElement))
+          const palette = generateColorPalette(imgElement)
+          drawPalette("palette-preview", palette);
 
         }, 1000);
       }
