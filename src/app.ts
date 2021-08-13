@@ -1,4 +1,5 @@
 import cv, { Mat, Rect } from "opencv-ts";
+import { generateColorPalette, toGray } from "./tools"
 //import ColorPalette from "./ColorPalette";
 
 cv.onRuntimeInitialized = () => {
@@ -10,6 +11,11 @@ cv.onRuntimeInitialized = () => {
     inputElement.addEventListener('change', (e : any) => {
       if(e && e.target && e.target.files) {
         (imgElement as HTMLImageElement).src = URL.createObjectURL(e.target.files[0]);
+        // use timeout to make sure the data is properly compute
+        setTimeout(() => {
+          console.log(generateColorPalette(imgElement))
+
+        }, 1000);
       }
     }, false);
 
@@ -20,11 +26,10 @@ cv.onRuntimeInitialized = () => {
       const roiRect: Rect = new cv.Rect(0, 0, 200, 200);
       const roi = dst.roi(roiRect);
 
+
       // algorithm used for final example
       //convert to grayscale
-      let grey: Mat = new cv.Mat(roi.cols, roi.rows, cv.CV_8UC4);
-      cv.cvtColor(roi, grey, cv.COLOR_BGR2GRAY)
-      
+      let grey: Mat = toGray(roi);
       cv.imshow('canvasOutput', grey);
 
       // clean up

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "colorthief": "^2.3.2",
     "fork-ts-checker-webpack-plugin": "^6.3.1",
     "opencv-ts": "^1.2.18",
     "ts-loader": "^9.2.5",
