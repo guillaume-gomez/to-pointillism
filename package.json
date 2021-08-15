@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "@types/color-convert": "^2.0.0",
+    "color-convert": "^2.0.1",
     "colorthief": "2.3.1",
     "fork-ts-checker-webpack-plugin": "^6.3.1",
     "opencv-ts": "^1.2.18",

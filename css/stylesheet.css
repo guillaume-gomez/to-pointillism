@@ -1,3 +1,7 @@
 #imageSrc {
   max-width: 500px;
 }
+
+#palette-preview {
+  width: 500px;
+}
