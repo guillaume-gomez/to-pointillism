@@ -1,5 +1,5 @@
 import cv, { Mat, Rect } from "opencv-ts";
-import { generateColorPalette, toGray, drawPalette, extendPalette } from "./tools";
+import { generateColorPalette, toGray, drawPalette, extendPalette, resizeWithRatio, resize } from "./tools";
 
 cv.onRuntimeInitialized = () => {
   const imgElement = document.getElementById('imageSrc') as HTMLImageElement;
@@ -23,20 +23,15 @@ cv.onRuntimeInitialized = () => {
 
     imgElement.onload = () => {
       const src = cv.imread(imgElement);
-      const dst: Mat = new cv.Mat(src.cols, src.rows, cv.CV_8UC4);
-      cv.resize(src, dst, new cv.Size(500, 500), 0, 0, cv.INTER_AREA);
-      const roiRect: Rect = new cv.Rect(0, 0, 200, 200);
-      const roi = dst.roi(roiRect);
-
-
+      const dst = resizeWithRatio(src, 400, 350);
+      
       // algorithm used for final example
       //convert to grayscale
-      let grey: Mat = toGray(roi);
+      let grey: Mat = toGray(dst);
       cv.imshow('canvasOutput', grey);
 
       // clean up
       dst.delete();
-      roi.delete();
       grey.delete();
     };
   }
