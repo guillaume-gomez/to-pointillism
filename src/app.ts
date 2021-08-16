@@ -1,5 +1,6 @@
 import cv, { Mat, Rect } from "opencv-ts";
-import { generateColorPalette, toGray, drawPalette, extendPalette, resizeWithRatio, resize } from "./tools";
+import { generateColorPalette, drawPalette, extendPalette } from "./tools";
+import { toGray, resizeWithRatio } from "./imageProcessingTool";
 
 cv.onRuntimeInitialized = () => {
   const imgElement = document.getElementById('imageSrc') as HTMLImageElement;
