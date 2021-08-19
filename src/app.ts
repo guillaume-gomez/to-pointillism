@@ -1,6 +1,7 @@
 import cv, { Mat, Rect } from "opencv-ts";
-import { generateColorPalette, drawPalette, extendPalette } from "./tools";
+import { generateColorPalette, drawPalette, extendPalette, generateRandomGrid } from "./tools";
 import { toGray, resizeWithRatio } from "./imageProcessingTool";
+import { createGradient, smooth } from "./gradient";
 
 cv.onRuntimeInitialized = () => {
   const imgElement = document.getElementById('imageSrc') as HTMLImageElement;
@@ -24,16 +25,37 @@ cv.onRuntimeInitialized = () => {
 
     imgElement.onload = () => {
       const src = cv.imread(imgElement);
-      const dst = resizeWithRatio(src, 400, 350);
-      
       // algorithm used for final example
+
       //convert to grayscale
-      let grey: Mat = toGray(dst);
+      let grey: Mat = toGray(src);
       cv.imshow('canvasOutput', grey);
 
+      const[dstx, dsty] = createGradient(grey);
+      cv.imshow('canvasOutputX', dstx);
+      cv.imshow('canvasOutputY', dsty);
+
+      const gradientSmoothingRadius = Math.round(Math.max(src.rows, src.cols) / 50);
+      const[dstxSmooth, dstySmooth] = smooth(dstx, dsty, gradientSmoothingRadius);
+      cv.imshow('canvasOutputXSmooth', dstxSmooth);
+      cv.imshow('canvasOutputYSmooth', dstySmooth);
+
+      let medianBlur = new cv.Mat();
+      cv.medianBlur(src, medianBlur, 11);
+      cv.imshow('medianBlur', medianBlur);
+
+      console.log(generateRandomGrid(src.rows, src.cols));
+
       // clean up
-      dst.delete();
       grey.delete();
+
+      dstx.delete();
+      dsty.delete();
+
+      dstxSmooth.delete();
+      dstySmooth.delete();
+
+      medianBlur.delete();
     };
   }
 };
