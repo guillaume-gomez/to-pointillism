@@ -1,5 +1,7 @@
+import { Mat } from "opencv-ts";
 import ColorThief from 'colorthief';
 import convert from "color-convert";
+import { shuffle } from "lodash";
 
 import { saturate, rotateHue } from "./colorTools";
 
@@ -42,7 +44,6 @@ export function drawPalette(canvasId: string, palette: number[][]) : void {
   const heightColor = widthColor;
 
   const yMax = palette.length / nbBaseColor;
-  console.log(yMax)
 
   for(let y = 0; y < yMax; ++y) {
     for(let x = 0; x < nbBaseColor; ++x) {
@@ -51,4 +52,29 @@ export function drawPalette(canvasId: string, palette: number[][]) : void {
       context.fillRect(widthColor * x, heightColor * y, widthColor, heightColor);
     }
   }
+}
+
+function getRandomIntInclusive(min: number, max: number) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min +1)) + min;
+}
+
+export function generateRandomGrid(width: number, height: number, scale: number = 3) {
+  const ratio = (scale / 2) >> 0;
+  let grid : Array<any> = [];
+
+  for(let i = 0; i < height; i = i + scale) {
+    for(let j = 0; j < width; j = j + scale) {
+      const y = getRandomIntInclusive(-ratio, ratio) + i;
+      const x = getRandomIntInclusive(-ratio, ratio) + j;
+      
+      grid.push([y % height, x % width])
+    }
+  }
+  return shuffle(grid);
+}
+
+function rangeOfPixels(image: Mat, grid: Array<[number, number]>, min: number, max: number ) : number[][] {
+  return grid.slice(min, max).map(([col, row]) => image.ucharPtr(col, row))
 }
