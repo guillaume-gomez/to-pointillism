@@ -78,3 +78,23 @@ export function generateRandomGrid(width: number, height: number, scale: number 
 function rangeOfPixels(image: Mat, grid: Array<[number, number]>, min: number, max: number ) : number[][] {
   return grid.slice(min, max).map(([col, row]) => image.ucharPtr(col, row))
 }
+
+
+type point = [number, number, number];
+
+function distance([x1, y1, z1]: point, [x2, y2, z2]: point): number {
+  return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2 + (z1 - z2) ** 2);
+}
+
+function arrayDist(array1: point[], array2: point[]) {
+  return array1.map( (point1) =>
+    array2.map( (point2) => 
+      distance(point1, point2)
+    )
+  );
+}
+
+/*
+const coords : point[] = [ [35.0456, -85.2672, 0], [35.1174, -89.9711, 0], [35.9728, -83.9422, 0], [36.1667, -86.7833, 0]];
+
+console.log(arrayDist(coords, coords))*/
