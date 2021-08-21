@@ -10,7 +10,7 @@
   <body>
     <div class="inputoutput">
       <img id="imageSrc" alt="No Image" />
-      <div class="caption">imageSrc <input type="file" id="fileInput" name="file" /></div>
+      <div class="caption">imageSrc <input type="file" id="fileInput" name="file" accept="image/png, image/gif, image/jpeg" /></div>
     </div>
     <div class="inputoutput">
       <canvas id="canvasOutput" ></canvas>
@@ -18,6 +18,17 @@
     </div>
     <div class="palette">
       <canvas id="palette-preview"></canvas>
+    </div>
+    <div class="intermediate-canvas">
+      <canvas id="canvasOutputX"></canvas>
+      <canvas id="canvasOutputY"></canvas>
+    </div>
+    <div class="smooth-intermediate-canvas">
+      <canvas id="canvasOutputXSmooth"></canvas>
+      <canvas id="canvasOutputYSmooth"></canvas>
+    </div>
+    <div class="smooth-intermediate-canvas">
+      <canvas id="medianBlur"></canvas>
     </div>
   
     <script src="dist/bundle.js"></script>
