@@ -29,7 +29,7 @@ export function resizeWithRatio(image: Mat, maxWidth: number, maxHeight: number)
 
 export function toGray(imageSource: Mat) : Mat {
   let grey: Mat = new cv.Mat(imageSource.cols, imageSource.rows, cv.CV_8UC4);
-  cv.cvtColor(imageSource, grey, cv.COLOR_BGR2GRAY)
+  cv.cvtColor(imageSource, grey, cv.COLOR_RGB2GRAY)
   return grey;
 }
 
