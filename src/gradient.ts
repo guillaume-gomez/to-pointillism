@@ -39,9 +39,9 @@ export function smooth(fieldX: Mat, fieldY: Mat, radius: number, iterations: num
 }
 
 export function direction(fieldX: Mat, fieldY: Mat, i: number, j: number) : number {
-  return Math.atan2(fieldY.ucharAt(i, j), fieldX.ucharAt(i, j));
+  return Math.atan2(fieldY.floatAt(i, j), fieldX.floatAt(i, j));
 }
 
 export function magnitude(fieldX: Mat, fieldY: Mat, i: number, j: number) : number {
-  return Math.hypot(fieldX.ucharAt(i, j), fieldY.ucharAt(i, j));
+  return Math.hypot(fieldX.floatAt(i, j), fieldY.floatAt(i, j));
 }

@@ -33,7 +33,8 @@ cv.onRuntimeInitialized = () => {
 
       //convert to grayscale
       let grey: Mat = toGray(src);
-      //cv.imshow('canvasOutput', grey);
+
+      cv.imshow('canvasOutput', grey);
 
       const[dstx, dsty] = createGradient(grey);
       //cv.imshow('canvasOutputX', dstx);
@@ -44,12 +45,12 @@ cv.onRuntimeInitialized = () => {
       //cv.imshow('canvasOutputXSmooth', dstxSmooth);
       //cv.imshow('canvasOutputYSmooth', dstySmooth);
 
-      let medianBlur = cv.Mat.zeros(src.rows, src.cols, cv.CV_8UC4);
+      let medianBlur = cv.Mat.zeros(src.cols, src.rows, cv.CV_32F);
       cv.medianBlur(src, medianBlur, 11);
       //cv.imshow('medianBlur', medianBlur);
 
-      const grid = generateRandomGrid(src.rows, src.cols);
-      const batchSize = 10;
+      const grid = generateRandomGrid(src.cols, src.rows);
+      const batchSize = 2000;
       const strokeScale = Math.floor(Math.max(src.rows, src.cols) / 1000);
       
       // LOOOP
@@ -59,13 +60,15 @@ cv.onRuntimeInitialized = () => {
         const color = colorSelect(colorProbabilities, palette);
         const angle = radiansToDegrees(direction(dstxSmooth, dstySmooth, y, x)) + 90;
         const length = Math.round(strokeScale + strokeScale * Math.sqrt(magnitude(dstxSmooth, dstySmooth, y, x)));
-        
+
         const scalar = new cv.Scalar(color[0], color[1], color[2], 255);
         cv.ellipse(medianBlur, new cv.Point(x, y), new cv.Size(length, strokeScale), angle, 0, 360, scalar, -1, cv.LINE_AA);
       });
       cv.imshow('medianBlur',medianBlur);
 
       // clean up
+      medianBlur.delete();
+      
       grey.delete();
 
       dstx.delete();
@@ -74,7 +77,6 @@ cv.onRuntimeInitialized = () => {
       dstxSmooth.delete();
       dstySmooth.delete();
 
-      medianBlur.delete();
     };
   }
 };
