@@ -1,7 +1,10 @@
 import cv, { Mat, Rect } from "opencv-ts";
+import { range } from "lodash";
+ 
 import { colorSelect, rangeOfPixels, generateColorPalette, drawPalette, extendPalette, generateRandomGrid, computeColorProbabilities } from "./tools";
 import { toGray, resizeWithRatio } from "./imageProcessingTool";
 import { createGradient, smooth, direction, magnitude } from "./gradient";
+
 
 function radiansToDegrees(radians: number) : number
 {
@@ -33,8 +36,7 @@ cv.onRuntimeInitialized = () => {
 
       //convert to grayscale
       let grey: Mat = toGray(src);
-
-      cv.imshow('canvasOutput', grey);
+      //cv.imshow('canvasOutput', grey);
 
       const[dstx, dsty] = createGradient(grey);
       //cv.imshow('canvasOutputX', dstx);
@@ -50,33 +52,39 @@ cv.onRuntimeInitialized = () => {
       //cv.imshow('medianBlur', medianBlur);
 
       const grid = generateRandomGrid(src.cols, src.rows);
-      const batchSize = 2000;
+      const batchSize = 1000;
       const strokeScale = Math.floor(Math.max(src.rows, src.cols) / 1000);
-      
-      // LOOOP
-      const pixels = rangeOfPixels(src, grid, 0, batchSize);
-      const colorProbabilities = computeColorProbabilities(pixels, palette);
-      grid.slice(0,batchSize).forEach(([y, x], index) => {
-        const color = colorSelect(colorProbabilities, palette);
-        const angle = radiansToDegrees(direction(dstxSmooth, dstySmooth, y, x)) + 90;
-        const length = Math.round(strokeScale + strokeScale * Math.sqrt(magnitude(dstxSmooth, dstySmooth, y, x)));
 
-        const scalar = new cv.Scalar(color[0], color[1], color[2], 255);
-        cv.ellipse(medianBlur, new cv.Point(x, y), new cv.Size(length, strokeScale), angle, 0, 360, scalar, -1, cv.LINE_AA);
+      range(0, grid.length, batchSize).map(progressIndex => {
+        console.log("progress => ",progressIndex / grid.length)
+        const pixels = rangeOfPixels(src, grid, progressIndex, progressIndex + batchSize);
+        const colorProbabilities = computeColorProbabilities(pixels, palette);
+        
+        grid.slice(progressIndex, Math.min((progressIndex + batchSize), grid.length)).forEach(([y, x], index) => {
+          const color = colorSelect(colorProbabilities[index], palette);
+          const angle = radiansToDegrees(direction(dstxSmooth, dstySmooth, y, x)) + 90;
+          const length = Math.round(strokeScale + strokeScale * Math.sqrt(magnitude(dstxSmooth, dstySmooth, y, x)));
+
+          const scalar = new cv.Scalar(color[0], color[1], color[2], 255);
+          cv.ellipse(medianBlur, new cv.Point(x, y), new cv.Size(length, strokeScale), angle, 0, 360, scalar, -1, cv.LINE_AA);
+        });
       });
+      console.log("finish")
+
       cv.imshow('medianBlur',medianBlur);
 
       // clean up
       medianBlur.delete();
       
-      grey.delete();
-
+      dstxSmooth.delete();
+      dstySmooth.delete();
+      
       dstx.delete();
       dsty.delete();
 
-      dstxSmooth.delete();
-      dstySmooth.delete();
+      grey.delete();
 
+      src.delete();
     };
   }
 };

@@ -154,10 +154,10 @@ function cumulativeSum(array: number[][]) : number[][] {
 }
 /*console.log(cumulativeSum([[1, 2, 3], [4, 5, 6]])) */
 
-export function colorSelect(probabilities : number[][], palette : point[]): point {
+export function colorSelect(probabilities : number[], palette : point[]): point {
   const r = Math.random();
   const index : number = bisect_left(probabilities, r);
-  
+
   if(index < palette.length) {
     return palette[index];
   } else {
