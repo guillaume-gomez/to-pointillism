@@ -16,14 +16,22 @@ cv.onRuntimeInitialized = () => {
   const imgElement = document.getElementById('imageSrc') as HTMLImageElement;
   const inputElement = document.getElementById('fileInput');
   const progressElement = document.getElementById('progress');
-  
-  function notify(text: string): void {
-    console.log("progress ", text)
-    progressElement!.innerHTML = text;
-  }
 
-  function computePointillism(src: Mat) {
-    // algorithm used for final example
+  if(inputElement && imgElement && progressElement) {
+    progressElement.style.display = "none";
+
+
+    inputElement.addEventListener('change', (e : any) => {
+      if(e && e.target && e.target.files) {
+        (imgElement as HTMLImageElement).src = URL.createObjectURL(e.target.files[0]);
+
+        progressElement.style.display = "block";
+      }
+    }, false);
+
+    imgElement.onload = () => {
+      const src = cv.imread(imgElement);
+      // algorithm used for final example
       let palette = generateColorPalette(imgElement);
           palette = extendPalette(palette);
 
@@ -54,7 +62,6 @@ cv.onRuntimeInitialized = () => {
       range(0, grid.length, batchSize).map(progressIndex => {
         const pixels = rangeOfPixels(src, grid, progressIndex, progressIndex + batchSize);
         const colorProbabilities = computeColorProbabilities(pixels, palette);
-        notify((progressIndex/grid.length).toFixed(2));
         
         grid.slice(progressIndex, Math.min((progressIndex + batchSize), grid.length)).forEach(([y, x], index) => {
           const color = colorSelect(colorProbabilities[index], palette);
@@ -81,26 +88,6 @@ cv.onRuntimeInitialized = () => {
       grey.delete();
 
       src.delete();
-  }
-
-  
-  if(inputElement && imgElement && progressElement) {
-    progressElement.style.display = "none";
-
-
-    inputElement.addEventListener('change', (e : any) => {
-      if(e && e.target && e.target.files) {
-        (imgElement as HTMLImageElement).src = URL.createObjectURL(e.target.files[0]);
-
-        progressElement.style.display = "block";
-      }
-    }, false);
-
-    imgElement.onload = () => {
-      const src = cv.imread(imgElement);
-      setTimeout(() => {
-        computePointillism(src)
-      }, 100);
     };
   }
 };
