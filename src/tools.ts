@@ -63,6 +63,11 @@ function getRandomIntInclusive(min: number, max: number) {
   return Math.floor(Math.random() * (max - min +1)) + min;
 }
 
+// https://web.archive.org/web/20090717035140if_/javascript.about.com/od/problemsolving/a/modulobug.htm
+function mod(n : number, m: number) : number {
+  return ((n % m) + m) % m;
+}
+
 export function generateRandomGrid(width: number, height: number, scale: number = 3) {
   const ratio = (scale / 2) >> 0;
   let grid : Array<any> = [];
@@ -71,8 +76,8 @@ export function generateRandomGrid(width: number, height: number, scale: number 
     for(let j = 0; j < width; j = j + scale) {
       const y = getRandomIntInclusive(-ratio, ratio) + i;
       const x = getRandomIntInclusive(-ratio, ratio) + j;
-      
-      grid.push([y % height, x % width])
+
+      grid.push([mod(y, height), mod(x, width)])
     }
   }
   return shuffle(grid);
