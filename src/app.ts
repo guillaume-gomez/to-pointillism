@@ -15,18 +15,15 @@ function radiansToDegrees(radians: number) : number
 cv.onRuntimeInitialized = () => {
   const imgElement = document.getElementById('imageSrc') as HTMLImageElement;
   const inputElement = document.getElementById('fileInput');
+  const progressElement = document.getElementById('progress');
   
-  if(inputElement && imgElement) {
-    
-    inputElement.addEventListener('change', (e : any) => {
-      if(e && e.target && e.target.files) {
-        (imgElement as HTMLImageElement).src = URL.createObjectURL(e.target.files[0]);
-      }
-    }, false);
+  function notify(text: string): void {
+    console.log("progress ", text)
+    progressElement!.innerHTML = text;
+  }
 
-    imgElement.onload = () => {
-      const src = cv.imread(imgElement);
-      // algorithm used for final example
+  function computePointillism(src: Mat) {
+    // algorithm used for final example
       let palette = generateColorPalette(imgElement);
           palette = extendPalette(palette);
 
@@ -54,22 +51,21 @@ cv.onRuntimeInitialized = () => {
       const grid = generateRandomGrid(src.cols, src.rows);
       const batchSize = 1000;
       const strokeScale = Math.floor(Math.max(src.rows, src.cols) / 1000);
-
       range(0, grid.length, batchSize).map(progressIndex => {
-        console.log("progress => ",progressIndex / grid.length)
         const pixels = rangeOfPixels(src, grid, progressIndex, progressIndex + batchSize);
         const colorProbabilities = computeColorProbabilities(pixels, palette);
+        notify((progressIndex/grid.length).toFixed(2));
         
         grid.slice(progressIndex, Math.min((progressIndex + batchSize), grid.length)).forEach(([y, x], index) => {
           const color = colorSelect(colorProbabilities[index], palette);
           const angle = radiansToDegrees(direction(dstxSmooth, dstySmooth, y, x)) + 90;
           const length = Math.round(strokeScale + strokeScale * Math.sqrt(magnitude(dstxSmooth, dstySmooth, y, x)));
-
           const scalar = new cv.Scalar(color[0], color[1], color[2], 255);
           cv.ellipse(medianBlur, new cv.Point(x, y), new cv.Size(length, strokeScale), angle, 0, 360, scalar, -1, cv.LINE_AA);
         });
       });
       console.log("finish")
+      //progressElement.style.display = "none";
 
       cv.imshow('medianBlur',medianBlur);
 
@@ -85,6 +81,26 @@ cv.onRuntimeInitialized = () => {
       grey.delete();
 
       src.delete();
+  }
+
+  
+  if(inputElement && imgElement && progressElement) {
+    progressElement.style.display = "none";
+
+
+    inputElement.addEventListener('change', (e : any) => {
+      if(e && e.target && e.target.files) {
+        (imgElement as HTMLImageElement).src = URL.createObjectURL(e.target.files[0]);
+
+        progressElement.style.display = "block";
+      }
+    }, false);
+
+    imgElement.onload = () => {
+      const src = cv.imread(imgElement);
+      setTimeout(() => {
+        computePointillism(src)
+      }, 100);
     };
   }
 };
