@@ -1,12 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import UseOpenCV from "./Hooks/UseOpenCV";
-import { computePointillism } from "./Pointillism/app";
+import { computePointillism, test } from "./Pointillism/app";
 
 function App() {
   const { cv, openCVLoaded } = UseOpenCV();
   const ref = useRef<HTMLImageElement>(null);
+  const [progress, setProgress] = useState<number>(0);
 
 
   function loadImage(event: React.ChangeEvent<HTMLInputElement>) {
@@ -15,9 +16,13 @@ function App() {
     }
   }
 
-  function onChangeImage(event: React.ChangeEvent<HTMLImageElement>) {
-    console.log(event.target)
-    computePointillism(cv, event.target)
+  function progressCallback(progress: number) {
+    setProgress(progress);
+  }
+
+  function onLoadImage(event: React.ChangeEvent<HTMLImageElement>) {
+     //test(progressCallback);
+    computePointillism(cv, event.target, progressCallback);
   }
 
   return (
@@ -28,7 +33,8 @@ function App() {
           null
         }
         <img src={logo} className="App-logo" alt="logo" />
-        <img id="imageSrc" alt="No Image" ref={ref} onLoad={onChangeImage} />
+        <p>{`${progress.toFixed(2)} %`}</p>
+        <img id="imageSrc" alt="No Image" ref={ref} onLoad={onLoadImage} />
         <canvas id="medianBlur"></canvas>
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
