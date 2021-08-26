@@ -1,4 +1,4 @@
-import { Mat, Rect } from "opencv-ts";
+import { Mat } from "opencv-ts";
 import { range } from "lodash";
  
 import { colorSelect, rangeOfPixels, generateColorPalette, drawPalette, extendPalette, generateRandomGrid, computeColorProbabilities } from "./tools";
@@ -12,47 +12,47 @@ function radiansToDegrees(radians: number) : number
   return radians * (180/pi);
 }
 
-export function test(progressCallback: (progress: number) => void) {
-  range(0,2000, 5).map(progressIndex => {
-    setTimeout(() => {
-      progressCallback(progressIndex)
-    }, 1000)
-  })
-}
-
 export async function computePointillism(cv: any, imgElement: HTMLImageElement, progressCallback: (progress: number) => void) {
+  console.log("read image")
   const src = cv.imread(imgElement);
   // algorithm used for final example
+  console.log("generate palette")
   let palette = generateColorPalette(imgElement);
       palette = extendPalette(palette);
 
   // optionnal not related to algorithm
   //drawPalette("palette-preview", palette);
 
-
+  console.log("convert to grey")
   //convert to grayscale
   let grey: Mat = toGray(src);
   //cv.imshow('canvasOutput', grey);
 
+  console.log("create gradient")
   const[dstx, dsty] = createGradient(grey);
   //cv.imshow('canvasOutputX', dstx);
   //cv.imshow('canvasOutputY', dsty);
 
+  console.log("create smooth gradiant")
   const gradientSmoothingRadius = Math.round(Math.max(src.rows, src.cols) / 50);
   const[dstxSmooth, dstySmooth] = smooth(dstx, dsty, gradientSmoothingRadius);
   //cv.imshow('canvasOutputXSmooth', dstxSmooth);
   //cv.imshow('canvasOutputYSmooth', dstySmooth);
 
+  console.log("generate blur image")
   let medianBlur = cv.Mat.zeros(src.cols, src.rows, cv.CV_32F);
   cv.medianBlur(src, medianBlur, 11);
   //cv.imshow('medianBlur', medianBlur);
 
+  console.log("generate random grid")
   const grid = generateRandomGrid(src.cols, src.rows);
   const batchSize = 1000;
   const strokeScale = Math.floor(Math.max(src.rows, src.cols) / 1000);
-  console.log("begin")
-  range(0, grid.length, batchSize).map(progressIndex => {
+
+  console.log("begin draw")
+  range(0, grid.length, batchSize).forEach(progressIndex => {
     setTimeout(() => {
+      console.log("progress")
         progressCallback( (progressIndex/grid.length) * 100)
     });
 

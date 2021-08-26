@@ -1,10 +1,4 @@
-import cv, { Mat, Size } from "opencv-ts";
-
-interface gradient {
-  x: string;
-  y: string;
-}
-
+import cv, { Mat } from "opencv-ts";
 
 export function createGradient(grey: Mat) : [Mat, Mat] {
   function divideByNumber(data: number[], x: number) : number[] {

@@ -1,5 +1,5 @@
 import cv from "opencv-ts";
-import React, { ReactElement, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface UseOpenCVInterface {
   openCVLoaded : boolean;

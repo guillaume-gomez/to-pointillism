@@ -8,11 +8,11 @@ export function resize(image: Mat, width: number, height: number) : Mat {
 
 export function resizeWithRatio(image: Mat, maxWidth: number, maxHeight: number) : Mat {
   if (maxWidth === 0) {
-    throw "resize : maxWidth is equal to zero. Please fill a value > 0";
+    throw new Error("resize : maxWidth is equal to zero. Please fill a value > 0");
   }
 
   if (maxHeight === 0) {
-    throw "resize : maxHeight is equal to zero. Please fill a value > 0";
+    throw new Error("resize : maxHeight is equal to zero. Please fill a value > 0");
   }
 
   const ratio = Math.min(1.0, maxWidth / image.cols, maxHeight / image.rows);

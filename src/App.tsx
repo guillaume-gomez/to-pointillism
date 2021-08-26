@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import UseOpenCV from "./Hooks/UseOpenCV";
-import { computePointillism } from "./Pointillism/app";
+import { computePointillism } from "./Pointillism/pointillism";
 
 function App() {
   const { cv, openCVLoaded } = UseOpenCV();
@@ -14,7 +14,7 @@ function App() {
     if(runAlgo && ref.current) {
       computePointillism(cv, ref.current, progressCallback);
     }
-  }, [runAlgo])
+  }, [cv, runAlgo])
 
 
   function loadImage(event: React.ChangeEvent<HTMLInputElement>) {
@@ -30,8 +30,7 @@ function App() {
   }
 
   function onLoadImage(event: React.ChangeEvent<HTMLImageElement>) {
-     setRunAlgo(true);
-    //computePointillism(cv, event.target, progressCallback);
+    setRunAlgo(true);
   }
 
   return (
