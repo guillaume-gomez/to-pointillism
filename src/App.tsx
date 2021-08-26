@@ -2,17 +2,26 @@ import React, { useEffect, useRef, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import UseOpenCV from "./Hooks/UseOpenCV";
-import { computePointillism, test } from "./Pointillism/app";
+import { computePointillism } from "./Pointillism/app";
 
 function App() {
   const { cv, openCVLoaded } = UseOpenCV();
   const ref = useRef<HTMLImageElement>(null);
   const [progress, setProgress] = useState<number>(0);
+  const [runAlgo, setRunAlgo] = useState<boolean>(false);
+
+  useEffect(() => {
+    if(runAlgo && ref.current) {
+      computePointillism(cv, ref.current, progressCallback);
+    }
+  }, [runAlgo])
 
 
   function loadImage(event: React.ChangeEvent<HTMLInputElement>) {
     if(event && event.target && event.target.files && ref.current) {
       ref.current.src = URL.createObjectURL(event.target.files[0]);
+      setRunAlgo(false);
+      setProgress(0);
     }
   }
 
@@ -21,8 +30,8 @@ function App() {
   }
 
   function onLoadImage(event: React.ChangeEvent<HTMLImageElement>) {
-     //test(progressCallback);
-    computePointillism(cv, event.target, progressCallback);
+     setRunAlgo(true);
+    //computePointillism(cv, event.target, progressCallback);
   }
 
   return (

@@ -20,7 +20,7 @@ export function test(progressCallback: (progress: number) => void) {
   })
 }
 
-export function computePointillism(cv: any, imgElement: HTMLImageElement, progressCallback: (progress: number) => void) {
+export async function computePointillism(cv: any, imgElement: HTMLImageElement, progressCallback: (progress: number) => void) {
   const src = cv.imread(imgElement);
   // algorithm used for final example
   let palette = generateColorPalette(imgElement);
