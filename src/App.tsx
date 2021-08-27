@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import logo from './logo.svg';
+import background from "./background.png";
 import './App.css';
 import UseOpenCV from "./Hooks/UseOpenCV";
 import { computePointillism } from "./Pointillism/pointillism";
@@ -34,7 +35,7 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <div className="App" style={{ backgroundImage: `linear-gradient(180deg, rgba(55,53,53,0.8) 10%, rgba(200,200,200,0.8) 100%), url(${background})` }}>
       <header className="App-header">
         { openCVLoaded ? 
           <input type="file" onChange={loadImage} /> :
