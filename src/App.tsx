@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import logo from './logo.svg';
 import background from "./background.png";
 import './App.css';
+import Stepper from "./Components/Stepper";
 import UseOpenCV from "./Hooks/UseOpenCV";
 import { computePointillism } from "./Pointillism/pointillism";
 
@@ -35,28 +36,29 @@ function App() {
   }
 
   return (
-    <div className="App" style={{ backgroundImage: `linear-gradient(180deg, rgba(55,53,53,0.8) 10%, rgba(200,200,200,0.8) 100%), url(${background})` }}>
-      <header className="App-header">
+    <div className="min-h-screen flex flex-col text-center" style={{ backgroundImage: `linear-gradient(180deg, rgba(55,53,53,0.8) 10%, rgba(200,200,200,0.8) 100%), url(${background})` }}>
+      <div className="bg-gray-200 p-6 h-24 bg-opacity-5">
+        <h1 className="font-bold text-5xl uppercase">
+            Pointillism
+        </h1>
+      </div>
+      <div className="bg-gray-200 p-6 flex-grow bg-opacity-30">
         { openCVLoaded ? 
           <input type="file" onChange={loadImage} /> :
           null
         }
-        <img src={logo} className="App-logo" alt="logo" />
         <p>{`${progress.toFixed(2)} %`}</p>
         <img id="imageSrc" alt="No Image" ref={ref} onLoad={onLoadImage} />
-        <canvas id="medianBlur"></canvas>
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <canvas id="medianBlur" />
+      </div>
+      <div className="bg-gray-200 p-6 h-32 bg-opacity-5 flex flex-col justify-end">
+        <footer className="flex flex-col">
+          <a href="https://github.com/guillaume-gomez/to-pointillism">
+            Source code here
+          </a>
+          Made By Guillaume Gomez 2021
+        </footer>
+      </div>
     </div>
   );
 }
