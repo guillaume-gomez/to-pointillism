@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import logo from './logo.svg';
+import arrowDown from './arrow-down.svg';
 import background from "./background.png";
 import './App.css';
 import Stepper from "./Components/Stepper";
@@ -43,7 +43,7 @@ function App() {
 
   function submit() {
     setProgress(0);
-    setRunAlgo(true);
+    //setRunAlgo(true);
   }
 
   function toggleCanvas(index: number) {
@@ -58,10 +58,12 @@ function App() {
 
   function renderCanvas(id: string, indexVisibilityCanvas: number) {
     return (
-      <div className="bg-yellow-100 rounded-md p-3 flex flex-col items-center gap-3 w-full">
+      <div className="bg-yellow-100 p-3 flex flex-col items-center gap-3 w-full">
         <div className="flex justify-between items-center w-full">
           <h2 className="flex self-start text-xl font-bold">{id}</h2>
-          <span onClick={() => toggleCanvas(indexVisibilityCanvas)}>X</span>
+          <span onClick={() => toggleCanvas(indexVisibilityCanvas)}>
+            <img className={`w-5 transform duration-300 ease-in-out ${visibilityCanvas[indexVisibilityCanvas] ? "rotate-180": ""}`} src={arrowDown} />
+          </span>
         </div>
         <canvas className={`max-w-full ${visibilityCanvas[indexVisibilityCanvas] ? "" : "hidden"} `} id={id}/>
       </div>
@@ -70,7 +72,7 @@ function App() {
 
   function renderForm() {
     return (
-      <div className="bg-yellow-100 rounded-md p-3 flex flex-col items-center gap-3 w-full">
+      <div className="bg-yellow-100 p-3 flex flex-col items-center gap-3 w-full">
         <h2 className="flex self-start text-xl font-bold">Settings</h2>
         <UploadButton onChange={loadImage} />
         <Slider label="thickness brush" value={thicknessBrush} min={1} max={MAX_THICKNESS_BRUSH} onChange={(value) => setThicknessBrush(value)} />
@@ -97,7 +99,9 @@ function App() {
             </div>
         }
         <img className="hidden" id="imageSrc" alt="No Image" ref={ref}/>
-        { CANVAS_IDS.map((id, index) => renderCanvas(id, index)) }
+        <div className="w-full flex flex-col items-center gap-2">
+          { CANVAS_IDS.map((id, index) => renderCanvas(id, index)) }
+        </div>
       </div>
       <div className="text-center bg-gray-200 p-6 h-32 bg-opacity-5 flex flex-col justify-end">
         <footer className="flex flex-col">
