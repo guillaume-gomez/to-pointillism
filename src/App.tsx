@@ -16,6 +16,7 @@ function App() {
 
   const ref = useRef<HTMLImageElement>(null);
   const [progress, setProgress] = useState<number>(0);
+  const [validForm, setValidForm] = useState<boolean>(false);
   const [runAlgo, setRunAlgo] = useState<boolean>(false);
   const [thicknessBrush, setThicknessBrush] = useState<number>(1);
   const [visibilityCanvas, setVisibilityCanvas] = useState<boolean[]>([false, false, false, false, false, false, true]);
@@ -77,7 +78,7 @@ function App() {
         <UploadButton onChange={loadImage} />
         <Slider label="thickness brush" value={thicknessBrush} min={1} max={MAX_THICKNESS_BRUSH} onChange={(value) => setThicknessBrush(value)} />
         <div className="flex self-end">
-          <Button label="Generate" onClick={submit} />
+          <Button label="Generate" disabled={!validForm} onClick={submit} />
         </div>
       </div>
     );
@@ -98,7 +99,7 @@ function App() {
             Load OpenCV library
             </div>
         }
-        <img className="hidden" id="imageSrc" alt="No Image" ref={ref}/>
+        <img className="hidden" id="imageSrc" alt="No Image" ref={ref} onLoad={() => setValidForm(true)}/>
         <div className="w-full flex flex-col items-center gap-2">
           <h2 className="text-xl font-bold">Results</h2>
           { CANVAS_IDS.map((id, index) => renderCanvas(id, index)) }
