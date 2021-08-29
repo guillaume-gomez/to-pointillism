@@ -59,7 +59,7 @@ function App() {
 
   function renderCanvas(id: string, indexVisibilityCanvas: number) {
     return (
-      <div className="bg-primary p-3 flex flex-col items-center gap-3 w-full">
+      <div key={id} className="bg-primary p-3 flex flex-col items-center gap-3 w-full">
         <div className="flex justify-between items-center w-full">
           <h2 className="flex self-start text-xl font-bold">{id}</h2>
           <span onClick={() => toggleCanvas(indexVisibilityCanvas)}>
