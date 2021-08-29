@@ -18,8 +18,8 @@ function Slider({ value, label, onChange, min = 1, max = 100, step = 0.01 } : Sl
         step={step}
         min={min}
         max={max}
-        className="w-full h-3 pr-2 my-4 bg-gray-200 rounded-md cursor-grab -top-0.5"
-        thumbClassName="absolute w-5 h-5 -top-0.5 cursor-grab bg-indigo-600 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 -top-0.5"
+        className="w-full h-3 pr-2 my-4 bg-white bg-opacity-50 rounded-md cursor-grab -top-0.5"
+        thumbClassName="absolute w-5 h-5 -top-0.5 cursor-grab bg-secondary rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary -top-0.5"
         value={value}
         onChange={onChange}
       />

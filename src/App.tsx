@@ -58,7 +58,7 @@ function App() {
 
   function renderCanvas(id: string, indexVisibilityCanvas: number) {
     return (
-      <div className="bg-yellow-100 p-3 flex flex-col items-center gap-3 w-full">
+      <div className="bg-primary p-3 flex flex-col items-center gap-3 w-full">
         <div className="flex justify-between items-center w-full">
           <h2 className="flex self-start text-xl font-bold">{id}</h2>
           <span onClick={() => toggleCanvas(indexVisibilityCanvas)}>
@@ -72,7 +72,7 @@ function App() {
 
   function renderForm() {
     return (
-      <div className="bg-yellow-100 p-3 flex flex-col items-center gap-3 w-full">
+      <div className="bg-primary p-3 flex flex-col items-center gap-3 w-full">
         <h2 className="flex self-start text-xl font-bold">Settings</h2>
         <UploadButton onChange={loadImage} />
         <Slider label="thickness brush" value={thicknessBrush} min={1} max={MAX_THICKNESS_BRUSH} onChange={(value) => setThicknessBrush(value)} />
@@ -100,6 +100,7 @@ function App() {
         }
         <img className="hidden" id="imageSrc" alt="No Image" ref={ref}/>
         <div className="w-full flex flex-col items-center gap-2">
+          <h2 className="text-xl font-bold">Results</h2>
           { CANVAS_IDS.map((id, index) => renderCanvas(id, index)) }
         </div>
       </div>
