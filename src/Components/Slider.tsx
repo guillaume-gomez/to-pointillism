@@ -3,16 +3,17 @@ import ReactSlider from "react-slider"
 
 interface SliderInterface {
   value: number;
+  label: string;
   onChange: (value: number) => void;
   min?: number;
   max?: number;
   step?: number
 }
 
-function Slider({ value, onChange, min = 1, max = 15.36, step = 0.01 } : SliderInterface): React.ReactElement {
+function Slider({ value, label, onChange, min = 1, max = 100, step = 0.01 } : SliderInterface): React.ReactElement {
   return (
-    <>
-      <label>React Slider</label>
+    <div className="w-full">
+      <label>{label}</label>
       <ReactSlider
         step={step}
         min={min}
@@ -23,7 +24,7 @@ function Slider({ value, onChange, min = 1, max = 15.36, step = 0.01 } : SliderI
         onChange={onChange}
       />
       <span>{value}px</span>
-   </>
+   </div>
   );
 }
 
