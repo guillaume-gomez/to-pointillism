@@ -15,6 +15,7 @@ function radiansToDegrees(radians: number) : number
 
 export const MAX_THICKNESS_BRUSH = 15.36;
 export const CANVAS_IDS = [
+  "drawPalette",
   "greyOutput",
   "canvasOutputX",
   "canvasOutputY",
@@ -33,28 +34,28 @@ export async function computePointillism(cv: any, imgElement: HTMLImageElement, 
       palette = extendPalette(palette);
 
   // optionnal not related to algorithm
-  //drawPalette("palette-preview", palette);
+  drawPalette(CANVAS_IDS[0], palette);
 
   console.log("convert to grey")
   //convert to grayscale
   let grey: Mat = toGray(src);
-  cv.imshow(CANVAS_IDS[0], grey);
+  cv.imshow(CANVAS_IDS[1], grey);
 
   console.log("create gradient")
   const[dstx, dsty] = createGradient(grey, thicknessBrush);
-  cv.imshow(CANVAS_IDS[1], dstx);
-  cv.imshow(CANVAS_IDS[2], dsty);
+  cv.imshow(CANVAS_IDS[2], dstx);
+  cv.imshow(CANVAS_IDS[3], dsty);
 
   console.log("create smooth gradiant")
   const gradientSmoothingRadius = Math.round(Math.max(src.rows, src.cols) / 50);
   const[dstxSmooth, dstySmooth] = smooth(dstx, dsty, gradientSmoothingRadius);
-  cv.imshow(CANVAS_IDS[3], dstxSmooth);
-  cv.imshow(CANVAS_IDS[4], dstySmooth);
+  cv.imshow(CANVAS_IDS[4], dstxSmooth);
+  cv.imshow(CANVAS_IDS[5], dstySmooth);
 
   console.log("generate blur image")
   let medianBlur = cv.Mat.zeros(src.cols, src.rows, cv.CV_32F);
   cv.medianBlur(src, medianBlur, 11);
-  cv.imshow(CANVAS_IDS[5], medianBlur);
+  cv.imshow(CANVAS_IDS[6], medianBlur);
 
   console.log("generate random grid")
   const grid = generateRandomGrid(src.cols, src.rows);
@@ -81,7 +82,7 @@ export async function computePointillism(cv: any, imgElement: HTMLImageElement, 
   console.log("finish")
   //progressElement.style.display = "none";
 
-  cv.imshow(CANVAS_IDS[6],medianBlur);
+  cv.imshow(CANVAS_IDS[7],medianBlur);
 
   // clean up
   medianBlur.delete();

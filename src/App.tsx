@@ -15,11 +15,12 @@ function App() {
   const { cv, openCVLoaded } = UseOpenCV();
 
   const ref = useRef<HTMLImageElement>(null);
+  const refFinalResult = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState<number>(0);
   const [validForm, setValidForm] = useState<boolean>(false);
   const [runAlgo, setRunAlgo] = useState<boolean>(false);
   const [thicknessBrush, setThicknessBrush] = useState<number>(1);
-  const [visibilityCanvas, setVisibilityCanvas] = useState<boolean[]>([false, false, false, false, false, false, true]);
+  const [visibilityCanvas, setVisibilityCanvas] = useState<boolean[]>([false, false, false, false, false, false, false, true]);
 
   useEffect(() => {
     if(runAlgo && ref.current) {
@@ -36,15 +37,19 @@ function App() {
 
   function progressCallback(progress: number) {
     setProgress(progress);
-    if(progress >= 100) {
+    if(progress >= 99) {
       setRunAlgo(false);
+      setProgress(0);
+      if(refFinalResult && refFinalResult.current) {
+        refFinalResult.current.scrollIntoView({behavior: "smooth"});
+      }
     }
   }
 
 
   function submit() {
     setProgress(0);
-    //setRunAlgo(true);
+    setRunAlgo(true);
   }
 
   function toggleCanvas(index: number) {
@@ -72,14 +77,23 @@ function App() {
   }
 
   function renderForm() {
-    return (
-      <div className="bg-primary p-3 flex flex-col items-center gap-3 w-full">
+    const content = runAlgo ?
+      <Loader width="w-80"/>
+    :
+    (
+      <>
         <h2 className="flex self-start text-xl font-bold">Settings</h2>
         <UploadButton onChange={loadImage} />
         <Slider label="thickness brush" value={thicknessBrush} min={1} max={MAX_THICKNESS_BRUSH} onChange={(value) => setThicknessBrush(value)} />
         <div className="flex self-end">
           <Button label="Generate" disabled={!validForm} onClick={submit} />
         </div>
+      </>
+   );
+
+    return (
+      <div className="bg-primary p-3 flex flex-col items-center gap-3 w-full">
+        {content}
       </div>
     );
   }
@@ -92,22 +106,35 @@ function App() {
         </h1>
       </div>
       <div className="bg-gray-200 p-6 w-full flex flex-col flex-grow items-center bg-opacity-30 gap-7">
-        { openCVLoaded ? 
+        {
+          !openCVLoaded ?
+          (<div className="flex flex-col items-center">
+            <Loader/>
+            Loading OpenCV library
+          </div>)
+          :
           renderForm()
-          :<div>
-            <Loader />
-            Load OpenCV library
-            </div>
         }
         <img className="hidden" id="imageSrc" alt="No Image" ref={ref} onLoad={() => setValidForm(true)}/>
         <div className="w-full flex flex-col items-center gap-2">
           <h2 className="text-xl font-bold">Results</h2>
-          { CANVAS_IDS.map((id, index) => renderCanvas(id, index)) }
+          { CANVAS_IDS.map((id, index) => {
+              if(id === "finalResult") {
+                return (
+                  <div className="w-full" key={id} ref={refFinalResult}>
+                    {renderCanvas(id, index)}
+                  </div>
+                );
+              } else {
+                return renderCanvas(id, index)
+              }
+            })
+          }
         </div>
       </div>
       <div className="text-center bg-gray-200 p-6 h-32 bg-opacity-5 flex flex-col justify-end">
         <footer className="flex flex-col">
-          <a href="https://github.com/guillaume-gomez/to-pointillism">
+          <a className="underline" href="https://github.com/guillaume-gomez/to-pointillism">
             Source code here
           </a>
           Made By Guillaume Gomez 2021
