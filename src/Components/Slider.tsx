@@ -9,7 +9,7 @@ interface SliderInterface {
   step?: number
 }
 
-function Slider({ value, onChange, min = 0.1, max = 15.38, step = 0.01 } : SliderInterface): React.ReactElement {
+function Slider({ value, onChange, min = 1, max = 15.36, step = 0.01 } : SliderInterface): React.ReactElement {
   return (
     <>
       <label>React Slider</label>

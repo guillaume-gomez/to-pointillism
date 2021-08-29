@@ -1,7 +1,8 @@
 import { Mat } from "opencv-ts";
 import { range } from "lodash";
  
-import { colorSelect, rangeOfPixels, generateColorPalette, drawPalette, extendPalette, generateRandomGrid, computeColorProbabilities } from "./tools";
+import { colorSelect, rangeOfPixels, generateRandomGrid, computeColorProbabilities } from "./tools";
+import { generateColorPalette, drawPalette, extendPalette } from "./palette";
 import { toGray, resizeWithRatio } from "./imageProcessingTool";
 import { createGradient, smooth, direction, magnitude } from "./gradient";
 
@@ -12,7 +13,7 @@ function radiansToDegrees(radians: number) : number
   return radians * (180/pi);
 }
 
-export async function computePointillism(cv: any, imgElement: HTMLImageElement, progressCallback: (progress: number) => void) {
+export async function computePointillism(cv: any, imgElement: HTMLImageElement, thicknessBrush: number , progressCallback: (progress: number) => void) {
   console.log("read image")
   const src = cv.imread(imgElement);
   // algorithm used for final example
@@ -29,7 +30,7 @@ export async function computePointillism(cv: any, imgElement: HTMLImageElement, 
   //cv.imshow('canvasOutput', grey);
 
   console.log("create gradient")
-  const[dstx, dsty] = createGradient(grey);
+  const[dstx, dsty] = createGradient(grey, thicknessBrush);
   //cv.imshow('canvasOutputX', dstx);
   //cv.imshow('canvasOutputY', dsty);
 

@@ -15,11 +15,11 @@ function App() {
   const ref = useRef<HTMLImageElement>(null);
   const [progress, setProgress] = useState<number>(0);
   const [runAlgo, setRunAlgo] = useState<boolean>(false);
-  const [thicknessBrush, setThicknessBrush] = useState<number>(0);
+  const [thicknessBrush, setThicknessBrush] = useState<number>(1);
 
   useEffect(() => {
     if(runAlgo && ref.current) {
-      computePointillism(cv, ref.current, progressCallback);
+      computePointillism(cv, ref.current, thicknessBrush, progressCallback);
     }
   }, [cv, runAlgo])
 
