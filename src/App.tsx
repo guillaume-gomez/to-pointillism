@@ -142,8 +142,8 @@ function App() {
               renderForm()
             }
             <img className="hidden" id="imageSrc" alt="No Image" ref={ref} onLoad={() => setValidForm(true)}/>
-            <div className="w-full flex flex-col items-center gap-3 pt-5">
-              <h2 className="text-xl font-bold">Results</h2>
+            <div className="w-full flex flex-col items-center gap-3 pt-5 border rounded-box">
+              <h2 className="text-xl font-bold text-neutral-content">Results</h2>
               <Stepper steps={ProcessStateMachineArray} currentStep={progress} />
               {renderAllCanvas()}
             </div>
