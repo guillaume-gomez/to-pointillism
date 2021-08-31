@@ -132,27 +132,27 @@ export async function computePointillism(cv: any, imgElement: HTMLImageElement, 
 
   const src = await cv.imread(imgElement);
 
-  const grey = await generateGreyImage(cv, src);
+  const grey = await generateGreyImage(cv, src, delay);
   progressCallback("grey");
   
-  const [dstX, dstY] = await generateGradiant(cv, grey, thicknessBrush);
+  const [dstX, dstY] = await generateGradiant(cv, grey, thicknessBrush, delay);
   progressCallback("gradiants")
 
-  const [dstxSmooth, dstySmooth] = await generateSmoothGradiant(cv, src.rows, src.cols, dstX, dstY);
+  const [dstxSmooth, dstySmooth] = await generateSmoothGradiant(cv, src.rows, src.cols, dstX, dstY, delay);
   progressCallback("gradiantSmooth")
   
   grey.delete();
   dstX.delete();
   dstY.delete();
 
-  let medianBlur = await generateBlurMedian(cv, src);
+  let medianBlur = await generateBlurMedian(cv, src, delay);
   progressCallback("medianBlur")
 
-  const grid = await generateRandomGrid(src.cols, src.rows);
+  const grid = await generateRandomGrid(src.cols, src.rows, delay);
   setTimeout(() =>  progressCallback("generateGrid"), delay);
 
 
-  await drawPointillism(cv, src, medianBlur, dstxSmooth, dstySmooth, grid, palette);
+  await drawPointillism(cv, src, medianBlur, dstxSmooth, dstySmooth, grid, palette, delay);
   progressCallback("done")
 
   src.delete();
