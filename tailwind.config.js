@@ -6,9 +6,9 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
-      backgroundImage: theme => ({
-         'img': `url(./background.png)`,
-        })
+      backgroundImage: {
+         'img': `linear-gradient(to right top, #acacacAF, #9ea1a6AF, #8c97a0AF, #778e98AF, #61858bAF), url(./background.png)`,
+      }
     },
   },
   variants: {

@@ -110,37 +110,38 @@ function App() {
   }
 
   return (
-    <div 
-      className="flex flex-col bg-gradient-to-t from-black via-red-500 to-white bg-img"
-      /*style={{ backgroundImage: `url(${background})` }}*/
-    >
-      <NavBar/>
-        {
-          !openCVLoaded ?
-          (<div className="flex flex-col items-center">
-            <Loader/>
-            Loading OpenCV library
-          </div>)
-          :
-          renderForm()
-        }
-        <img className="hidden" id="imageSrc" alt="No Image" ref={ref} onLoad={() => setValidForm(true)}/>
-        <div className="w-full flex flex-col items-center gap-2">
-          <h2 className="text-xl font-bold">Results</h2>
-          { CANVAS_IDS.map((id, index) => {
-              if(id === "finalResult") {
-                return (
-                  <div className="w-full" key={id} ref={refFinalResult}>
-                    {renderCanvas(id, index)}
-                  </div>
-                );
-              } else {
-                return renderCanvas(id, index)
+    <div className="bg-img">
+      <div className="container mx-auto flex flex-col gap-3">
+        <NavBar/>
+        <div className="flex flex-col px-4" >
+            {
+              !openCVLoaded ?
+              (<div className="flex flex-col items-center">
+                <Loader/>
+                Loading OpenCV library
+              </div>)
+              :
+              renderForm()
+            }
+            <img className="hidden" id="imageSrc" alt="No Image" ref={ref} onLoad={() => setValidForm(true)}/>
+            <div className="w-full flex flex-col items-center gap-2">
+              <h2 className="text-xl font-bold">Results</h2>
+              { CANVAS_IDS.map((id, index) => {
+                  if(id === "finalResult") {
+                    return (
+                      <div className="w-full" key={id} ref={refFinalResult}>
+                        {renderCanvas(id, index)}
+                      </div>
+                    );
+                  } else {
+                    return renderCanvas(id, index)
+                  }
+                })
               }
-            })
-          }
+            </div>
         </div>
-      <Footer />
+        <Footer />
+      </div>
     </div>
   );
 }
