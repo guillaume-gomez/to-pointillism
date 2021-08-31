@@ -13,7 +13,7 @@ function Slider({ value, label, onChange, min = 1, max = 100, step = 1 } : Slide
   return (
     <div className="w-full">
       <label>{label}</label>
-      <input type="range" onChange={(event) => onChange(event.target.value)} min={min} max={max} value={value} step={step} className="range range-secondary"></input> 
+      <input type="range" onChange={(event) => onChange(event.target.value)} min={min} max={max} value={value} step={step} className="range range-primary"></input> 
       <span>{value}px</span>
    </div>
   );

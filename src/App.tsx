@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import arrowDown from './arrow-down.svg';
-import background from "./background.png";
 import './App.css';
 import Stepper from "./Components/Stepper";
 import UploadButton from "./Components/UploadButton";
@@ -31,8 +30,8 @@ function App() {
   const [progress, setProgress] = useState<number>(0);
   const [validForm, setValidForm] = useState<boolean>(false);
   const [runAlgo, setRunAlgo] = useState<boolean>(false);
-  const [thicknessBrush, setThicknessBrush] = useState<number>(1);
-  const [visibilityCanvas, setVisibilityCanvas] = useState<boolean[]>([false, false, false, false, false, false, false, true]);
+  const [thicknessBrush, setThicknessBrush] = useState<number>(100);
+  const [visibilityCanvas, setVisibilityCanvas] = useState<boolean[]>([false, false, false, false, false, false, false, false]);
 
   useEffect(() => {
     if(runAlgo && ref.current) {
@@ -76,21 +75,21 @@ function App() {
 
   function renderCanvas(id: string, indexVisibilityCanvas: number) {
     return (
-      <div key={id} className="bg-primary p-3 flex flex-col items-center gap-3 w-full">
-        <div className="flex justify-between items-center w-full">
-          <h2 className="flex self-start text-xl font-bold">{TITLE_FROM_CANVAS_IDS[indexVisibilityCanvas]}</h2>
-          <span onClick={() => toggleCanvas(indexVisibilityCanvas)}>
-            <img className={`w-5 transform duration-300 ease-in-out ${visibilityCanvas[indexVisibilityCanvas] ? "rotate-180": ""}`} src={arrowDown} />
-          </span>
+      <div key={id} className={`card glass text-neutral-content collapse w-full border rounded-box border-base-300 collapse-arrow ${validForm ? "" : "collapse-close"}`}>
+        <input type="checkbox" onClick={() => toggleCanvas(indexVisibilityCanvas)}/>
+        <div className="collapse-title text-xl font-medium">
+          {TITLE_FROM_CANVAS_IDS[indexVisibilityCanvas]}
         </div>
-        <canvas className={`max-w-full ${visibilityCanvas[indexVisibilityCanvas] ? "" : "hidden"} `} id={id}/>
+        <div className="collapse-content flex justify-center"> 
+          <canvas className={`max-w-full ${visibilityCanvas[indexVisibilityCanvas] ? "" : "hidden"} `} id={id}/>
+        </div>
       </div>
     );
   }
 
   function renderForm() {
     const content = runAlgo ?
-      <Loader width="w-80"/>
+      <Loader width="flex flex-col items-center w-80"/>
     :
     (
       <div className="flex flex-col items-center gap-3 w-full p-4">
@@ -98,7 +97,7 @@ function App() {
         <UploadButton onChange={loadImage} />
         <Slider label="thickness brush" value={thicknessBrush} min={1 * 100} max={MAX_THICKNESS_BRUSH * 100} onChange={(value) => setThicknessBrush(parseInt(value))} />
         <div className="flex self-end">
-          <button className="btn btn-primary" disabled={!validForm} onClick={submit}>J'aime les haricots</button>
+          <button className="btn btn-primary" disabled={!validForm} onClick={submit}>Generate</button>
         </div>
       </div>
    );
@@ -111,7 +110,10 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundImage: `linear-gradient(180deg, rgba(55,53,53,0.8) 10%, rgba(200,200,200,0.8) 100%), url(${background})` }}>
+    <div 
+      className="flex flex-col bg-gradient-to-t from-black via-red-500 to-white bg-img"
+      /*style={{ backgroundImage: `url(${background})` }}*/
+    >
       <NavBar/>
         {
           !openCVLoaded ?
@@ -138,7 +140,6 @@ function App() {
             })
           }
         </div>
-      
       <Footer />
     </div>
   );
