@@ -6,6 +6,8 @@ import Stepper from "./Components/Stepper";
 import UploadButton from "./Components/UploadButton";
 import Loader from "./Components/Loader";
 import Slider from "./Components/Slider";
+import Footer from "./Components/Footer";
+import NavBar from "./Components/NavBar";
 
 import UseOpenCV from "./Hooks/UseOpenCV";
 import { computePointillism, MAX_THICKNESS_BRUSH, CANVAS_IDS } from "./Pointillism/pointillism";
@@ -91,18 +93,18 @@ function App() {
       <Loader width="w-80"/>
     :
     (
-      <>
+      <div className="flex flex-col items-center gap-3 w-full p-4">
         <h2 className="flex self-start text-xl font-bold">Settings</h2>
         <UploadButton onChange={loadImage} />
         <Slider label="thickness brush" value={thicknessBrush} min={1 * 100} max={MAX_THICKNESS_BRUSH * 100} onChange={(value) => setThicknessBrush(parseInt(value))} />
         <div className="flex self-end">
           <button className="btn btn-primary" disabled={!validForm} onClick={submit}>J'aime les haricots</button>
         </div>
-      </>
+      </div>
    );
 
     return (
-      <div className="bg-primary p-3 flex flex-col items-center gap-3 w-full">
+      <div className="card glass lg:card-side text-neutral-content">
         {content}
       </div>
     );
@@ -110,12 +112,7 @@ function App() {
 
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundImage: `linear-gradient(180deg, rgba(55,53,53,0.8) 10%, rgba(200,200,200,0.8) 100%), url(${background})` }}>
-      <div className="bg-gray-200 p-6 h-24 bg-opacity-5 text-center">
-        <h1 className="font-bold text-5xl uppercase">
-            Pointillism
-        </h1>
-      </div>
-      <div className="bg-gray-200 p-6 w-full flex flex-col flex-grow items-center bg-opacity-30 gap-7">
+      <NavBar/>
         {
           !openCVLoaded ?
           (<div className="flex flex-col items-center">
@@ -141,17 +138,8 @@ function App() {
             })
           }
         </div>
-      </div>
-      <div className="text-center bg-gray-200 p-6 h-32 bg-opacity-5 flex flex-col justify-end">
-        <footer className="p-4 footer bg-base-300 text-base-content footer-center">
-          <div>
-            <a className="underline" href="https://github.com/guillaume-gomez/to-pointillism">
-              Source code here
-            </a>
-            <p> 2021 - Made By Guillaume Gomez</p>
-          </div>
-        </footer>
-      </div>
+      
+      <Footer />
     </div>
   );
 }
