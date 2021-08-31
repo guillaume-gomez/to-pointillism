@@ -23,9 +23,9 @@ function Stepper({ steps, currentStep }: StepperInterface): React.ReactElement {
       {
         steps.map((step, index) => {
           if(index <= stepIndex) {
-            return <li className="step step-success">{step}</li> 
+            return <li key={step} className="step step-success">{step}</li> 
           }
-          return <li className="step">{step}</li>
+          return <li key={step} className="step">{step}</li>
         })
       }
     </ul>
