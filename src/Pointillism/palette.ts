@@ -3,14 +3,14 @@ import convert from "color-convert";
 import { saturate, rotateHue } from "./colorTools";
 
 const PALETTE_BASE_COLOR = 20;
-type point = [number, number, number];
+export type pixel = [number, number, number];
 
-export function generateColorPalette(image: HTMLImageElement) : point[] {
+export function generateColorPalette(image: HTMLImageElement) : pixel[] {
   let colorThief = new ColorThief();
   return colorThief.getPalette(image, PALETTE_BASE_COLOR);
 }
 
-export function extendPalette(palette: point[]) : point[] {
+export function extendPalette(palette: pixel[]) : pixel[] {
   const moreSaturatedPalette = palette.map(([red, green, blue]) => {
     const [hue, saturation, lightness] = convert.rgb.hsl(red, green, blue);
     const [_, moreSaturated, __] = saturate([hue, saturation, lightness], 20);
@@ -29,7 +29,7 @@ export function extendPalette(palette: point[]) : point[] {
   return [...palette.slice(0), ...moreSaturatedPalette, ...moreHuePaletteGenerator(), ...moreHuePaletteGenerator()];
 }
 
-export function drawPalette(canvasId: string, palette: point[]) : void {
+export function drawPalette(canvasId: string, palette: pixel[]) : void {
   let canvas = document.getElementById(canvasId) as HTMLCanvasElement;
   if (!canvas.getContext) {
     throw "cannot find canvas to draw palette";
