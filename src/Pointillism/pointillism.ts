@@ -25,7 +25,7 @@ export const CANVAS_IDS = [
   "finalResult"
 ];
 
-export async function computePointillism(cv: any, imgElement: HTMLImageElement, thicknessBrush: number , progressCallback: (progress: number) => void) {
+export function computePointillism(cv: any, imgElement: HTMLImageElement, thicknessBrush: number , progressCallback: (progress: number) => void) {
   console.log("read image")
   const src = cv.imread(imgElement);
   // algorithm used for final example
@@ -41,10 +41,12 @@ export async function computePointillism(cv: any, imgElement: HTMLImageElement, 
   let grey: Mat = toGray(src);
   cv.imshow(CANVAS_IDS[1], grey);
 
+
   console.log("create gradient")
   const[dstx, dsty] = createGradient(grey, thicknessBrush);
   cv.imshow(CANVAS_IDS[2], dstx);
   cv.imshow(CANVAS_IDS[3], dsty);
+
 
   console.log("create smooth gradiant")
   const gradientSmoothingRadius = Math.round(Math.max(src.rows, src.cols) / 50);
@@ -61,6 +63,7 @@ export async function computePointillism(cv: any, imgElement: HTMLImageElement, 
   const grid = generateRandomGrid(src.cols, src.rows);
   const batchSize = 1000;
   const strokeScale = Math.floor(Math.max(src.rows, src.cols) / 1000);
+
 
   console.log("begin draw")
   range(0, grid.length, batchSize).forEach(progressIndex => {

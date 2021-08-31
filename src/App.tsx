@@ -11,6 +11,17 @@ import Button from "./Components/Button";
 import UseOpenCV from "./Hooks/UseOpenCV";
 import { computePointillism, MAX_THICKNESS_BRUSH, CANVAS_IDS } from "./Pointillism/pointillism";
 
+export const TITLE_FROM_CANVAS_IDS = [
+  "Generate Palette",
+  "Grey Scale Image",
+  "Gradient on X axis",
+  "Gradient on Y axis",
+  "Gradient on X axis Smooth",
+  "Gradient on Y axis Smooth",
+  "Generate Median Blur Image",
+  "Final Result"
+];
+
 function App() {
   const { cv, openCVLoaded } = UseOpenCV();
 
@@ -66,7 +77,7 @@ function App() {
     return (
       <div key={id} className="bg-primary p-3 flex flex-col items-center gap-3 w-full">
         <div className="flex justify-between items-center w-full">
-          <h2 className="flex self-start text-xl font-bold">{id}</h2>
+          <h2 className="flex self-start text-xl font-bold">{TITLE_FROM_CANVAS_IDS[indexVisibilityCanvas]}</h2>
           <span onClick={() => toggleCanvas(indexVisibilityCanvas)}>
             <img className={`w-5 transform duration-300 ease-in-out ${visibilityCanvas[indexVisibilityCanvas] ? "rotate-180": ""}`} src={arrowDown} />
           </span>
