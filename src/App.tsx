@@ -38,7 +38,7 @@ function App() {
 
   useEffect(() => {
     if(runAlgo && ref.current) {
-      computePointillism(cv, ref.current, thicknessBrush, progressCallback).then(() => {
+      computePointillism(cv, ref.current, thicknessBrush/100, progressCallback).then(() => {
         setRunAlgo(false);
         if(refFinalResult.current) {
           refFinalResult.current.scrollIntoView({behavior: "smooth"});

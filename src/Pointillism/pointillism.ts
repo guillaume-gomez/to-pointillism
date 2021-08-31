@@ -105,10 +105,8 @@ export async function drawPointillism(
   
     const batchSize = 1000;
     const strokeScale = Math.floor(Math.max(src.rows, src.cols) / 1000);
-    console.log(grid.length)
     return new Promise((resolve) => {
       range(0, grid.length, batchSize).forEach(progressIndex => {
-        console.log("djfkdj")
         const pixels = rangeOfPixels(src, grid, progressIndex, progressIndex + batchSize);
         const colorProbabilities = computeColorProbabilities(pixels, palette);
         grid.slice(progressIndex, Math.min((progressIndex + batchSize), grid.length)).forEach(([y, x], index) => {
