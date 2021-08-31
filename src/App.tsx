@@ -22,21 +22,27 @@ export const TITLE_FROM_CANVAS_IDS = [
   "Final Result"
 ];
 
+const intialCanvasVisibility = [false, false, false, false, false, false, false, false];
+
 function App() {
   const { cv, openCVLoaded } = UseOpenCV();
 
   const ref = useRef<HTMLImageElement>(null);
   const refFinalResult = useRef<HTMLDivElement>(null);
+
   const [progress, setProgress] = useState<string>("");
   const [validForm, setValidForm] = useState<boolean>(false);
   const [runAlgo, setRunAlgo] = useState<boolean>(false);
   const [thicknessBrush, setThicknessBrush] = useState<number>(100);
-  const [visibilityCanvas, setVisibilityCanvas] = useState<boolean[]>([false, false, false, false, false, false, false, false]);
+  const [visibilityCanvas, setVisibilityCanvas] = useState<boolean[]>(intialCanvasVisibility);
 
   useEffect(() => {
     if(runAlgo && ref.current) {
       computePointillism(cv, ref.current, thicknessBrush, progressCallback).then(() => {
-        setRunAlgo(false)
+        setRunAlgo(false);
+        if(refFinalResult.current) {
+          refFinalResult.current.scrollIntoView({behavior: "smooth"});
+        }
       })
     }
   }, [cv, runAlgo])
@@ -54,6 +60,8 @@ function App() {
 
 
   function submit() {
+    setProgress("");
+    setVisibilityCanvas(intialCanvasVisibility);
     setRunAlgo(true);
   }
 
@@ -74,8 +82,13 @@ function App() {
         <div className="collapse-title text-xl font-medium">
           {TITLE_FROM_CANVAS_IDS[indexVisibilityCanvas]}
         </div>
-        <div className="collapse-content flex justify-center"> 
+        <div className="collapse-content flex flex-col justify-center gap-3"> 
           <canvas className={`border max-w-full ${visibilityCanvas[indexVisibilityCanvas] ? "" : "hidden"} `} id={id}/>
+          <div>
+            <div className="flex flex-row-reverse">
+              <button className="btn btn-primary">Save</button>
+            </div>
+          </div>
         </div>
       </div>
     );

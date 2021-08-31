@@ -2,9 +2,9 @@ import React from 'react';
 
 function NavBar(): React.ReactElement {
   return (
-     <div className="navbar mb-2 shadow-lg bg-neutral text-neutral-content rounded-box">
+     <div className="navbar mb-2 bg-accent text-neutral-content p-6">
       <div className="px-2 mx-2 navbar-start">
-        <span className="text-lg font-bold">
+        <span className="text-2xl font-bold">
           Pointillism
         </span>
       </div> 

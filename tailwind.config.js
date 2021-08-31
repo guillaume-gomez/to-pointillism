@@ -7,7 +7,7 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-         'img': `linear-gradient(to right top, #acacacAF, #9ea1a6AF, #8c97a0AF, #778e98AF, #61858bAF), url(./background.png)`,
+         'img': `linear-gradient(to right top, #acacacAA, #9ea1a6AA, #8c97a0AA, #778e98AA, #61858bAA), url(./background.png)`,
       }
     },
   },
