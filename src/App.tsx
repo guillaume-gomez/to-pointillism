@@ -83,7 +83,9 @@ function App() {
 
   function renderForm() {
     const content = runAlgo ?
-      <Loader width="flex flex-col items-center w-80"/>
+      <div className="flex justify-center">
+        <Loader width="w-80"/>
+      </div>
     :
     (
       <div className="flex flex-col items-center gap-3 w-full p-4">
@@ -97,7 +99,7 @@ function App() {
    );
 
     return (
-      <div className="card glass lg:card-side text-neutral-content">
+      <div className="card glass text-neutral-content">
         {content}
       </div>
     );
