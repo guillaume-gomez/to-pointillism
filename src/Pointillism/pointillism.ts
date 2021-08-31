@@ -84,7 +84,6 @@ export async function generateSmoothGradiant(cv: any, rows: number, cols: number
 
 export async function generateBlurMedian(cv: any, src: Mat, delay: number = 2000) : Promise<Mat> {
   return new Promise((resolve) => {
-    console.log("generate blur image")
     let medianBlur = cv.Mat.zeros(src.cols, src.rows, cv.CV_32F);
     cv.medianBlur(src, medianBlur, 11);
     cv.imshow(CANVAS_IDS[6], medianBlur);
@@ -106,9 +105,10 @@ export async function drawPointillism(
   
     const batchSize = 1000;
     const strokeScale = Math.floor(Math.max(src.rows, src.cols) / 1000);
-
+    console.log(grid.length)
     return new Promise((resolve) => {
       range(0, grid.length, batchSize).forEach(progressIndex => {
+        console.log("djfkdj")
         const pixels = rangeOfPixels(src, grid, progressIndex, progressIndex + batchSize);
         const colorProbabilities = computeColorProbabilities(pixels, palette);
         grid.slice(progressIndex, Math.min((progressIndex + batchSize), grid.length)).forEach(([y, x], index) => {
@@ -148,7 +148,7 @@ export async function computePointillism(cv: any, imgElement: HTMLImageElement, 
   let medianBlur = await generateBlurMedian(cv, src, delay);
   progressCallback("medianBlur")
 
-  const grid = await generateRandomGrid(src.cols, src.rows, delay);
+  const grid = generateRandomGrid(src.cols, src.rows);
   setTimeout(() =>  progressCallback("generateGrid"), delay);
 
 
