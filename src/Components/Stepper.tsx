@@ -1,13 +1,34 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { findIndex } from "lodash";
 
-function Stepper(): React.ReactElement {
+interface StepperInterface {
+  steps: string[];
+  currentStep: string;
+}
+
+function Stepper({ steps, currentStep }: StepperInterface): React.ReactElement {
+  const [stepIndex, setStepIndex] = useState<number>(0);
+
+  useEffect(()=> {
+    const stpIndex = findIndex(steps, (step) => step === currentStep);
+    if(stpIndex === -1) {
+      setStepIndex(0);
+    } else {
+      setStepIndex(stpIndex);
+    }
+  }, [currentStep]);
+
   return (
-  <ul className="w-full steps">
-    <li className="step step-primary">Register</li> 
-    <li className="step step-primary">Choose plan</li> 
-    <li className="step">Purchase</li> 
-    <li className="step">Receive Product</li>
-  </ul>
+    <ul className="w-full steps">
+      {
+        steps.map((step, index) => {
+          if(index <= stepIndex) {
+            return <li className="step step-success">{step}</li> 
+          }
+          return <li className="step">{step}</li>
+        })
+      }
+    </ul>
   );
 }
 

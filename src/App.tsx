@@ -9,7 +9,7 @@ import Footer from "./Components/Footer";
 import NavBar from "./Components/NavBar";
 
 import UseOpenCV from "./Hooks/UseOpenCV";
-import { computePointillism, MAX_THICKNESS_BRUSH, CANVAS_IDS } from "./Pointillism/pointillism";
+import { computePointillism, MAX_THICKNESS_BRUSH, CANVAS_IDS, ProcessStateMachineArray } from "./Pointillism/pointillism";
 
 export const TITLE_FROM_CANVAS_IDS = [
   "Generate Palette",
@@ -27,7 +27,7 @@ function App() {
 
   const ref = useRef<HTMLImageElement>(null);
   const refFinalResult = useRef<HTMLDivElement>(null);
-  const [progress, setProgress] = useState<number>(0);
+  const [progress, setProgress] = useState<string>("");
   const [validForm, setValidForm] = useState<boolean>(false);
   const [runAlgo, setRunAlgo] = useState<boolean>(false);
   const [thicknessBrush, setThicknessBrush] = useState<number>(100);
@@ -35,7 +35,9 @@ function App() {
 
   useEffect(() => {
     if(runAlgo && ref.current) {
-      computePointillism(cv, ref.current, thicknessBrush / 100, progressCallback);
+      computePointillism(cv, ref.current, thicknessBrush, progressCallback).then(() => {
+        setRunAlgo(false)
+      })
     }
   }, [cv, runAlgo])
 
@@ -46,20 +48,12 @@ function App() {
     }
   }
 
-  function progressCallback(progress: number) {
+  function progressCallback(progress: string) {
     setProgress(progress);
-    if(progress >= 99) {
-      setRunAlgo(false);
-      setProgress(0);
-      if(refFinalResult && refFinalResult.current) {
-        refFinalResult.current.scrollIntoView({behavior: "smooth"});
-      }
-    }
   }
 
 
   function submit() {
-    setProgress(0);
     setRunAlgo(true);
   }
 
@@ -81,7 +75,7 @@ function App() {
           {TITLE_FROM_CANVAS_IDS[indexVisibilityCanvas]}
         </div>
         <div className="collapse-content flex justify-center"> 
-          <canvas className={`max-w-full ${visibilityCanvas[indexVisibilityCanvas] ? "" : "hidden"} `} id={id}/>
+          <canvas className={`border max-w-full ${visibilityCanvas[indexVisibilityCanvas] ? "" : "hidden"} `} id={id}/>
         </div>
       </div>
     );
@@ -111,9 +105,9 @@ function App() {
 
   return (
     <div className="bg-img">
-      <div className="container mx-auto flex flex-col gap-3">
+      <div className="container mx-auto flex flex-col gap-10 bg-neutral">
         <NavBar/>
-        <div className="flex flex-col px-4" >
+        <div className="flex flex-col px-4 flex flex-col gap-5" >
             {
               !openCVLoaded ?
               (<div className="flex flex-col items-center">
@@ -124,8 +118,9 @@ function App() {
               renderForm()
             }
             <img className="hidden" id="imageSrc" alt="No Image" ref={ref} onLoad={() => setValidForm(true)}/>
-            <div className="w-full flex flex-col items-center gap-2">
+            <div className="w-full flex flex-col items-center gap-3 pt-5">
               <h2 className="text-xl font-bold">Results</h2>
+              <Stepper steps={ProcessStateMachineArray} currentStep={progress} />
               { CANVAS_IDS.map((id, index) => {
                   if(id === "finalResult") {
                     return (
