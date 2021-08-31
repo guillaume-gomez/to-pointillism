@@ -28,7 +28,7 @@ function CanvasCard({ toggleCanvas, title, canvasId, collapsible }: CanvasCardIn
         {title}
       </div>
       <div className="collapse-content flex flex-col justify-center gap-3"> 
-        <canvas ref={refCanvas} className={`border max-w-full`} id={canvasId}/>
+        <canvas ref={refCanvas} className={`max-w-full`} id={canvasId}/>
         <div>
           <div className="flex flex-row-reverse">
             <a ref={refA} className="btn btn-primary" onClick={saveImage}>Save</a>

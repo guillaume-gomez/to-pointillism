@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import arrowDown from './arrow-down.svg';
 import './App.css';
+import { range } from "lodash";
 import Stepper from "./Components/Stepper";
 import UploadButton from "./Components/UploadButton";
 import Loader from "./Components/Loader";
 import Slider from "./Components/Slider";
 import Footer from "./Components/Footer";
 import NavBar from "./Components/NavBar";
+import CanvasCard from "./Components/CanvasCard";
 
 import UseOpenCV from "./Hooks/UseOpenCV";
 import { computePointillism, MAX_THICKNESS_BRUSH, CANVAS_IDS, ProcessStateMachineArray } from "./Pointillism/pointillism";
@@ -29,6 +30,7 @@ function App() {
 
   const ref = useRef<HTMLImageElement>(null);
   const refFinalResult = useRef<HTMLDivElement>(null);
+  const refCanvas = useRef<HTMLCanvasElement[]>([]);
 
   const [progress, setProgress] = useState<string>("");
   const [validForm, setValidForm] = useState<boolean>(false);
@@ -75,23 +77,30 @@ function App() {
     setVisibilityCanvas(newVisibiltyCanvas);
   }
 
-  function renderCanvas(id: string, indexVisibilityCanvas: number) {
-    return (
-      <div key={id} className={`card glass text-neutral-content collapse w-full border rounded-box border-base-300 collapse-arrow ${validForm ? "" : "collapse-close"}`}>
-        <input type="checkbox" onClick={() => toggleCanvas(indexVisibilityCanvas)}/>
-        <div className="collapse-title text-xl font-medium">
-          {TITLE_FROM_CANVAS_IDS[indexVisibilityCanvas]}
-        </div>
-        <div className="collapse-content flex flex-col justify-center gap-3"> 
-          <canvas className={`border max-w-full ${visibilityCanvas[indexVisibilityCanvas] ? "" : "hidden"} `} id={id}/>
-          <div>
-            <div className="flex flex-row-reverse">
-              <button className="btn btn-primary">Save</button>
+  function renderAllCanvas() {
+    return CANVAS_IDS.map((id, index) => {
+        if(id === "finalResult") {
+          return (
+            <div className="w-full" key={id} ref={refFinalResult}>
+              <CanvasCard
+                toggleCanvas={() => toggleCanvas(index)}
+                title={TITLE_FROM_CANVAS_IDS[index]}
+                canvasId={id}
+                collapsible={validForm}
+              />
             </div>
-          </div>
-        </div>
-      </div>
-    );
+          );
+        } else {
+          return (
+            <CanvasCard
+              toggleCanvas={() => toggleCanvas(index)}
+              title={TITLE_FROM_CANVAS_IDS[index]}
+              canvasId={id}
+              collapsible={validForm}
+            />
+          );
+        }
+      });
   }
 
   function renderForm() {
@@ -136,18 +145,7 @@ function App() {
             <div className="w-full flex flex-col items-center gap-3 pt-5">
               <h2 className="text-xl font-bold">Results</h2>
               <Stepper steps={ProcessStateMachineArray} currentStep={progress} />
-              { CANVAS_IDS.map((id, index) => {
-                  if(id === "finalResult") {
-                    return (
-                      <div className="w-full" key={id} ref={refFinalResult}>
-                        {renderCanvas(id, index)}
-                      </div>
-                    );
-                  } else {
-                    return renderCanvas(id, index)
-                  }
-                })
-              }
+              {renderAllCanvas()}
             </div>
         </div>
         <Footer />
