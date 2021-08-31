@@ -6,15 +6,15 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
-      colors: {
+      /*colors: {
         primary: "#93C5FD",
         secondary: "#EF4444",
         neutral: "grey"
-      },
+      },*/
     },
   },
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require('daisyui')],
 }

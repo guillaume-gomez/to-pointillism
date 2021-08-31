@@ -6,7 +6,6 @@ import Stepper from "./Components/Stepper";
 import UploadButton from "./Components/UploadButton";
 import Loader from "./Components/Loader";
 import Slider from "./Components/Slider";
-import Button from "./Components/Button";
 
 import UseOpenCV from "./Hooks/UseOpenCV";
 import { computePointillism, MAX_THICKNESS_BRUSH, CANVAS_IDS } from "./Pointillism/pointillism";
@@ -35,7 +34,7 @@ function App() {
 
   useEffect(() => {
     if(runAlgo && ref.current) {
-      computePointillism(cv, ref.current, thicknessBrush, progressCallback);
+      computePointillism(cv, ref.current, thicknessBrush / 100, progressCallback);
     }
   }, [cv, runAlgo])
 
@@ -95,9 +94,9 @@ function App() {
       <>
         <h2 className="flex self-start text-xl font-bold">Settings</h2>
         <UploadButton onChange={loadImage} />
-        <Slider label="thickness brush" value={thicknessBrush} min={1} max={MAX_THICKNESS_BRUSH} onChange={(value) => setThicknessBrush(value)} />
+        <Slider label="thickness brush" value={thicknessBrush} min={1 * 100} max={MAX_THICKNESS_BRUSH * 100} onChange={(value) => setThicknessBrush(parseInt(value))} />
         <div className="flex self-end">
-          <Button label="Generate" disabled={!validForm} onClick={submit} />
+          <button className="btn btn-primary" disabled={!validForm} onClick={submit}>J'aime les haricots</button>
         </div>
       </>
    );
@@ -144,11 +143,13 @@ function App() {
         </div>
       </div>
       <div className="text-center bg-gray-200 p-6 h-32 bg-opacity-5 flex flex-col justify-end">
-        <footer className="flex flex-col">
-          <a className="underline" href="https://github.com/guillaume-gomez/to-pointillism">
-            Source code here
-          </a>
-          Made By Guillaume Gomez 2021
+        <footer className="p-4 footer bg-base-300 text-base-content footer-center">
+          <div>
+            <a className="underline" href="https://github.com/guillaume-gomez/to-pointillism">
+              Source code here
+            </a>
+            <p> 2021 - Made By Guillaume Gomez</p>
+          </div>
         </footer>
       </div>
     </div>
