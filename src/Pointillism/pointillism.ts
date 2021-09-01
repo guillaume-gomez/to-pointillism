@@ -104,7 +104,9 @@ export async function drawPointillism(
   ) : Promise<unknown> {
   
     const batchSize = 1000;
-    const strokeScale = Math.floor(Math.max(src.rows, src.cols) / 1000);
+    // magic number to apply properly the algorithm on both small and image
+    const strokeScaleDivider = Math.max(src.rows, src.cols) * 1000 /1900;
+    const strokeScale = Math.floor(Math.max(src.rows, src.cols) / strokeScaleDivider);
     return new Promise((resolve) => {
       range(0, grid.length, batchSize).forEach(progressIndex => {
         const pixels = rangeOfPixels(src, grid, progressIndex, progressIndex + batchSize);
@@ -124,11 +126,17 @@ export async function drawPointillism(
 }
 
 
-export async function computePointillism(cv: any, imgElement: HTMLImageElement, thicknessBrush: number, progressCallback: (progress: ProcessStateMachine) => void, delay: number = 2000) {
+export async function computePointillism(
+    cv: any,
+    imgElement: HTMLImageElement,
+    thicknessBrush: number,
+    autoResize: boolean,
+    progressCallback: (progress: ProcessStateMachine) => void, delay: number = 2000
+  ) {
   const palette = await generatePalette(imgElement);
   progressCallback("palette");
 
-  const src = await cv.imread(imgElement);
+  let src = await cv.imread(imgElement);
 
   const grey = await generateGreyImage(cv, src, delay);
   progressCallback("grey");
@@ -143,6 +151,10 @@ export async function computePointillism(cv: any, imgElement: HTMLImageElement, 
   dstX.delete();
   dstY.delete();
 
+  if(autoResize) {
+    src = resizeWithRatio(src, 1280, 780);
+  }
+
   let medianBlur = await generateBlurMedian(cv, src, delay);
   progressCallback("medianBlur")
 
@@ -150,7 +162,7 @@ export async function computePointillism(cv: any, imgElement: HTMLImageElement, 
   setTimeout(() =>  progressCallback("generateGrid"), delay);
 
 
-  await drawPointillism(cv, src, medianBlur, dstxSmooth, dstySmooth, grid, palette, delay);
+  await drawPointillism(cv, src, medianBlur, dstxSmooth, dstySmooth, grid, palette ,delay);
   progressCallback("done")
 
   src.delete();
