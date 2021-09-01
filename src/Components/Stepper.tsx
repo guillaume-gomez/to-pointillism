@@ -19,13 +19,22 @@ function Stepper({ steps, currentStep }: StepperInterface): React.ReactElement {
   }, [currentStep]);
 
   return (
-    <ul className="w-full steps">
+    <ul className="steps w-full overflow-auto">
       {
         steps.map((step, index) => {
           if(index <= stepIndex) {
-            return <li key={step} className="step step-success text-neutral-content">{step}</li> 
+            return
+            (
+              <li key={step} className="step step-success text-neutral-content">
+                <span className="hidden lg:block xl:block 2xl:block">{step}</span>
+              </li>
+            );
           }
-          return <li key={step} className="step text-neutral-content">{step}</li>
+          return (
+            <li key={step} className="step text-neutral-content">
+              <span className="hidden lg:block xl:block 2xl:block">{step}</span>
+            </li>
+            );
         })
       }
     </ul>
