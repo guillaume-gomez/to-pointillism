@@ -22,7 +22,7 @@ function CanvasCard({ toggleCanvas, title, canvasId, collapsible }: CanvasCardIn
   }
 
   return (
-    <div className={`card glass text-neutral-content collapse w-full border rounded-box border-base-300 collapse-arrow ${collapsible ? "" : "collapse-close"}`}>
+    <div className={`bg-neutral text-neutral-content collapse w-full border rounded-box border-base-300 collapse-arrow ${collapsible ? "" : "collapse-close"}`}>
       <input type="checkbox" onClick={() => toggleCanvas()}/>
       <div className="collapse-title text-xl font-medium">
         {title}
