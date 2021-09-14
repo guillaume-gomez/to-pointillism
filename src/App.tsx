@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './App.css';
-import { range } from "lodash";
 import Stepper from "./Components/Stepper";
 import UploadButton from "./Components/UploadButton";
 import Loader from "./Components/Loader";
@@ -23,26 +22,30 @@ export const TITLE_FROM_CANVAS_IDS = [
   "Final Result"
 ];
 
-const intialCanvasVisibility = [false, false, false, false, false, false, false, false];
+const initialCanvasCollapse = [false, false, false, false, false, false, false, false];
 
 function App() {
   const { cv, openCVLoaded } = UseOpenCV();
 
   const ref = useRef<HTMLImageElement>(null);
   const refFinalResult = useRef<HTMLDivElement>(null);
-  const refCanvas = useRef<HTMLCanvasElement[]>([]);
 
   const [progress, setProgress] = useState<string>("");
   const [validForm, setValidForm] = useState<boolean>(false);
   const [autoresize, setAutoresize] = useState<boolean>(false);
   const [runAlgo, setRunAlgo] = useState<boolean>(false);
   const [thicknessBrush, setThicknessBrush] = useState<number>(100);
-  const [visibilityCanvas, setVisibilityCanvas] = useState<boolean[]>(intialCanvasVisibility);
+  const [visibilityCanvas, setVisibilityCanvas] = useState<boolean[]>(initialCanvasCollapse);
 
   useEffect(() => {
     if(runAlgo && ref.current) {
       computePointillism(cv, ref.current, thicknessBrush/100, autoresize, progressCallback).then(() => {
         setRunAlgo(false);
+        // show last canvas with the pointillism result
+        if(visibilityCanvas[visibilityCanvas.length - 1] === false) {
+          toggleCanvas(visibilityCanvas.length - 1);
+        }
+
         if(refFinalResult.current) {
           refFinalResult.current.scrollIntoView({behavior: "smooth"});
         }
@@ -64,7 +67,7 @@ function App() {
 
   function submit() {
     setProgress("");
-    setVisibilityCanvas(intialCanvasVisibility);
+    setVisibilityCanvas(initialCanvasCollapse);
     setRunAlgo(true);
   }
 
@@ -88,6 +91,7 @@ function App() {
                 title={TITLE_FROM_CANVAS_IDS[index]}
                 canvasId={id}
                 collapsible={validForm}
+                collapse={visibilityCanvas[index]}
               />
             </div>
           );
@@ -99,6 +103,7 @@ function App() {
               title={TITLE_FROM_CANVAS_IDS[index]}
               canvasId={id}
               collapsible={validForm}
+              collapse={visibilityCanvas[index]}
             />
           );
         }
@@ -119,8 +124,8 @@ function App() {
         <div className="self-start">
           <div className="form-control">
             <label className="cursor-pointer flex gap-2">
-              <span className="label-text text-base">Resize Image </span> 
-              <input type="checkbox" checked={autoresize} onChange={() => setAutoresize((old) => !old)} className="checkbox checkbox-primary" />
+              <span className="label-text text-neutral-content">Resize Image </span> 
+              <input type="checkbox" checked={autoresize} onChange={() => setAutoresize((old) => !old)} className="checkbox checkbox-primary checkbox-md" />
             </label>
           </div>
           <span className="text-sm">Recommanded for heavy images on low configuration</span>
@@ -153,7 +158,7 @@ function App() {
           </div>
             {
               !openCVLoaded ?
-              (<div className="flex flex-col items-center">
+              (<div className="flex flex-col items-center text-neutral-content">
                 <Loader/>
                 Loading OpenCV library
               </div>)

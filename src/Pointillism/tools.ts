@@ -1,10 +1,5 @@
 import { Mat } from "opencv-ts";
-import ColorThief from 'colorthief';
-import convert from "color-convert";
 import { shuffle, max, sum } from "lodash";
-
-import { saturate, rotateHue } from "./colorTools";
-
 import { bisect_left } from "aureooms-js-bisect";
 
 type pixel = [number, number, number];

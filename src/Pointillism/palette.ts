@@ -32,7 +32,7 @@ export function extendPalette(palette: pixel[]) : pixel[] {
 export function drawPalette(canvasId: string, palette: pixel[]) : void {
   let canvas = document.getElementById(canvasId) as HTMLCanvasElement;
   if (!canvas.getContext) {
-    throw "cannot find canvas to draw palette";
+    throw new Error("cannot find canvas to draw palette");
   }
   let context = canvas.getContext('2d') as CanvasRenderingContext2D;
 
