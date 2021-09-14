@@ -24,7 +24,7 @@ function Stepper({ steps, currentStep }: StepperInterface): React.ReactElement {
         steps.map((step, index) => {
           if(index <= stepIndex) {
             return (
-              <li key={step} className="step step-success text-neutral-content">
+              <li key={step} className="step step-primary text-neutral-content">
                 <span className="hidden lg:block xl:block 2xl:block">{step}</span>
               </li>
             );
