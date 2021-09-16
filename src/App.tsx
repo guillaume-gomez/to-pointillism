@@ -3,7 +3,7 @@ import './App.css';
 import Stepper from "./Components/Stepper";
 import UploadButton from "./Components/UploadButton";
 import Loader from "./Components/Loader";
-import Slider from "./Components/Slider";
+import ThicknessSlider from "./Components/ThicknessSlider";
 import Footer from "./Components/Footer";
 import NavBar from "./Components/NavBar";
 import CanvasCard from "./Components/CanvasCard";
@@ -120,7 +120,7 @@ function App() {
       <div className="flex flex-col items-center gap-3 w-full p-4">
         <h2 className="flex self-start text-xl font-bold">Settings</h2>
         <UploadButton onChange={loadImage} />
-        <Slider label="thickness brush" value={thicknessBrush} min={1 * 100} max={MAX_THICKNESS_BRUSH * 100} onChange={(value) => setThicknessBrush(parseInt(value))} />
+        <ThicknessSlider label="thickness brush" value={thicknessBrush} min={1 * 100} max={MAX_THICKNESS_BRUSH * 100} onChange={(value) => setThicknessBrush(parseInt(value))} />
         <div className="self-start">
           <div className="form-control">
             <label className="cursor-pointer flex gap-2">
