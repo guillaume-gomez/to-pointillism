@@ -5,9 +5,9 @@ import { saturate, rotateHue } from "./colorTools";
 const PALETTE_BASE_COLOR = 20;
 export type pixel = [number, number, number];
 
-export function generateColorPalette(image: HTMLImageElement) : pixel[] {
+export function generateColorPalette(image: HTMLImageElement, paletteSize: number  = PALETTE_BASE_COLOR) : pixel[] {
   let colorThief = new ColorThief();
-  return colorThief.getPalette(image, PALETTE_BASE_COLOR);
+  return colorThief.getPalette(image, paletteSize);
 }
 
 export function extendPalette(palette: pixel[]) : pixel[] {
@@ -36,7 +36,7 @@ export function drawPalette(canvasId: string, palette: pixel[]) : void {
   }
   let context = canvas.getContext('2d') as CanvasRenderingContext2D;
 
-  const nbBaseColor = PALETTE_BASE_COLOR;
+  const nbBaseColor = palette.length / 4; // original palette + 3 more palettes
   
   const widthColor = canvas.width / nbBaseColor;
   const heightColor = widthColor;

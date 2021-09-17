@@ -43,9 +43,9 @@ export const ProcessStateMachineArray = [
 /////////////////////////////////////////////////////////////////////////////////
 
 
-export async function generatePalette(imgElement: HTMLImageElement, delay: number = 2000) : Promise<pixel[]> {
+export async function generatePalette(imgElement: HTMLImageElement, paletteSize: number, delay: number = 2000) : Promise<pixel[]> {
   return new Promise((resolve) => {
-      let palette = generateColorPalette(imgElement);
+      let palette = generateColorPalette(imgElement, paletteSize);
       palette = extendPalette(palette);
 
       drawPalette(CANVAS_IDS[0], palette);
@@ -104,9 +104,10 @@ export async function drawPointillism(
   ) : Promise<unknown> {
   
     const batchSize = 1000;
-    // magic number to apply properly the algorithm on both small and image
-    const strokeScaleDivider = Math.max(src.rows, src.cols) * 1000 /1900;
-    const strokeScale = Math.floor(Math.max(src.rows, src.cols) / strokeScaleDivider);
+    // magic number to apply properly the algorithm on both small and large images
+    const maxSize = Math.max(src.rows, src.cols);
+    const strokeScaleDivider = maxSize * 1000 /1900;
+    const strokeScale = Math.floor(maxSize / strokeScaleDivider);
     return new Promise((resolve) => {
       range(0, grid.length, batchSize).forEach(progressIndex => {
         const pixels = rangeOfPixels(src, grid, progressIndex, progressIndex + batchSize);
@@ -130,10 +131,11 @@ export async function computePointillism(
     cv: any,
     imgElement: HTMLImageElement,
     thicknessBrush: number,
+    paletteSize: number,
     autoResize: boolean,
     progressCallback: (progress: ProcessStateMachine) => void, delay: number = 2000
   ) {
-  const palette = await generatePalette(imgElement);
+  const palette = await generatePalette(imgElement, paletteSize);
   progressCallback("palette");
 
   let src = await cv.imread(imgElement);
