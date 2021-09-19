@@ -10,16 +10,16 @@ export function generateColorPalette(image: HTMLImageElement, paletteSize: numbe
   return colorThief.getPalette(image, paletteSize);
 }
 
-export function extendPalette(palette: pixel[]) : pixel[] {
+export function extendPalette(palette: pixel[], saturatioLevel: number = 20, hueLevel: number = 20 ) : pixel[] {
   const moreSaturatedPalette = palette.map(([red, green, blue]) => {
     const [hue, saturation, lightness] = convert.rgb.hsl(red, green, blue);
-    const [_, moreSaturated, __] = saturate([hue, saturation, lightness], 20);
+    const [_, moreSaturated, __] = saturate([hue, saturation, lightness], saturatioLevel);
     return convert.hsl.rgb([hue, moreSaturated, lightness]);
   });
 
   function moreHuePaletteGenerator() {
     return palette.map(([red, green, blue]) => {
-      const random = Math.random() * (20 - -20) + -20;
+      const random = Math.random() * (hueLevel - -hueLevel) + -hueLevel;
       
       const [hue, saturation, lightness] = convert.rgb.hsl(red, green, blue);
       const [newHue, _, __] = rotateHue([hue, saturation, lightness], random);
