@@ -8,6 +8,7 @@ import PaletteSizeSlider from "./Components/PaletteSizeSlider";
 import Footer from "./Components/Footer";
 import NavBar from "./Components/NavBar";
 import CanvasCard from "./Components/CanvasCard";
+import ColorComponent from "./Components/ColorComponent";
 
 import UseOpenCV from "./Hooks/UseOpenCV";
 import { computePointillism, MAX_THICKNESS_BRUSH, CANVAS_IDS, ProcessStateMachineArray } from "./Pointillism/pointillism";
@@ -37,7 +38,10 @@ function App() {
   const [runAlgo, setRunAlgo] = useState<boolean>(false);
   const [thicknessBrush, setThicknessBrush] = useState<number>(100);
   const [paletteSize, setPaletteSize] = useState<number>(20);
+  const [hue, setHue] = useState<number>(20);
+  const [saturation, setSaturation] = useState<number>(20);
   const [visibilityCanvas, setVisibilityCanvas] = useState<boolean[]>(initialCanvasCollapse);
+  
   useEffect(() => {
     if(runAlgo && ref.current) {
       computePointillism(cv, ref.current, thicknessBrush/100, paletteSize, autoresize, progressCallback).then(() => {
@@ -118,7 +122,7 @@ function App() {
       </div>
     :
     (
-      <div className="flex flex-col items-center gap-3 w-full p-4">
+      <div className="flex flex-col items-center gap-5 w-full p-4">
         <h2 className="flex self-start text-xl font-bold">Settings</h2>
         <UploadButton onChange={loadImage} />
         <ThicknessSlider value={thicknessBrush} min={1 * 100} max={MAX_THICKNESS_BRUSH * 100} onChange={(value) => setThicknessBrush(parseInt(value, 10))} />
@@ -132,6 +136,7 @@ function App() {
           </div>
           <span className="text-sm">Recommanded for heavy images on low configuration</span>
         </div>
+        <ColorComponent hue={hue} saturation={saturation} onChangeHue={setHue} onChangeSaturation={setSaturation} />
         <div>
           
         </div>
