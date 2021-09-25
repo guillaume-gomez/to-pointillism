@@ -44,7 +44,7 @@ function App() {
   
   useEffect(() => {
     if(runAlgo && ref.current) {
-      computePointillism(cv, ref.current, thicknessBrush/100, paletteSize, autoresize, progressCallback).then(() => {
+      computePointillism(cv, ref.current, thicknessBrush/100, paletteSize, hue, saturation, autoresize, progressCallback).then(() => {
         setRunAlgo(false);
         // show last canvas with the pointillism result
         if(visibilityCanvas[visibilityCanvas.length - 1] === false) {

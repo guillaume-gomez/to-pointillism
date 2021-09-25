@@ -43,10 +43,16 @@ export const ProcessStateMachineArray = [
 /////////////////////////////////////////////////////////////////////////////////
 
 
-export async function generatePalette(imgElement: HTMLImageElement, paletteSize: number, delay: number = 2000) : Promise<pixel[]> {
+export async function generatePalette(
+    imgElement: HTMLImageElement,
+    paletteSize: number,
+    hue: number,
+    saturation: number,
+    delay: number = 2000
+  ) : Promise<pixel[]> {
   return new Promise((resolve) => {
       let palette = generateColorPalette(imgElement, paletteSize);
-      palette = extendPalette(palette);
+      palette = extendPalette(palette, hue, saturation);
 
       drawPalette(CANVAS_IDS[0], palette);
       setTimeout(() => resolve(palette), delay);
@@ -132,10 +138,12 @@ export async function computePointillism(
     imgElement: HTMLImageElement,
     thicknessBrush: number,
     paletteSize: number,
+    hue: number,
+    saturation: number,
     autoResize: boolean,
     progressCallback: (progress: ProcessStateMachine) => void, delay: number = 2000
   ) {
-  const palette = await generatePalette(imgElement, paletteSize);
+  const palette = await generatePalette(imgElement, paletteSize, hue, saturation);
   progressCallback("palette");
 
   let src = await cv.imread(imgElement);
