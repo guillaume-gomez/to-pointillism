@@ -20,6 +20,7 @@
     "colorthief": "2.3.1",
     "daisyui": "^1.14.0",
     "gh-pages": "^3.1.0",
+    "gpu.js": "^2.11.4",
     "lodash": "^4.17.21",
     "opencv-ts": "^1.2.18",
     "postcss": "^7",
