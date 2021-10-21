@@ -39,6 +39,7 @@ function App() {
   const [thicknessBrush, setThicknessBrush] = useState<number>(100);
   const [paletteSize, setPaletteSize] = useState<number>(20);
   const [hue, setHue] = useState<number>(20);
+  const [format, setFormat] = useState<string>("jpeg");
   const [saturation, setSaturation] = useState<number>(20);
   const [visibilityCanvas, setVisibilityCanvas] = useState<boolean[]>(initialCanvasCollapse);
   
@@ -97,6 +98,7 @@ function App() {
                 canvasId={id}
                 collapsible={validForm}
                 collapse={visibilityCanvas[index]}
+                format={format}
               />
             </div>
           );
@@ -109,6 +111,7 @@ function App() {
               canvasId={id}
               collapsible={validForm}
               collapse={visibilityCanvas[index]}
+              format={format}
             />
           );
         }
@@ -127,6 +130,13 @@ function App() {
         <UploadButton onChange={loadImage} />
         <ThicknessSlider value={thicknessBrush} min={1 * 100} max={MAX_THICKNESS_BRUSH * 100} onChange={(value) => setThicknessBrush(parseInt(value, 10))} />
         <PaletteSizeSlider value={paletteSize} onChange={(value) => setPaletteSize(parseInt(value, 10))}/>
+        <div className="w-full">
+          <select onChange={(e) =>setFormat(e.target.value)} value={format} className="select select-bordered select-primary max-w-xs text-primary bg-opacity-50">
+            <option disabled>Select output format</option>
+            <option value="png">Png</option>
+            <option value="jpeg">Jpeg</option>
+          </select>
+        </div>
         <div className="self-start">
           <div className="form-control">
             <label className="cursor-pointer flex gap-2">

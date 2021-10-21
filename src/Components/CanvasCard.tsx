@@ -6,16 +6,17 @@ interface CanvasCardInterface {
   canvasId: string;
   collapsible: boolean;
   collapse: boolean;
+  format: string;
 }
 
-function CanvasCard({ toggleCanvas, title, canvasId, collapsible, collapse }: CanvasCardInterface): React.ReactElement {
+function CanvasCard({ toggleCanvas, title, canvasId, collapsible, collapse, format }: CanvasCardInterface): React.ReactElement {
   const refCanvas = useRef<HTMLCanvasElement>(null);
   const refA = useRef<HTMLAnchorElement>(null);
 
   function saveImage() {
     if(refCanvas.current && refA.current) {
-      const dataURL = refCanvas.current.toDataURL("image/png");
-      (refA.current as any).download = "image.png";
+      const dataURL = refCanvas.current.toDataURL(`image/${format}`);
+      (refA.current as any).download = `image.${format}`;
       refA.current.href = dataURL.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
       window.open('about:blank','image from canvas');
     }
