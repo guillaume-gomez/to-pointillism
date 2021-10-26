@@ -150,7 +150,7 @@ function App() {
             <div className="form-control">
               <label className="cursor-pointer flex gap-2">
                 <span className="label-text text-neutral-content">Resize Image </span> 
-                <input type="checkbox" checked={autoresize} onChange={() => setAutoresize((old) => !old)} className="checkbox checkbox-primary checkbox-md" />
+                <input type="checkbox" checked={autoresize} onChange={() => { setAutoresize((old) => !old); setThickness(1)} } className="checkbox checkbox-primary checkbox-md" />
               </label>
             </div>
             <span className="text-xs">Recommanded for heavy images on low configuration.</span>
