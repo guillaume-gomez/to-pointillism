@@ -11,7 +11,7 @@ import CanvasCard from "./Components/CanvasCard";
 import ColorComponent from "./Components/ColorComponent";
 
 import UseOpenCV from "./Hooks/UseOpenCV";
-import { computePointillism, MAX_THICKNESS_BRUSH, CANVAS_IDS, ProcessStateMachineArray } from "./Pointillism/pointillism";
+import { computePointillism, MAX_GRADIANT_SMOOTH_RATIO, CANVAS_IDS, ProcessStateMachineArray } from "./Pointillism/pointillism";
 
 export const TITLE_FROM_CANVAS_IDS = [
   "Generate Palette",
@@ -36,7 +36,8 @@ function App() {
   const [validForm, setValidForm] = useState<boolean>(false);
   const [autoresize, setAutoresize] = useState<boolean>(false);
   const [runAlgo, setRunAlgo] = useState<boolean>(false);
-  const [smoothnessGradiant, setSmoothnessGradiant] = useState<number>(100);
+  const [smoothnessGradiant, setSmoothnessGradiant] = useState<number>((MAX_GRADIANT_SMOOTH_RATIO * 100) /2);
+  const [thickness, setThickness] = useState<number>(1);
   const [paletteSize, setPaletteSize] = useState<number>(20);
   const [hue, setHue] = useState<number>(20);
   const [format, setFormat] = useState<string>("jpeg");
@@ -63,8 +64,15 @@ function App() {
   function loadImage(event: React.ChangeEvent<HTMLInputElement>) {
     if(event && event.target && event.target.files && ref.current) {
       ref.current.src = URL.createObjectURL(event.target.files[0]);
+      ref.current.onload =  (event: any) => {
+          const maxSize = Math.max(event.target.width, event.target.height);
+          const empiricalRatio = Math.round(0.001709 * maxSize - 0.9158);
+          const thickness = Math.max(1, empiricalRatio);
+          setThickness(thickness)
+      };
     }
   }
+
 
   function progressCallback(progress: string) {
     setProgress(progress);
@@ -128,7 +136,8 @@ function App() {
       <div className="flex flex-col items-center gap-5 w-full p-4">
         <h2 className="flex self-start text-xl font-bold">Settings</h2>
         <UploadButton onChange={loadImage} />
-        <ThicknessSlider value={smoothnessGradiant} min={1 * 100} max={MAX_THICKNESS_BRUSH * 100} onChange={(value) => setSmoothnessGradiant(parseInt(value, 10))} />
+        <ThicknessSlider value={smoothnessGradiant} min={1 * 100} max={MAX_GRADIANT_SMOOTH_RATIO * 100} onChange={(value) => setSmoothnessGradiant(parseInt(value, 10))} />
+        <ThicknessSlider value={thickness} min={1} max={20} onChange={(value) => setThickness(parseInt(value, 10))} />
         <PaletteSizeSlider value={paletteSize} onChange={(value) => setPaletteSize(parseInt(value, 10))}/>
         <div className="w-full">
           <select onChange={(e) =>setFormat(e.target.value)} value={format} className="select select-bordered select-primary max-w-xs text-primary bg-opacity-50">

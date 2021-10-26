@@ -16,7 +16,7 @@ function radiansToDegrees(radians: number) : number
 type ProcessStateMachine = "palette" | "grey" |"gradiants" |"gradiantSmooth" |"generateGrid" |"medianBlur" | "done";
 
 
-export const MAX_THICKNESS_BRUSH = 15.36;
+export const MAX_GRADIANT_SMOOTH_RATIO = 15.36;
 export const CANVAS_IDS = [
   "drawPalette",
   "greyOutput",
@@ -110,11 +110,10 @@ export async function drawPointillism(
   ) : Promise<unknown> {
   
     const batchSize = 1000;
-    // magic number to apply properly the algorithm on both small and large images
     const maxSize = Math.max(src.rows, src.cols);
-    const strokeScaleDivider = maxSize * 1000 /1900;
-    const strokeScale = Math.floor(4*maxSize / strokeScaleDivider);
-    console.log(strokeScale)
+    // magic number to apply properly the algorithm on both small and large images
+    const empiricalRatio = Math.round(0.001709 * maxSize - 0.9158);
+    const strokeScale = Math.max(1, empiricalRatio);
     return new Promise((resolve) => {
       range(0, grid.length, batchSize).forEach(progressIndex => {
         const pixels = rangeOfPixels(src, grid, progressIndex, progressIndex + batchSize);
