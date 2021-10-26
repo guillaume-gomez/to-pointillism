@@ -67,9 +67,9 @@ export async function generateGreyImage(cv: any, src: Mat, delay: number = 2000)
   });
 }
 
-export async function generateGradiant(cv: any, grey: Mat, thicknessBrush: number, delay: number = 2000): Promise<[Mat, Mat]> {
+export async function generateGradiant(cv: any, grey: Mat, smoothnessGradiant: number, delay: number = 2000): Promise<[Mat, Mat]> {
   return new Promise((resolve) => {
-    const gradiants = createGradient(grey, thicknessBrush);
+    const gradiants = createGradient(grey, smoothnessGradiant);
     cv.imshow(CANVAS_IDS[2], gradiants[0]);
     cv.imshow(CANVAS_IDS[3], gradiants[1]);
 
@@ -113,7 +113,8 @@ export async function drawPointillism(
     // magic number to apply properly the algorithm on both small and large images
     const maxSize = Math.max(src.rows, src.cols);
     const strokeScaleDivider = maxSize * 1000 /1900;
-    const strokeScale = Math.floor(maxSize / strokeScaleDivider);
+    const strokeScale = Math.floor(4*maxSize / strokeScaleDivider);
+    console.log(strokeScale)
     return new Promise((resolve) => {
       range(0, grid.length, batchSize).forEach(progressIndex => {
         const pixels = rangeOfPixels(src, grid, progressIndex, progressIndex + batchSize);
@@ -136,7 +137,7 @@ export async function drawPointillism(
 export async function computePointillism(
     cv: any,
     imgElement: HTMLImageElement,
-    thicknessBrush: number,
+    smoothnessGradiant: number,
     paletteSize: number,
     hue: number,
     saturation: number,
@@ -151,7 +152,7 @@ export async function computePointillism(
   const grey = await generateGreyImage(cv, src, delay);
   progressCallback("grey");
   
-  const [dstX, dstY] = await generateGradiant(cv, grey, thicknessBrush, delay);
+  const [dstX, dstY] = await generateGradiant(cv, grey, smoothnessGradiant, delay);
   progressCallback("gradiants")
 
   const [dstxSmooth, dstySmooth] = await generateSmoothGradiant(cv, src.rows, src.cols, dstX, dstY, delay);

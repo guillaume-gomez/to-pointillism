@@ -36,7 +36,7 @@ function App() {
   const [validForm, setValidForm] = useState<boolean>(false);
   const [autoresize, setAutoresize] = useState<boolean>(false);
   const [runAlgo, setRunAlgo] = useState<boolean>(false);
-  const [thicknessBrush, setThicknessBrush] = useState<number>(100);
+  const [smoothnessGradiant, setSmoothnessGradiant] = useState<number>(100);
   const [paletteSize, setPaletteSize] = useState<number>(20);
   const [hue, setHue] = useState<number>(20);
   const [format, setFormat] = useState<string>("jpeg");
@@ -45,7 +45,7 @@ function App() {
   
   useEffect(() => {
     if(runAlgo && ref.current) {
-      computePointillism(cv, ref.current, thicknessBrush/100, paletteSize, hue, saturation, autoresize, progressCallback).then(() => {
+      computePointillism(cv, ref.current, smoothnessGradiant/100, paletteSize, hue, saturation, autoresize, progressCallback).then(() => {
         setRunAlgo(false);
         // show last canvas with the pointillism result
         if(visibilityCanvas[visibilityCanvas.length - 1] === false) {
@@ -128,7 +128,7 @@ function App() {
       <div className="flex flex-col items-center gap-5 w-full p-4">
         <h2 className="flex self-start text-xl font-bold">Settings</h2>
         <UploadButton onChange={loadImage} />
-        <ThicknessSlider value={thicknessBrush} min={1 * 100} max={MAX_THICKNESS_BRUSH * 100} onChange={(value) => setThicknessBrush(parseInt(value, 10))} />
+        <ThicknessSlider value={smoothnessGradiant} min={1 * 100} max={MAX_THICKNESS_BRUSH * 100} onChange={(value) => setSmoothnessGradiant(parseInt(value, 10))} />
         <PaletteSizeSlider value={paletteSize} onChange={(value) => setPaletteSize(parseInt(value, 10))}/>
         <div className="w-full">
           <select onChange={(e) =>setFormat(e.target.value)} value={format} className="select select-bordered select-primary max-w-xs text-primary bg-opacity-50">
