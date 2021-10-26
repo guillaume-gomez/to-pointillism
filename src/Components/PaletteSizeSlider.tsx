@@ -1,5 +1,5 @@
 import React from 'react';
-import Slider from "./Slider";
+import SliderWithLabel from "./SliderWithLabel";
 
 interface PaletteSizeSliderInterface {
   value: number;
@@ -9,9 +9,7 @@ interface PaletteSizeSliderInterface {
 function PaletteSizeSlider({ value, onChange } : PaletteSizeSliderInterface): React.ReactElement {
   return (
     <div className="w-full">
-      <label>Palette Size</label>
-      <Slider value={value} onChange={onChange} min={5} max={20} step={1}/>
-      <span>{value}</span>
+      <SliderWithLabel label="Palette Size" value={value} onChange={onChange} min={5} max={20} step={1}/>
    </div>
   );
 }

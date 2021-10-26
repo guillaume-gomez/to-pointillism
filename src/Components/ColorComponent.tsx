@@ -1,5 +1,5 @@
 import React from 'react';
-import Slider from "./Slider";
+import SliderWithLabel from "./SliderWithLabel";
 
 interface ColorComponentInterface {
   hue: number;
@@ -10,23 +10,20 @@ interface ColorComponentInterface {
 
 function ColorComponent({hue, saturation, onChangeHue, onChangeSaturation } : ColorComponentInterface): React.ReactElement {
   return (
-    <details className="w-full">
-      <summary>Advanced palette settings</summary>
-      <div className="flex flex-col gap-5">
-        <div>
-          <label>Hue Level</label>
-          <Slider value={hue} onChange={(value) => onChangeHue(parseInt(value, 10))} min={0} max={360} />
-          <p>{hue}</p>
-          <span className="text-sm">Hue level will change the second row in the palette</span>
+    <div>
+      <label className="text-lg">Advanced palette settings</label>
+      <div className="flex flex-row justify-between gap-5">
+        <div className="w-2/4">
+          <SliderWithLabel label="Hue Level" value={hue} onChange={(value) => onChangeHue(parseInt(value, 10))} min={0} max={360} />
+          <span className="text-xs">Hue level will change the second row in the palette</span>
         </div>
-        <div>
-          <label>Saturation Level</label>
-          <Slider value={saturation} onChange={(value) => onChangeSaturation(parseInt(value, 10))} min={0} max={100} />
-          <p>{saturation}</p>
-          <span className="text-sm">Saturation level will change the third and the fourth rows in the palette </span>
+        <div className="divider divider-vertical"></div>
+        <div className="w-2/4">
+          <SliderWithLabel label="Saturation Level" value={saturation} onChange={(value) => onChangeSaturation(parseInt(value, 10))} min={0} max={100} />
+          <span className="text-xs">Saturation level will change the third and the fourth rows in the palette </span>
         </div>
       </div>
-    </details>
+    </div>
   );
 }
 

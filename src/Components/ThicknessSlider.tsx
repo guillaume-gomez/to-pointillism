@@ -1,5 +1,5 @@
 import React from 'react';
-import Slider from "./Slider";
+import SliderWithLabel from "./SliderWithLabel";
 
 interface ThicknessSliderInterface {
   value: number;
@@ -11,12 +11,8 @@ interface ThicknessSliderInterface {
 function ThicknessSlider({ value, onChange, min = 1, max = 100 } : ThicknessSliderInterface): React.ReactElement {
   return (
     <div className="w-full">
-      <div className="flex justify-between">
-        <label>More Artistic</label>
-        <label>More Realistic</label>
-      </div>
-      <Slider value={value} onChange={onChange} min={min} max={max} step={1}/>
-      <span>{value}</span>
+      <SliderWithLabel label="Thickness "value={value} onChange={onChange} min={min} max={max} step={1}/>
+      <span className="text-xs">The thickness of the brush. You can let the algorithm choose for you.</span>
    </div>
   );
 }
