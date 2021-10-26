@@ -12,7 +12,7 @@ import CanvasCard from "./Components/CanvasCard";
 import ColorComponent from "./Components/ColorComponent";
 
 import UseOpenCV from "./Hooks/UseOpenCV";
-import { computePointillism, MAX_GRADIANT_SMOOTH_RATIO, CANVAS_IDS, ProcessStateMachineArray } from "./Pointillism/pointillism";
+import { computePointillism, MAX_GRADIANT_SMOOTH_RATIO, CANVAS_IDS, ProcessStateMachineArray, computeThicknessBrush } from "./Pointillism/pointillism";
 
 export const TITLE_FROM_CANVAS_IDS = [
   "Generate Palette",
@@ -47,7 +47,7 @@ function App() {
   
   useEffect(() => {
     if(runAlgo && ref.current) {
-      computePointillism(cv, ref.current, smoothnessGradiant/100, paletteSize, hue, saturation, autoresize, progressCallback).then(() => {
+      computePointillism(cv, ref.current, smoothnessGradiant/100, thickness, paletteSize, hue, saturation, autoresize, progressCallback).then(() => {
         setRunAlgo(false);
         // show last canvas with the pointillism result
         if(visibilityCanvas[visibilityCanvas.length - 1] === false) {
@@ -66,9 +66,7 @@ function App() {
     if(event && event.target && event.target.files && ref.current) {
       ref.current.src = URL.createObjectURL(event.target.files[0]);
       ref.current.onload =  (event: any) => {
-          const maxSize = Math.max(event.target.width, event.target.height);
-          const empiricalRatio = Math.round(0.001709 * maxSize - 0.9158);
-          const thickness = Math.max(1, empiricalRatio);
+          const thickness = computeThicknessBrush(event.target.width, event.target.height);
           setThickness(thickness)
       };
     }
@@ -158,7 +156,7 @@ function App() {
             <span className="text-xs">Recommanded for heavy images on low configuration.</span>
           </div>
           <details className="w-full text-lg">
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-8">
               <PaletteSizeSlider value={paletteSize} onChange={(value) => setPaletteSize(parseInt(value, 10))}/>
               <ColorComponent hue={hue} saturation={saturation} onChangeHue={setHue} onChangeSaturation={setSaturation} />
             </div>

@@ -13,6 +13,13 @@ function radiansToDegrees(radians: number) : number
   return radians * (180/pi);
 }
 
+export function computeThicknessBrush(width: number, height: number) :number {
+    const maxSize = Math.max(width, height);
+    // linear equation to apply properly the algorithm on both small and large images
+    const empiricalRatio = Math.round(0.001709 * maxSize - 0.9158);
+    return Math.max(1, empiricalRatio);
+}
+
 type ProcessStateMachine = "palette" | "grey" |"gradiants" |"gradiantSmooth" |"generateGrid" |"medianBlur" | "done";
 
 
@@ -106,14 +113,10 @@ export async function drawPointillism(
   dstySmooth: Mat,
   grid: Array<any>,
   palette: pixel[],
+  thicknessBrush: number,
   delay: number = 2000
   ) : Promise<unknown> {
-  
     const batchSize = 1000;
-    const maxSize = Math.max(src.rows, src.cols);
-    // magic number to apply properly the algorithm on both small and large images
-    const empiricalRatio = Math.round(0.001709 * maxSize - 0.9158);
-    const strokeScale = Math.max(1, empiricalRatio);
     return new Promise((resolve) => {
       range(0, grid.length, batchSize).forEach(progressIndex => {
         const pixels = rangeOfPixels(src, grid, progressIndex, progressIndex + batchSize);
@@ -121,9 +124,9 @@ export async function drawPointillism(
         grid.slice(progressIndex, Math.min((progressIndex + batchSize), grid.length)).forEach(([y, x], index) => {
           const color = colorSelect(colorProbabilities[index], palette);
           const angle = radiansToDegrees(direction(dstxSmooth, dstySmooth, y, x)) + 90;
-          const length = Math.round(strokeScale + strokeScale * Math.sqrt(magnitude(dstxSmooth, dstySmooth, y, x)));
+          const length = Math.round(thicknessBrush + thicknessBrush * Math.sqrt(magnitude(dstxSmooth, dstySmooth, y, x)));
           const scalar = new cv.Scalar(color[0], color[1], color[2], 255);
-          cv.ellipse(medianBlur, new cv.Point(x, y), new cv.Size(length, strokeScale), angle, 0, 360, scalar, -1, cv.LINE_AA);
+          cv.ellipse(medianBlur, new cv.Point(x, y), new cv.Size(length, thicknessBrush), angle, 0, 360, scalar, -1, cv.LINE_AA);
         });
       });
 
@@ -137,6 +140,7 @@ export async function computePointillism(
     cv: any,
     imgElement: HTMLImageElement,
     smoothnessGradiant: number,
+    thicknessBrush: number, 
     paletteSize: number,
     hue: number,
     saturation: number,
@@ -172,7 +176,7 @@ export async function computePointillism(
   setTimeout(() =>  progressCallback("generateGrid"), delay);
 
 
-  await drawPointillism(cv, src, medianBlur, dstxSmooth, dstySmooth, grid, palette ,delay);
+  await drawPointillism(cv, src, medianBlur, dstxSmooth, dstySmooth, grid, palette, thicknessBrush, delay);
   progressCallback("done")
 
   src.delete();
