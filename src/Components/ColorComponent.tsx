@@ -12,7 +12,7 @@ function ColorComponent({hue, saturation, onChangeHue, onChangeSaturation } : Co
   return (
     <div>
       <label className="text-lg">Advanced palette settings</label>
-      <div className="flex flex-row justify-between gap-5">
+      <div className="flex flex-row justify-between gap-5 pt-2">
         <div className="w-2/4">
           <SliderWithLabel label="Hue Level" value={hue} onChange={(value) => onChangeHue(parseInt(value, 10))} min={0} max={360} />
           <span className="text-xs">Hue level will change the second row in the palette</span>

@@ -134,36 +134,39 @@ function App() {
     (
       <div className="flex justify-center">
         <div className="flex flex-col items-center justify-center gap-8 py-4 w-4/5">
-          <h2 className="flex self-start text-xl font-bold">Settings</h2>
+          <h2 className="flex text-3xl font-bold">Settings</h2>
           <UploadButton onChange={loadImage} />
           <SmoothnessSlider value={smoothnessGradiant} min={1 * 100} max={MAX_GRADIANT_SMOOTH_RATIO * 100} onChange={(value) => setSmoothnessGradiant(parseInt(value, 10))} />
           <ThicknessSlider value={thickness} min={1} max={20} onChange={(value) => setThickness(parseInt(value, 10))} />
-          <div className="w-full flex flex-col gap-2">
-            <select onChange={(e) =>setFormat(e.target.value)} value={format} className="select select-bordered select-primary max-w-xs text-primary bg-opacity-50">
-              <option disabled>Select output format</option>
-              <option value="png">Png</option>
-              <option value="jpeg">Jpeg</option>
-            </select>
-            <span className="text-xs">Output format of the image. While Png preserve quality, Jpeg is a lightweight format.</span>
-          </div>
-          <div className="self-start">
-            <div className="form-control">
-              <label className="cursor-pointer flex gap-2">
-                <span className="label-text text-neutral-content">Resize Image </span> 
-                <input type="checkbox" checked={autoresize} onChange={() => { setAutoresize((old) => !old); setThickness(1)} } className="checkbox checkbox-primary checkbox-md" />
-              </label>
+          <div className="w-full flex gap-5 items-center">
+            <div className="w-2/4">
+              <div className="form-control">
+                <label className="cursor-pointer flex justify-between gap-2">
+                  <span className="label-text text-neutral-content text-base font-semibold">Resize Image </span> 
+                  <input type="checkbox" checked={autoresize} onChange={() => { setAutoresize((old) => !old); setThickness(1)} } className="checkbox checkbox-primary checkbox-md" />
+                </label>
+              </div>
+              <span className="text-xs">Recommanded for heavy images on low configuration.</span>
             </div>
-            <span className="text-xs">Recommanded for heavy images on low configuration.</span>
+            
+            <div className="divider divider-vertical"></div>
+
+            <div className="w-2/4 flex flex-col gap-2">
+              <select onChange={(e) =>setFormat(e.target.value)} value={format} className="select select-bordered select-primary max-w-xs text-primary bg-opacity-50">
+                <option disabled>Select output format</option>
+                <option value="png">Png</option>
+                <option value="jpeg">Jpeg</option>
+              </select>
+              <span className="text-xs">Output format of the image. While Png preserve quality, Jpeg is a lightweight format.</span>
+            </div>
           </div>
-          <details className="w-full text-lg">
-            <div className="flex flex-col gap-8">
+          <details className="w-full text-xl">
+            <div className="flex flex-col gap-8 pt-4">
               <PaletteSizeSlider value={paletteSize} onChange={(value) => setPaletteSize(parseInt(value, 10))}/>
               <ColorComponent hue={hue} saturation={saturation} onChangeHue={setHue} onChangeSaturation={setSaturation} />
             </div>
           </details>
-          <div className="flex self-end">
-            <button className="btn btn-primary" disabled={!validForm} onClick={submit}>Generate</button>
-          </div>
+          <button className="btn btn-primary w-2/4 h-16" disabled={!validForm} onClick={submit}>Generate</button>
         </div>
       </div>
    );
@@ -198,10 +201,12 @@ function App() {
               renderForm()
             }
             <img className="hidden" id="imageSrc" alt="No Image" ref={ref} onLoad={() => setValidForm(true)}/>
-            <div className="w-full flex flex-col items-center gap-3 p-5 card glass text-neutral-content rounded-box">
-              <h2 className="text-xl font-bold text-neutral-content">Results</h2>
+            <div className="w-full flex flex-col items-center gap-8 p-5 card glass text-neutral-content rounded-box">
+              <h2 className="text-3xl font-bold text-neutral-content">Results</h2>
               <Stepper steps={ProcessStateMachineArray} currentStep={progress} />
-              {renderAllCanvas()}
+              <div className="w-full flex flex-col items-center gap-2">
+                {renderAllCanvas()}
+              </div>
             </div>
         </div>
         <Footer />

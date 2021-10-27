@@ -25,11 +25,11 @@ function CanvasCard({ toggleCanvas, title, canvasId, collapsible, collapse, form
   return (
     <div className={`bg-neutral text-neutral-content collapse w-full border rounded-box border-base-300 collapse-arrow ${collapsible ? "" : "collapse-close"}`}>
       <input type="checkbox" checked={collapse} onChange={() => toggleCanvas()}/>
-      <div className="collapse-title text-xl font-medium">
+      <div className="collapse-title text-lg font-medium">
         {title}
       </div>
       <div className="collapse-content flex flex-col justify-center gap-3"> 
-        <canvas ref={refCanvas} className={`max-w-full`} id={canvasId}/>
+        <canvas ref={refCanvas} className={`max-w-full rounded-lg`} id={canvasId}/>
         <div>
           <div className="flex flex-row-reverse">
             <a ref={refA} className="btn btn-primary" onClick={saveImage}>Save</a>
