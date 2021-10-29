@@ -160,13 +160,17 @@ function App() {
               <span className="text-xs">Output format of the image. While Png preserve quality, Jpeg is a lightweight format.</span>
             </div>
           </div>
-          <details className="w-full text-xl">
+          <details className="w-full">
+            <summary className="text-xl">Advanced</summary>
             <div className="flex flex-col gap-8 pt-4">
               <PaletteSizeSlider value={paletteSize} onChange={(value) => setPaletteSize(parseInt(value, 10))}/>
               <ColorComponent hue={hue} saturation={saturation} onChangeHue={setHue} onChangeSaturation={setSaturation} />
             </div>
           </details>
-          <button className="btn btn-primary w-2/4 h-16" disabled={!validForm} onClick={submit}>Generate</button>
+          <div className="w-2/4 flex flex-col gap-2">
+            <button className="btn btn-primary w-full h-16" disabled={!validForm} onClick={submit}>Generate</button>
+            <p className="text-xs italic opacity-60">We don't collect or share images. Everything is done locally</p>
+          </div>
         </div>
       </div>
    );
@@ -180,7 +184,7 @@ function App() {
 
   return (
     <div className="bg-img">
-      <div className="container mx-auto flex flex-col gap-10 bg-neutral">
+      <div className="container mx-auto flex flex-col gap-5 bg-neutral">
         <NavBar/>
         <div className="flex flex-col px-4 flex flex-col gap-5" >
           <div className="alert alert-warning">
