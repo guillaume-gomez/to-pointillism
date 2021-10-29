@@ -119,15 +119,18 @@ export async function drawPointillism(
     const batchSize = 1000;
     return new Promise((resolve) => {
       range(0, grid.length, batchSize).forEach(progressIndex => {
-        const pixels = rangeOfPixels(src, grid, progressIndex, progressIndex + batchSize);
+        const maxSize = Math.min((progressIndex + batchSize), grid.length)
+        const pixels = rangeOfPixels(src, grid, progressIndex, maxSize);
         const colorProbabilities = computeColorProbabilities(pixels, palette);
-        grid.slice(progressIndex, Math.min((progressIndex + batchSize), grid.length)).forEach(([y, x], index) => {
-          const color = colorSelect(colorProbabilities[index], palette);
+
+        for(let index = progressIndex; index < maxSize; index++) {
+          const [y, x] = grid[index];
+          const color = colorSelect(colorProbabilities[index % batchSize], palette);
           const angle = radiansToDegrees(direction(dstxSmooth, dstySmooth, y, x)) + 90;
           const length = Math.round(thicknessBrush + thicknessBrush * Math.sqrt(magnitude(dstxSmooth, dstySmooth, y, x)));
           const scalar = new cv.Scalar(color[0], color[1], color[2], 255);
           cv.ellipse(medianBlur, new cv.Point(x, y), new cv.Size(length, thicknessBrush), angle, 0, 360, scalar, -1, cv.LINE_AA);
-        });
+        }
       });
 
       cv.imshow(CANVAS_IDS[7],medianBlur);
@@ -172,12 +175,17 @@ export async function computePointillism(
   let medianBlur = await generateBlurMedian(cv, src, delay);
   progressCallback("medianBlur")
 
+  let startTime = performance.now();
   const grid = generateRandomGrid(src.cols, src.rows);
+  let endTime = performance.now();
+  console.log("Ellipse ->", endTime - startTime);
   setTimeout(() =>  progressCallback("generateGrid"), delay);
 
-
+  startTime = performance.now();
   await drawPointillism(cv, src, medianBlur, dstxSmooth, dstySmooth, grid, palette, thicknessBrush, delay);
   progressCallback("done")
+  endTime = performance.now();
+  console.log("Pointillism ->", endTime - startTime);
 
   src.delete();
   medianBlur.delete();
