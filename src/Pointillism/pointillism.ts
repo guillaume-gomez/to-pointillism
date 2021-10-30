@@ -154,6 +154,9 @@ export async function computePointillism(
   progressCallback("palette");
 
   let src = await cv.imread(imgElement);
+  if(autoResize) {
+    src = resizeWithRatio(src, 1280, 780);
+  }
 
   const grey = await generateGreyImage(cv, src, delay);
   progressCallback("grey");
@@ -168,9 +171,6 @@ export async function computePointillism(
   dstX.delete();
   dstY.delete();
 
-  if(autoResize) {
-    src = resizeWithRatio(src, 1280, 780);
-  }
 
   let medianBlur = await generateBlurMedian(cv, src, delay);
   progressCallback("medianBlur")
