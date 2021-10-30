@@ -85,7 +85,7 @@ const arrayDistGpu = gpu.createKernel(function(a: pixel[], b: pixel[]) {
   // eslint-disable-next-line
   return Math.sqrt((a[this.thread.y][0] - b[this.thread.x][0]) ** 2 + (a[this.thread.y][1] - b[this.thread.x][1]) ** 2 + (a[this.thread.y][2] - b[this.thread.x][2]) ** 2)  //distance(a[this.thread.x], b[this.thread.x]);
 })
-.setOutput([80, 1000]);
+.setOutput([80, 5000]);
 //Palette Size max, BatchSize
 
 

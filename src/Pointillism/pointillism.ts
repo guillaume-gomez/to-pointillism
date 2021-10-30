@@ -116,7 +116,7 @@ export async function drawPointillism(
   thicknessBrush: number,
   delay: number = 2000
   ) : Promise<unknown> {
-    const batchSize = 1000;
+    const batchSize = 5000;
     return new Promise((resolve) => {
       range(0, grid.length, batchSize).forEach(progressIndex => {
         const maxSize = Math.min((progressIndex + batchSize), grid.length)
@@ -175,16 +175,13 @@ export async function computePointillism(
   let medianBlur = await generateBlurMedian(cv, src, delay);
   progressCallback("medianBlur")
 
-  let startTime = performance.now();
   const grid = generateRandomGrid(src.cols, src.rows);
-  let endTime = performance.now();
-  console.log("Ellipse ->", endTime - startTime);
   setTimeout(() =>  progressCallback("generateGrid"), delay);
 
-  startTime = performance.now();
+  const startTime = performance.now();
   await drawPointillism(cv, src, medianBlur, dstxSmooth, dstySmooth, grid, palette, thicknessBrush, delay);
   progressCallback("done")
-  endTime = performance.now();
+  const endTime = performance.now();
   console.log("Pointillism ->", endTime - startTime);
 
   src.delete();
