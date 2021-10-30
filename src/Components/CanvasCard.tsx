@@ -18,7 +18,6 @@ function CanvasCard({ toggleCanvas, title, canvasId, collapsible, collapse, form
       const dataURL = refCanvas.current.toDataURL(`image/${format}`);
       (refA.current as any).download = `image.${format}`;
       refA.current.href = dataURL.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
-      window.open('about:blank','image from canvas');
     }
   }
 
