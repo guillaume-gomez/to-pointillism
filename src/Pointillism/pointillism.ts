@@ -55,7 +55,7 @@ export async function generatePalette(
     paletteSize: number,
     hue: number,
     saturation: number,
-    delay: number = 2000
+    delay: number = 100
   ) : Promise<pixel[]> {
   return new Promise((resolve) => {
       let palette = generateColorPalette(imgElement, paletteSize);
@@ -66,7 +66,7 @@ export async function generatePalette(
   });
 }
 
-export async function generateGreyImage(cv: any, src: Mat, delay: number = 2000) : Promise<Mat> {
+export async function generateGreyImage(cv: any, src: Mat, delay: number = 100) : Promise<Mat> {
   return new Promise((resolve) => {
     let grey: Mat = toGray(src);
     cv.imshow(CANVAS_IDS[1], grey);
@@ -74,7 +74,7 @@ export async function generateGreyImage(cv: any, src: Mat, delay: number = 2000)
   });
 }
 
-export async function generateGradiant(cv: any, grey: Mat, smoothnessGradiant: number, delay: number = 2000): Promise<[Mat, Mat]> {
+export async function generateGradiant(cv: any, grey: Mat, smoothnessGradiant: number, delay: number = 100): Promise<[Mat, Mat]> {
   return new Promise((resolve) => {
     const gradiants = createGradient(grey, smoothnessGradiant);
     cv.imshow(CANVAS_IDS[2], gradiants[0]);
@@ -84,7 +84,7 @@ export async function generateGradiant(cv: any, grey: Mat, smoothnessGradiant: n
   });
 }
 
-export async function generateSmoothGradiant(cv: any, rows: number, cols: number, dstx: Mat, dsty: Mat, delay: number = 2000): Promise<[Mat, Mat]> {
+export async function generateSmoothGradiant(cv: any, rows: number, cols: number, dstx: Mat, dsty: Mat, delay: number = 100): Promise<[Mat, Mat]> {
   return new Promise((resolve) => {
     const gradientSmoothingRadius = Math.round(Math.max(rows, cols) / 50);
     const gradientSmooths = smooth(dstx, dsty, gradientSmoothingRadius);
@@ -95,7 +95,7 @@ export async function generateSmoothGradiant(cv: any, rows: number, cols: number
   });
 }
 
-export async function generateBlurMedian(cv: any, src: Mat, delay: number = 2000) : Promise<Mat> {
+export async function generateBlurMedian(cv: any, src: Mat, delay: number = 100) : Promise<Mat> {
   return new Promise((resolve) => {
     let medianBlur = cv.Mat.zeros(src.cols, src.rows, cv.CV_32F);
     cv.medianBlur(src, medianBlur, 11);
@@ -114,7 +114,7 @@ export async function drawPointillism(
   grid: Array<any>,
   palette: pixel[],
   thicknessBrush: number,
-  delay: number = 2000
+  delay: number = 100
   ) : Promise<unknown> {
     const batchSize = 5000;
     return new Promise((resolve) => {
@@ -148,7 +148,7 @@ export async function computePointillism(
     hue: number,
     saturation: number,
     autoResize: boolean,
-    progressCallback: (progress: ProcessStateMachine) => void, delay: number = 2000
+    progressCallback: (progress: ProcessStateMachine) => void, delay: number = 100
   ) {
   const palette = await generatePalette(imgElement, paletteSize, hue, saturation);
   progressCallback("palette");
