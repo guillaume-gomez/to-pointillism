@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, ReactNode } from 'react';
 import * as dateFns from "date-fns";
 interface CanvasCardInterface {
   toggleCanvas: () => void;
@@ -7,9 +7,10 @@ interface CanvasCardInterface {
   collapsible: boolean;
   collapse: boolean;
   format: string;
+  children?: ReactNode
 }
 
-function CanvasCard({ toggleCanvas, title, canvasId, collapsible, collapse, format }: CanvasCardInterface): React.ReactElement {
+function CanvasCard({ toggleCanvas, title, canvasId, collapsible, collapse, format, children }: CanvasCardInterface): React.ReactElement {
   const refCanvas = useRef<HTMLCanvasElement>(null);
   const refA = useRef<HTMLAnchorElement>(null);
 
@@ -28,12 +29,14 @@ function CanvasCard({ toggleCanvas, title, canvasId, collapsible, collapse, form
       <div className="collapse-title text-lg font-medium">
         {title}
       </div>
-      <div className="collapse-content flex flex-col justify-center gap-3"> 
+      <div className="collapse-content flex flex-col justify-center items-center gap-3"> 
         <canvas ref={refCanvas} className={`max-w-full rounded-lg`} id={canvasId}/>
-        <div>
-          <div className="flex flex-row-reverse">
-            <a ref={refA} className="btn btn-primary" onClick={saveImage}>Save</a>
-          </div>
+        { children ?
+            children
+            : null
+        }
+        <div className="flex flex-row self-end">
+          <a ref={refA} className="btn btn-primary" onClick={saveImage}>Save</a>
         </div>
       </div>
     </div>

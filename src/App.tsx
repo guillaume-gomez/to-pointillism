@@ -106,7 +106,12 @@ function App() {
                 collapsible={validForm}
                 collapse={visibilityCanvas[index]}
                 format={format}
-              />
+              >
+                <p className="text-base font-semibold">
+                  Not fully satisfied 😅.
+                  Try again by changing default parameters.
+                </p>
+              </CanvasCard>
             </div>
           );
         } else {
