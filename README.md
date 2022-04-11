@@ -4,6 +4,13 @@ Convert any images to pointillism painting.
 
 [Try by yourself 🙂 ](https://guillaume-gomez.github.io/to-pointillism/) 
 
+## Example
+
+### Original
+![original](0_ftnAIoF9wkjeAR9b.jpeg)
+
+### Converted
+![to-pointillism](to-pointillism.jpeg)
 
 ## references
 
