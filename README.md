@@ -7,10 +7,10 @@ Convert any images to pointillism painting.
 ## Example
 
 ### Original
-![original](0_ftnAIoF9wkjeAR9b.jpeg)
+<img src="samples/original.jpeg" width="50%">
 
 ### Converted
-![to-pointillism](to-pointillism.jpeg)
+<img src="samples/to-pointillism.jpeg" width="50%">
 
 ## references
 
