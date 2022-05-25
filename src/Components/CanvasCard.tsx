@@ -1,5 +1,5 @@
 import React, { useRef, ReactNode } from 'react';
-import * as dateFns from "date-fns";
+import { format as formatFns } from "date-fns";
 interface CanvasCardInterface {
   toggleCanvas: () => void;
   title: string;
@@ -17,7 +17,7 @@ function CanvasCard({ toggleCanvas, title, canvasId, collapsible, collapse, form
   function saveImage() {
     if(refCanvas.current && refA.current) {
       const dataURL = refCanvas.current.toDataURL(`image/${format}`);
-      const dateString = dateFns.format(new Date(), "dd-MM-yyyy-hh-mm");
+      const dateString = formatFns(new Date(), "dd-MM-yyyy-hh-mm");
       (refA.current as any).download = `${dateString}-pointillism.${format}`;
       refA.current.href = dataURL.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
     }
