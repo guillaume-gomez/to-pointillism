@@ -13,7 +13,7 @@ function radiansToDegrees(radians: number) : number
   return radians * (180/pi);
 }
 
-export function computeThicknessBrush(width: number, height: number) :number {
+export function computeBrushThickness(width: number, height: number) :number {
     const maxSize = Math.max(width, height);
     // linear equation to apply properly the algorithm on both small and large images
     const empiricalRatio = Math.round(0.001709 * maxSize - 0.9158);
@@ -128,8 +128,8 @@ export async function drawPointillism(
           const color = colorSelect(colorProbabilities[index % batchSize], palette);
           const angle = radiansToDegrees(direction(dstxSmooth, dstySmooth, y, x)) + 90;
           const length = Math.round(thicknessBrush + thicknessBrush * Math.sqrt(magnitude(dstxSmooth, dstySmooth, y, x)));
-          const scalar = new cv.Scalar(color[0], color[1], color[2], 255);
-          cv.ellipse(medianBlur, new cv.Point(x, y), new cv.Size(length, thicknessBrush), angle, 0, 360, scalar, -1, cv.LINE_AA);
+          const ellipseColor = new cv.Scalar(color[0], color[1], color[2], 255);
+          cv.ellipse(medianBlur, new cv.Point(x, y), new cv.Size(length, thicknessBrush), angle, 0, 360, ellipseColor, -1, cv.LINE_AA);
         }
       });
 
