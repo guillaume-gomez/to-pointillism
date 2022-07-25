@@ -23,6 +23,12 @@ export function computeBrushThickness(width: number, height: number) :number {
 type ProcessStateMachine = "palette" | "grey" |"gradiants" |"gradiantSmooth" |"generateGrid" |"medianBlur" | "done";
 
 
+export interface BrushParams {
+  brushThickness: number;
+  brushOpacity: number;
+  brushStroke: number
+}
+
 export const MAX_GRADIANT_SMOOTH_RATIO = 15.36;
 export const CANVAS_IDS = [
   "drawPalette",
@@ -44,6 +50,7 @@ export const ProcessStateMachineArray = [
 "generateGrid",
 "done"
 ];
+
 
 /////////////////////////////////////////////////////////////////////////////////
 // Delay in each method is here to "cool down" each step of pointillism algorithm
@@ -113,7 +120,7 @@ export async function drawPointillism(
   dstySmooth: Mat,
   grid: Array<any>,
   palette: pixel[],
-  thicknessBrush: number,
+  { brushThickness, brushOpacity, brushStroke }: BrushParams,
   delay: number = 100
   ) : Promise<unknown> {
     const batchSize = 5000;
@@ -127,9 +134,9 @@ export async function drawPointillism(
           const [y, x] = grid[index];
           const color = colorSelect(colorProbabilities[index % batchSize], palette);
           const angle = radiansToDegrees(direction(dstxSmooth, dstySmooth, y, x)) + 90;
-          const length = Math.round(thicknessBrush + thicknessBrush * Math.sqrt(magnitude(dstxSmooth, dstySmooth, y, x)));
-          const ellipseColor = new cv.Scalar(color[0], color[1], color[2], 255);
-          cv.ellipse(medianBlur, new cv.Point(x, y), new cv.Size(length, thicknessBrush), angle, 0, 360, ellipseColor, -1, cv.LINE_AA);
+          const length = Math.round(brushThickness + brushThickness * brushStroke * Math.sqrt(magnitude(dstxSmooth, dstySmooth, y, x)));
+          const ellipseColor = new cv.Scalar(color[0], color[1], color[2], brushOpacity);
+          cv.ellipse(medianBlur, new cv.Point(x, y), new cv.Size(length, brushThickness), angle, 0, 360, ellipseColor, -1, cv.LINE_AA);
         }
       });
 
@@ -143,7 +150,7 @@ export async function computePointillism(
     cv: any,
     imgElement: HTMLImageElement,
     smoothnessGradiant: number,
-    thicknessBrush: number, 
+    brushParams: BrushParams, 
     paletteSize: number,
     hue: number,
     saturation: number,
@@ -179,7 +186,7 @@ export async function computePointillism(
   setTimeout(() =>  progressCallback("generateGrid"), delay);
 
   const startTime = performance.now();
-  await drawPointillism(cv, src, medianBlur, dstxSmooth, dstySmooth, grid, palette, thicknessBrush, delay);
+  await drawPointillism(cv, src, medianBlur, dstxSmooth, dstySmooth, grid, palette, brushParams, delay);
   progressCallback("done")
   const endTime = performance.now();
   console.log("Pointillism ->", endTime - startTime);
