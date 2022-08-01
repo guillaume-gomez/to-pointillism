@@ -14,7 +14,7 @@ function BrushComponent({brushStroke, brushOpacity, onChangeBrushStroke, onChang
       <label className="text-lg">Advanced brush settings</label>
       <div className="flex flex-row justify-between gap-5 pt-2">
         <div className="w-2/4">
-          <SliderWithLabel label="Brush Strokes" value={brushStroke} onChange={(value) => onChangeBrushStroke(parseInt(value, 10))} min={5} max={20} />
+          <SliderWithLabel label="Brush Strokes" value={brushStroke} onChange={(value) => onChangeBrushStroke(parseInt(value, 10))} min={1} max={20} />
           <span className="text-xs">Brush Strokes will change the 'length' of a line</span>
         </div>
         <div className="divider divider-vertical"></div>

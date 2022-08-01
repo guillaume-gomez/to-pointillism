@@ -9,10 +9,11 @@ import PaletteSizeSlider from "./Components/PaletteSizeSlider";
 import Footer from "./Components/Footer";
 import NavBar from "./Components/NavBar";
 import CanvasCard from "./Components/CanvasCard";
+import BrushComponent from "./Components/BrushComponent";
 import ColorComponent from "./Components/ColorComponent";
 
 import UseOpenCV from "./Hooks/UseOpenCV";
-import { computePointillism, MAX_GRADIANT_SMOOTH_RATIO, CANVAS_IDS, ProcessStateMachineArray, computeThicknessBrush } from "./Pointillism/pointillism";
+import { computePointillism, MAX_GRADIANT_SMOOTH_RATIO, CANVAS_IDS, ProcessStateMachineArray, computeBrushThickness } from "./Pointillism/pointillism";
 
 export const TITLE_FROM_CANVAS_IDS = [
   "Generate Palette",
@@ -32,14 +33,15 @@ function App() {
 
   const ref = useRef<HTMLImageElement>(null);
   const refFinalResult = useRef<HTMLDivElement>(null);
-
   const [progress, setProgress] = useState<string>("");
   const [validForm, setValidForm] = useState<boolean>(false);
   const [autoresize, setAutoresize] = useState<boolean>(false);
   const [runAlgo, setRunAlgo] = useState<boolean>(false);
   const [smoothnessGradiant, setSmoothnessGradiant] = useState<number>((MAX_GRADIANT_SMOOTH_RATIO * 100) /2);
-  const [thickness, setThickness] = useState<number>(1);
+  const [brushThickness, setBrushThickness] = useState<number>(1);
   const [paletteSize, setPaletteSize] = useState<number>(20);
+  const [brushStroke, setBrushStroke] = useState<number>(1);
+  const [brushOpacity, setBrushOpacity] = useState<number>(255);
   const [hue, setHue] = useState<number>(20);
   const [format, setFormat] = useState<string>("jpeg");
   const [saturation, setSaturation] = useState<number>(20);
@@ -47,7 +49,9 @@ function App() {
   
   useEffect(() => {
     if(runAlgo && ref.current) {
-      computePointillism(cv, ref.current, smoothnessGradiant/100, thickness, paletteSize, hue, saturation, autoresize, progressCallback).then(() => {
+      const brushParams = { brushThickness, brushOpacity, brushStroke };
+
+      computePointillism(cv, ref.current, smoothnessGradiant/100, brushParams, paletteSize, hue, saturation, autoresize, progressCallback).then(() => {
         setRunAlgo(false);
         // show last canvas with the pointillism result
         if(visibilityCanvas[visibilityCanvas.length - 1] === false) {
@@ -59,15 +63,27 @@ function App() {
         }
       })
     }
-  }, [cv, runAlgo])
+  }, [cv, runAlgo]);
+
+
+  function resetDefaultParams() {
+    setSmoothnessGradiant((MAX_GRADIANT_SMOOTH_RATIO * 100) /2);
+    setBrushThickness(1);
+    setPaletteSize(20);
+    setBrushStroke(1);
+    setBrushOpacity(255);
+    setHue(20);
+    setFormat("jpeg");
+    setSaturation(20);
+  }
 
 
   function loadImage(event: React.ChangeEvent<HTMLInputElement>) {
     if(event && event.target && event.target.files && ref.current) {
       ref.current.src = URL.createObjectURL(event.target.files[0]);
       ref.current.onload =  (event: any) => {
-          const thickness = computeThicknessBrush(event.target.width, event.target.height);
-          setThickness(thickness)
+          const brushThickness = computeBrushThickness(event.target.width, event.target.height);
+          setBrushThickness(brushThickness)
       };
     }
   }
@@ -142,13 +158,13 @@ function App() {
           <h2 className="flex text-3xl font-bold">Settings</h2>
           <UploadButton onChange={loadImage} />
           <SmoothnessSlider value={smoothnessGradiant} min={1 * 100} max={MAX_GRADIANT_SMOOTH_RATIO * 100} onChange={(value) => setSmoothnessGradiant(parseInt(value, 10))} />
-          <ThicknessSlider value={thickness} min={1} max={20} onChange={(value) => setThickness(parseInt(value, 10))} />
+          <ThicknessSlider value={brushThickness} min={1} max={20} onChange={(value) => setBrushThickness(parseInt(value, 10))} />
           <div className="w-full flex gap-5 items-center">
             <div className="w-2/4">
               <div className="form-control">
                 <label className="cursor-pointer flex justify-between gap-2">
                   <span className="label-text text-neutral-content text-base font-semibold">Resize Image </span> 
-                  <input type="checkbox" checked={autoresize} onChange={() => { setAutoresize((old) => !old); setThickness(1)} } className="checkbox checkbox-primary checkbox-md" />
+                  <input type="checkbox" checked={autoresize} onChange={() => { setAutoresize((old) => !old); setBrushThickness(1)} } className="checkbox checkbox-primary checkbox-md" />
                 </label>
               </div>
               <span className="text-xs">Recommanded for heavy images on low configuration.</span>
@@ -162,19 +178,35 @@ function App() {
                 <option value="png">Png</option>
                 <option value="jpeg">Jpeg</option>
               </select>
-              <span className="text-xs">Output format of the image. While Png preserve quality, Jpeg is a lightweight format.</span>
+              <span className="text-xs">Output format of the image. While Png preserve quality, Jpeg is a lightweight format. Brush opacity works only on Png. </span>
             </div>
           </div>
           <details className="w-full">
             <summary className="text-xl">Advanced</summary>
             <div className="flex flex-col gap-8 pt-4">
               <PaletteSizeSlider value={paletteSize} onChange={(value) => setPaletteSize(parseInt(value, 10))}/>
-              <ColorComponent hue={hue} saturation={saturation} onChangeHue={setHue} onChangeSaturation={setSaturation} />
+              <ColorComponent
+                hue={hue}
+                saturation={saturation}
+                onChangeHue={setHue}
+                onChangeSaturation={setSaturation}
+              />
+            </div>
+            <div className="flex flex-col gap-8 pt-4">
+              <BrushComponent
+                brushStroke={brushStroke}
+                brushOpacity={brushOpacity}
+                onChangeBrushStroke={setBrushStroke}
+                onChangeBrushOpacity={setBrushOpacity}
+              />
             </div>
           </details>
-          <div className="w-2/4 flex flex-col gap-2">
-            <button className="btn btn-primary w-full h-16" disabled={!validForm} onClick={submit}>Generate</button>
-            <p className="text-xs italic opacity-60">We don't collect or share images. Everything is done locally.</p>
+          <div className="w-2/4 flex flex-col gap-5">
+            <div className="flex flex-col">
+              <button className="btn btn-primary w-full h-16" disabled={!validForm} onClick={submit}>Generate</button>
+              <button className="self-end btn btn-link btn-xs italic opacity-80" onClick={resetDefaultParams}>Reset to default params</button>
+            </div>
+            <p className="text-xs text-center italic opacity-60">We don't collect or share images. Everything is done locally.</p>
           </div>
         </div>
       </div>
