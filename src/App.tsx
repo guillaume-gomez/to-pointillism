@@ -11,6 +11,7 @@ import NavBar from "./Components/NavBar";
 import CanvasCard from "./Components/CanvasCard";
 import BrushComponent from "./Components/BrushComponent";
 import ColorComponent from "./Components/ColorComponent";
+//import gifShot from "gifshot";
 
 import UseOpenCV from "./Hooks/UseOpenCV";
 import { computePointillism, MAX_GRADIANT_SMOOTH_RATIO, CANVAS_IDS, ProcessStateMachineArray, computeBrushThickness } from "./Pointillism/pointillism";
@@ -64,6 +65,21 @@ function App() {
       })
     }
   }, [cv, runAlgo]);
+
+
+/*  useEffect(() => {
+    gifShot.createGIF({
+      'images': ['http://i.imgur.com/2OO33vX.jpg', 'http://i.imgur.com/qOwVaSN.png', 'http://i.imgur.com/Vo5mFZJ.gif']
+    },function(obj: any) {
+      if(!obj.error) {
+        var image = obj.image,
+        animatedImage = document.createElement('img');
+        animatedImage.id = "super-truc";
+        animatedImage.src = image;
+        document.body.appendChild(animatedImage);
+      }
+    });
+  }, [])*/
 
 
   function resetDefaultParams() {
