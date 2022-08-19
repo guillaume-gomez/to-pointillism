@@ -173,10 +173,10 @@ function App() {
             <div className="divider divider-vertical"></div>
 
             <div className="w-2/4 flex flex-col gap-2">
-              <select onChange={(e) =>setFormat(e.target.value)} value={format} className="select select-bordered select-primary max-w-xs text-primary bg-opacity-50">
-                <option disabled>Select output format</option>
-                <option value="png">Png</option>
-                <option value="jpeg">Jpeg</option>
+              <select onChange={(e) =>setFormat(e.target.value)} value={format} className="select select-bordered select-primary max-w-xs text-primary bg-opacity-40">
+                <option className="bg-accent" disabled>Select output format</option>
+                <option className="bg-accent" value="png">Png</option>
+                <option className="bg-accent" value="jpeg">Jpeg</option>
               </select>
               <span className="text-xs">Output format of the image. While Png preserve quality, Jpeg is a lightweight format. Brush opacity works only on Png. </span>
             </div>
