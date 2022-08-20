@@ -1,16 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './App.css';
 import Stepper from "./Components/Stepper";
-import UploadButton from "./Components/UploadButton";
-import Loader from "./Components/Loader";
-import ThicknessSlider from "./Components/ThicknessSlider";
-import SmoothnessSlider from "./Components/SmoothnessSlider";
-import PaletteSizeSlider from "./Components/PaletteSizeSlider";
 import Footer from "./Components/Footer";
 import NavBar from "./Components/NavBar";
+import Loader from "./Components/Loader";
 import CanvasCard from "./Components/CanvasCard";
-import BrushComponent from "./Components/BrushComponent";
-import ColorComponent from "./Components/ColorComponent";
+import Form from "./Components/Form";
 
 import UseOpenCV from "./Hooks/UseOpenCV";
 import { computePointillism, MAX_GRADIANT_SMOOTH_RATIO, CANVAS_IDS, ProcessStateMachineArray, computeBrushThickness } from "./Pointillism/pointillism";
@@ -146,78 +141,6 @@ function App() {
       });
   }
 
-  function renderForm() {
-    const content = runAlgo ?
-      <div className="flex justify-center">
-        <Loader width="w-80"/>
-      </div>
-    :
-    (
-      <div className="flex justify-center">
-        <div className="flex flex-col items-center justify-center gap-8 py-4 w-4/5">
-          <h2 className="flex text-3xl font-bold">Settings</h2>
-          <UploadButton onChange={loadImage} />
-          <SmoothnessSlider value={smoothnessGradiant} min={1 * 100} max={MAX_GRADIANT_SMOOTH_RATIO * 100} onChange={(value) => setSmoothnessGradiant(parseInt(value, 10))} />
-          <ThicknessSlider value={brushThickness} min={1} max={20} onChange={(value) => setBrushThickness(parseInt(value, 10))} />
-          <div className="w-full flex gap-5 items-center">
-            <div className="w-2/4">
-              <div className="form-control">
-                <label className="cursor-pointer flex justify-between gap-2">
-                  <span className="label-text text-neutral-content text-base font-semibold">Resize Image </span> 
-                  <input type="checkbox" checked={autoresize} onChange={() => { setAutoresize((old) => !old); setBrushThickness(1)} } className="checkbox checkbox-primary checkbox-md" />
-                </label>
-              </div>
-              <span className="text-xs">Recommanded for heavy images on low configuration.</span>
-            </div>
-            
-            <div className="divider divider-vertical"></div>
-
-            <div className="w-2/4 flex flex-col gap-2">
-              <select onChange={(e) =>setFormat(e.target.value)} value={format} className="select select-bordered select-primary max-w-xs text-primary bg-opacity-40">
-                <option className="bg-accent" disabled>Select output format</option>
-                <option className="bg-accent" value="png">Png</option>
-                <option className="bg-accent" value="jpeg">Jpeg</option>
-              </select>
-              <span className="text-xs">Output format of the image. While Png preserve quality, Jpeg is a lightweight format. Brush opacity works only on Png. </span>
-            </div>
-          </div>
-          <details className="w-full">
-            <summary className="text-xl">Advanced</summary>
-            <div className="flex flex-col gap-8 pt-4">
-              <PaletteSizeSlider value={paletteSize} onChange={(value) => setPaletteSize(parseInt(value, 10))}/>
-              <ColorComponent
-                hue={hue}
-                saturation={saturation}
-                onChangeHue={setHue}
-                onChangeSaturation={setSaturation}
-              />
-            </div>
-            <div className="flex flex-col gap-8 pt-4">
-              <BrushComponent
-                brushStroke={brushStroke}
-                brushOpacity={brushOpacity}
-                onChangeBrushStroke={setBrushStroke}
-                onChangeBrushOpacity={setBrushOpacity}
-              />
-            </div>
-          </details>
-          <div className="w-2/4 flex flex-col gap-5">
-            <div className="flex flex-col">
-              <button className="btn btn-primary w-full h-16" disabled={!validForm} onClick={submit}>Generate</button>
-              <button className="self-end btn btn-link btn-xs italic opacity-80" onClick={resetDefaultParams}>Reset to default params</button>
-            </div>
-            <p className="text-xs text-center italic opacity-60">We don't collect or share images. Everything is done locally.</p>
-          </div>
-        </div>
-      </div>
-   );
-
-    return (
-      <div className="card glass text-neutral-content">
-        {content}
-      </div>
-    );
-  }
 
   return (
     <div className="bg-img">
@@ -239,7 +162,31 @@ function App() {
                 Loading OpenCV library
               </div>)
               :
-              renderForm()
+              <Form
+                runAlgo={runAlgo}
+                loadImage={loadImage}
+                smoothnessGradiant={smoothnessGradiant}
+                setSmoothnessGradiant={setSmoothnessGradiant}
+                brushThickness={brushThickness}
+                setBrushThickness={setBrushThickness}
+                autoresize={autoresize}
+                setAutoresize={setAutoresize}
+                format={format}
+                setFormat={setFormat}
+                paletteSize={paletteSize}
+                setPaletteSize={setPaletteSize}
+                hue={hue}
+                setHue={setHue}
+                saturation={saturation}
+                setSaturation={setSaturation}
+                brushStroke={brushStroke}
+                setBrushStroke={setBrushStroke}
+                brushOpacity={brushOpacity}
+                setBrushOpacity={setBrushOpacity}
+                validForm={validForm}
+                submit={submit}
+                resetDefaultParams={resetDefaultParams}
+              />
             }
             <img className="hidden" id="imageSrc" alt="No Image" ref={ref} onLoad={() => setValidForm(true)}/>
             <div className="w-full flex flex-col items-center gap-8 p-5 card glass text-neutral-content rounded-box">
