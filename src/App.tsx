@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+  import React, { useEffect, useRef, useState } from 'react';
 import './App.css';
 import Stepper from "./Components/Stepper";
 import Footer from "./Components/Footer";
@@ -9,7 +9,7 @@ import gifShot from "gifshot";
 import Form from "./Components/Form";
 
 import UseOpenCV from "./Hooks/UseOpenCV";
-import { computePointillism, MAX_GRADIANT_SMOOTH_RATIO, CANVAS_IDS, ProcessStateMachineArray, computeBrushThickness } from "./Pointillism/pointillism";
+import { computePointillism, computePointillismGif, MAX_GRADIANT_SMOOTH_RATIO, CANVAS_IDS, ProcessStateMachineArray, computeBrushThickness } from "./Pointillism/pointillism";
 
 export const TITLE_FROM_CANVAS_IDS = [
   "Generate Palette",
@@ -73,54 +73,11 @@ function App() {
     if(!ref.current) {
       return;
     }
-    let images = [];
-    // add loop option
-    for(let i = 1; i <= 7; i++) {
-      console.log("images");
-      const brushParams = { brushThickness, brushOpacity, brushStroke: i };
-      await computePointillism(cv, ref.current, smoothnessGradiant/100, brushParams, paletteSize, hue, saturation, autoresize, progressCallback)
-      setProgress("");
-      setVisibilityCanvas(initialCanvasCollapse);
-      if(refFinalResult.current)
-      {
-        const image = refFinalResult.current.getElementsByTagName("canvas")[0].toDataURL(`image/jpeg`);
-
-        images.push(image);
-      }
-    }
-    gifShot.createGIF({
-      images: images,
-      gifWidth: ref.current.width,
-      gifHeight: ref.current.height,
-      interval: 0.1,
-    },function(obj: any) {
-      if(!obj.error) {
-        var image = obj.image,
-        animatedImage = document.createElement('img');
-        animatedImage.id = "super-truc";
-        animatedImage.src = image;
-        document.body.appendChild(animatedImage);
-      }
-    });
-
+    const brushParams = { brushThickness, brushOpacity, brushStroke };
+    const gifParams = { delay: 0.15, numberOfFrames: 5, loop: true };
+    await computePointillismGif(cv, ref.current, smoothnessGradiant/100, brushParams, paletteSize, hue, saturation, autoresize, gifParams, progressCallback);
     setRunAlgo(false);
   }
-
-
-/*  useEffect(() => {
-    gifShot.createGIF({
-      'images': ['http://i.imgur.com/2OO33vX.jpg', 'http://i.imgur.com/qOwVaSN.png', 'http://i.imgur.com/Vo5mFZJ.gif']
-    },function(obj: any) {
-      if(!obj.error) {
-        var image = obj.image,
-        animatedImage = document.createElement('img');
-        animatedImage.id = "super-truc";
-        animatedImage.src = image;
-        document.body.appendChild(animatedImage);
-      }
-    });
-  }, [])*/
-
 
   function resetDefaultParams() {
     setSmoothnessGradiant((MAX_GRADIANT_SMOOTH_RATIO * 100) /2);
