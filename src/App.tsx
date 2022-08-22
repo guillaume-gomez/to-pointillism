@@ -5,7 +5,7 @@ import Footer from "./Components/Footer";
 import NavBar from "./Components/NavBar";
 import Loader from "./Components/Loader";
 import CanvasCard from "./Components/CanvasCard";
-//import gifShot from "gifshot";
+import gifShot from "gifshot";
 import Form from "./Components/Form";
 
 import UseOpenCV from "./Hooks/UseOpenCV";
@@ -45,21 +45,65 @@ function App() {
   
   useEffect(() => {
     if(runAlgo && ref.current) {
-      const brushParams = { brushThickness, brushOpacity, brushStroke };
-
-      computePointillism(cv, ref.current, smoothnessGradiant/100, brushParams, paletteSize, hue, saturation, autoresize, progressCallback).then(() => {
-        setRunAlgo(false);
-        // show last canvas with the pointillism result
-        if(visibilityCanvas[visibilityCanvas.length - 1] === false) {
-          toggleCanvas(visibilityCanvas.length - 1);
-        }
-
-        if(refFinalResult.current) {
-          refFinalResult.current.scrollIntoView({behavior: "smooth"});
-        }
-      })
+      runGif();
     }
   }, [cv, runAlgo]);
+
+
+  function runImage() {
+    if(!ref.current) {
+      return;
+    }
+    const brushParams = { brushThickness, brushOpacity, brushStroke };
+
+    computePointillism(cv, ref.current, smoothnessGradiant/100, brushParams, paletteSize, hue, saturation, autoresize, progressCallback).then(() => {
+      setRunAlgo(false);
+      // show last canvas with the pointillism result
+      if(visibilityCanvas[visibilityCanvas.length - 1] === false) {
+        toggleCanvas(visibilityCanvas.length - 1);
+      }
+
+      if(refFinalResult.current) {
+        refFinalResult.current.scrollIntoView({behavior: "smooth"});
+      }
+    })
+  }
+
+  async function runGif() {
+    if(!ref.current) {
+      return;
+    }
+    let images = [];
+    for(let i = 1; i <= 7; i++) {
+      console.log("images");
+      const brushParams = { brushThickness, brushOpacity, brushStroke: i };
+      await computePointillism(cv, ref.current, smoothnessGradiant/100, brushParams, paletteSize, hue, saturation, autoresize, progressCallback)
+      setProgress("");
+      setVisibilityCanvas(initialCanvasCollapse);
+      if(refFinalResult.current)
+      {
+        const image = refFinalResult.current.getElementsByTagName("canvas")[0].toDataURL(`image/jpeg`);
+
+        images.push(image);
+      }
+    }
+    gifShot.createGIF({
+      images: images,
+      gifWidth: ref.current.width,
+      gifHeight: ref.current.height,
+      interval: 0.1,
+    },function(obj: any) {
+      if(!obj.error) {
+        var image = obj.image,
+        animatedImage = document.createElement('img');
+        animatedImage.id = "super-truc";
+        animatedImage.src = image;
+        document.body.appendChild(animatedImage);
+      }
+    });
+
+    setRunAlgo(false);
+  }
 
 
 /*  useEffect(() => {

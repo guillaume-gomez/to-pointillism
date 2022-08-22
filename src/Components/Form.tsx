@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import BrushComponent from "./BrushComponent";
 import ColorComponent from "./ColorComponent";
 import UploadButton from "./UploadButton";
@@ -61,6 +61,12 @@ function Form({
   resetDefaultParams
 }: FormInterface): React.ReactElement {
 
+  useEffect(() => {
+    if(format === "gif") {
+      setBrushStroke(1);
+    }
+  }, [format]);
+
   if(runAlgo) {
     return (
       <div className="card glass text-neutral-content">
@@ -97,6 +103,7 @@ function Form({
                 <option className="bg-accent" disabled>Select output format</option>
                 <option className="bg-accent" value="png">Png</option>
                 <option className="bg-accent" value="jpeg">Jpeg</option>
+                <option className="bg-accent" value="gif">Gif</option>
               </select>
               <span className="text-xs">Output format of the image. While Png preserve quality, Jpeg is a lightweight format. Brush opacity works only on Png. </span>
             </div>
