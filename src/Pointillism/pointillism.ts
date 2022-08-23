@@ -1,12 +1,12 @@
 import { Mat } from "opencv-ts";
-import { range } from "lodash";
- 
+import { range, reverse } from "lodash";
 import { colorSelect, rangeOfPixels, generateRandomGrid, computeColorProbabilities } from "./tools";
 import { generateColorPalette, drawPalette, extendPalette, pixel } from "./palette";
 import { toGray, resizeWithRatio } from "./imageProcessingTool";
 import { createGradient, smooth, direction, magnitude } from "./gradient";
 import gifShot from "gifshot";
 
+const GIF_IMG_ID = "gif-id";
 
 function radiansToDegrees(radians: number) : number
 {
@@ -160,6 +160,22 @@ async function drawPointillism(
     });
 }
 
+function getImageFromCanvas() : string {
+  const canvas = document.getElementById(CANVAS_IDS[7]) as HTMLCanvasElement;
+  if(!canvas) {
+    throw new Error(`Cannot find the canvas ${CANVAS_IDS[7]}`);
+  }
+  return canvas.toDataURL(`image/jpeg`)
+}
+
+export function hideGifID() {
+  let animatedImage = document.getElementById(GIF_IMG_ID) as HTMLImageElement;
+  if(!animatedImage) {
+    // we assume the gif image is not created yet
+    return;
+  }
+  animatedImage.src = "";
+}
 
 export async function computePointillism(
     cv: any,
@@ -213,14 +229,6 @@ export async function computePointillism(
   dstySmooth.delete();
 }
 
-function getImageFromCanvas() : string {
-  const canvas = document.getElementById(CANVAS_IDS[7]) as HTMLCanvasElement;
-  if(!canvas) {
-    throw new Error(`Cannot find the canvas ${CANVAS_IDS[7]}`);
-  }
-  return canvas.toDataURL(`image/jpeg`)
-}
-
 export async function computePointillismGif(cv: any,
     imgElement: HTMLImageElement,
     smoothnessGradiant: number,
@@ -270,22 +278,12 @@ export async function computePointillismGif(cv: any,
       brushStroke: i
     }
     await drawPointillism(cv, src, medianBlur, dstxSmooth, dstySmooth, grid, palette, brushParams, delay);
-    //progressCallback("computeGif");
     console.log("gifParams frame ${i}");
     images.push(getImageFromCanvas());
   }
 
   if(gifParams.loop) {
-    for(let i = gifParams.numberOfFrames; i > 1; i--) {
-      const customBrushParams = {
-      ...brushParams,
-      brushStroke: i
-      }
-      await drawPointillism(cv, src, medianBlur, dstxSmooth, dstySmooth, grid, palette, brushParams, delay);
-      //progressCallback("computeGif");
-      console.log("gifParams frame ${i}");
-      images.push(getImageFromCanvas());
-    }
+    images = [...images, ...reverse(images)];
   }
 
   gifShot.createGIF({
@@ -295,11 +293,24 @@ export async function computePointillismGif(cv: any,
       interval: gifParams.delay,
     },function(obj: any) {
       if(!obj.error) {
+        const finalCanvas = document.getElementById(CANVAS_IDS[7]) as HTMLCanvasElement;
+        if(!finalCanvas) {
+          throw new Error(`Cannot find the canvas ${CANVAS_IDS[7]}`);
+        }
+
         const image = obj.image;
-        const animatedImage = document.createElement('img');
-        animatedImage.id = "super-truc";
+
+        let animatedImage = document.getElementById(GIF_IMG_ID) as HTMLImageElement;
+        if(!animatedImage) {
+          animatedImage = document.createElement('img');
+          animatedImage.id = GIF_IMG_ID;
+
+          finalCanvas.parentElement!.prepend(animatedImage);
+        }
         animatedImage.src = image;
-        document.getElementById(CANVAS_IDS[7])!.parentElement!.appendChild(animatedImage);
+        // hide canvas 7
+        finalCanvas.width = 0;
+        finalCanvas.height = 0;
       }
     });
 

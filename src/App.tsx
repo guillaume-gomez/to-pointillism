@@ -9,7 +9,15 @@ import gifShot from "gifshot";
 import Form from "./Components/Form";
 
 import UseOpenCV from "./Hooks/UseOpenCV";
-import { computePointillism, computePointillismGif, MAX_GRADIANT_SMOOTH_RATIO, CANVAS_IDS, ProcessStateMachineArray, computeBrushThickness } from "./Pointillism/pointillism";
+import { 
+  computePointillism,
+  computePointillismGif,
+  hideGifID,
+  MAX_GRADIANT_SMOOTH_RATIO,
+  CANVAS_IDS,
+  ProcessStateMachineArray,
+  computeBrushThickness
+} from "./Pointillism/pointillism";
 
 export const TITLE_FROM_CANVAS_IDS = [
   "Generate Palette",
@@ -44,20 +52,43 @@ function App() {
   const [visibilityCanvas, setVisibilityCanvas] = useState<boolean[]>(initialCanvasCollapse);
   
   useEffect(() => {
-    if(runAlgo && ref.current) {
-      runGif();
+    if(runAlgo) {
+      hideGifID();
+      if(format === "gif") {
+        runGif();
+      } else {
+        runImage();
+      }
     }
   }, [cv, runAlgo]);
 
 
-  function runImage() {
+  async function runImage() {
     if(!ref.current) {
       return;
     }
     const brushParams = { brushThickness, brushOpacity, brushStroke };
 
-    computePointillism(cv, ref.current, smoothnessGradiant/100, brushParams, paletteSize, hue, saturation, autoresize, progressCallback).then(() => {
-      setRunAlgo(false);
+    await computePointillism(cv, ref.current, smoothnessGradiant/100, brushParams, paletteSize, hue, saturation, autoresize, progressCallback);
+    setRunAlgo(false);
+    // show last canvas with the pointillism result
+    if(visibilityCanvas[visibilityCanvas.length - 1] === false) {
+      toggleCanvas(visibilityCanvas.length - 1);
+    }
+
+    if(refFinalResult.current) {
+      refFinalResult.current.scrollIntoView({behavior: "smooth"});
+    }
+  }
+
+  async function runGif() {
+    if(!ref.current) {
+      return;
+    }
+    const brushParams = { brushThickness, brushOpacity, brushStroke };
+    const gifParams = { delay: 0.15, numberOfFrames: 3, loop: true };
+    await computePointillismGif(cv, ref.current, smoothnessGradiant/100, brushParams, paletteSize, hue, saturation, autoresize, gifParams, progressCallback);
+    setRunAlgo(false);
       // show last canvas with the pointillism result
       if(visibilityCanvas[visibilityCanvas.length - 1] === false) {
         toggleCanvas(visibilityCanvas.length - 1);
@@ -66,17 +97,6 @@ function App() {
       if(refFinalResult.current) {
         refFinalResult.current.scrollIntoView({behavior: "smooth"});
       }
-    })
-  }
-
-  async function runGif() {
-    if(!ref.current) {
-      return;
-    }
-    const brushParams = { brushThickness, brushOpacity, brushStroke };
-    const gifParams = { delay: 0.15, numberOfFrames: 5, loop: true };
-    await computePointillismGif(cv, ref.current, smoothnessGradiant/100, brushParams, paletteSize, hue, saturation, autoresize, gifParams, progressCallback);
-    setRunAlgo(false);
   }
 
   function resetDefaultParams() {

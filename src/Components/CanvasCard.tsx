@@ -35,9 +35,10 @@ function CanvasCard({ toggleCanvas, title, canvasId, collapsible, collapse, form
             children
             : null
         }
-        <div className="flex flex-row self-end">
+        { format !== "gif" && <div className="flex flex-row self-end">
           <a ref={refA} className="btn btn-primary" onClick={saveImage}>Save</a>
         </div>
+        }
       </div>
     </div>
   );
