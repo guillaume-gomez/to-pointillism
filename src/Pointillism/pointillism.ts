@@ -277,8 +277,9 @@ export async function computePointillismGif(
       ...brushParams,
       brushStroke: i
     }
+    console.log(customBrushParams);
     await drawPointillism(cv, src, medianBlur, dstxSmooth, dstySmooth, grid, palette, brushParams, delay);
-    console.log("gifParams frame ${i}");
+    console.log(`gifParams frame ${i}`);
     images.push(getImageFromCanvas());
   }
 
