@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Stepper from "./Components/Stepper";
-import Loader from "./Components/Loader";
-import CanvasCard from "./Components/CanvasCard";
-import Form from "./Components/Form";
-import DataForm from "./reducers/usePointillismParams";
+import Stepper from "./Stepper";
+import Loader from "./Loader";
+import CanvasCard from "./CanvasCard";
+import Form from "./Form";
+import DataForm from "../reducers/usePointillismParams";
 
-import UseOpenCV from "./Hooks/UseOpenCV";
-import { computePointillism, MAX_GRADIANT_SMOOTH_RATIO, CANVAS_IDS, ProcessStateMachineArray, computeBrushThickness } from "./Pointillism/pointillism";
+import UseOpenCV from "../Hooks/UseOpenCV";
+import { computePointillism, MAX_GRADIANT_SMOOTH_RATIO, CANVAS_IDS, ProcessStateMachineArray, computeBrushThickness } from "../Pointillism/pointillism";
 
 export const TITLE_FROM_CANVAS_IDS = [
   "Generate Palette",
@@ -176,7 +176,7 @@ function AppBody() {
                 resetDefaultParams={resetDefaultParams}
               />
           }
-          <img className="hidden" id="imageSrc" alt="No Image" ref={ref} onLoad={() => setValidForm(true)}/>
+          <img className="hidden" id="imageSrc" alt="converted source" ref={ref} onLoad={() => setValidForm(true)}/>
           <div className="w-full flex flex-col items-center gap-8 p-5 card glass text-neutral-content rounded-box">
             <h2 className="text-3xl font-bold text-neutral-content">Results</h2>
             <Stepper steps={ProcessStateMachineArray} currentStep={progress} />
