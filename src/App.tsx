@@ -68,7 +68,9 @@ function App() {
       return;
     }
     const brushParams = { brushThickness, brushOpacity, brushStroke };
-    await computePointillism(cv, ref.current, smoothnessGradiant/100, brushParams, paletteSize, hue, saturation, autoresize, progressCallback);
+    const paletteParams = { paletteSize, hue, saturation };
+    const gifParams = { delay: 0.15, numberOfFrames: 3, loop: true };
+    await computePointillism(cv, ref.current, smoothnessGradiant/100, autoresize, brushParams, paletteParams, progressCallback);
     showResultAnimation();
   }
 
@@ -77,8 +79,9 @@ function App() {
       return;
     }
     const brushParams = { brushThickness, brushOpacity, brushStroke };
+    const paletteParams = { paletteSize, hue, saturation };
     const gifParams = { delay: 0.15, numberOfFrames: 3, loop: true };
-    await computePointillismGif(cv, ref.current, smoothnessGradiant/100, brushParams, paletteSize, hue, saturation, autoresize, gifParams, progressCallback);
+    await computePointillismGif(cv, ref.current, smoothnessGradiant/100, autoresize, brushParams, paletteParams, gifParams, progressCallback);
     showResultAnimation();
   }
 

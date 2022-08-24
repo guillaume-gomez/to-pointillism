@@ -43,6 +43,11 @@ export interface GifParams {
   numberOfFrames: number;
   loop: boolean;
 }
+export interface PaletteParams {
+  paletteSize: number;
+  hue: number;
+  saturation: number;
+}
 
 export const MAX_GRADIANT_SMOOTH_RATIO = 15.36;
 export const CANVAS_IDS = [
@@ -74,9 +79,7 @@ export const ProcessStateMachineArray = [
 
 async function generatePalette(
     imgElement: HTMLImageElement,
-    paletteSize: number,
-    hue: number,
-    saturation: number,
+    {paletteSize, hue, saturation }: PaletteParams,
     delay: number = 100
   ) : Promise<pixel[]> {
   return new Promise((resolve) => {
@@ -181,15 +184,13 @@ export async function computePointillism(
     cv: any,
     imgElement: HTMLImageElement,
     smoothnessGradiant: number,
-    brushParams: BrushParams, 
-    paletteSize: number,
-    hue: number,
-    saturation: number,
     autoResize: boolean,
+    brushParams: BrushParams, 
+    paletteParams: PaletteParams,
     progressCallback: (progress: ProcessStateMachine) => void,
     delay: number = 100
   ) {
-  const palette = await generatePalette(imgElement, paletteSize, hue, saturation);
+  const palette = await generatePalette(imgElement, paletteParams);
   progressCallback("palette");
 
   let src = await cv.imread(imgElement);
@@ -219,7 +220,7 @@ export async function computePointillism(
 
   const startTime = performance.now();
   await drawPointillism(cv, src, medianBlur, dstxSmooth, dstySmooth, grid, palette, brushParams, delay);
-  progressCallback("done")
+  progressCallback("done");
   const endTime = performance.now();
   console.log("Pointillism ->", endTime - startTime);
 
@@ -229,19 +230,18 @@ export async function computePointillism(
   dstySmooth.delete();
 }
 
-export async function computePointillismGif(cv: any,
+export async function computePointillismGif(
+    cv: any,
     imgElement: HTMLImageElement,
     smoothnessGradiant: number,
-    brushParams: BrushParams, 
-    paletteSize: number,
-    hue: number,
-    saturation: number,
     autoResize: boolean,
+    brushParams: BrushParams,
+    paletteParams: PaletteParams,
     gifParams: GifParams,
     progressCallback: (progress: ProcessStateMachine) => void,
     delay: number = 100
   ) {
-  const palette = await generatePalette(imgElement, paletteSize, hue, saturation);
+  const palette = await generatePalette(imgElement, paletteParams);
   progressCallback("palette");
 
   let src = await cv.imread(imgElement);
