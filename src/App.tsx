@@ -49,6 +49,9 @@ function App() {
   const [hue, setHue] = useState<number>(20);
   const [format, setFormat] = useState<string>("jpeg");
   const [saturation, setSaturation] = useState<number>(20);
+  const [numberOfFramesGif, setNumberOfFramesGif] = useState<number>(3);
+  const [delayGif, setDelayGif] = useState<number>(0.15);
+  const [boomerangGif, setBoomerangGif] = useState<boolean>(true);
   const [visibilityCanvas, setVisibilityCanvas] = useState<boolean[]>(initialCanvasCollapse);
   
   useEffect(() => {
@@ -69,7 +72,6 @@ function App() {
     }
     const brushParams = { brushThickness, brushOpacity, brushStroke };
     const paletteParams = { paletteSize, hue, saturation };
-    const gifParams = { delay: 0.15, numberOfFrames: 3, loop: true };
     await computePointillism(cv, ref.current, smoothnessGradiant/100, autoresize, brushParams, paletteParams, progressCallback);
     showResultAnimation();
   }
@@ -80,7 +82,7 @@ function App() {
     }
     const brushParams = { brushThickness, brushOpacity, brushStroke };
     const paletteParams = { paletteSize, hue, saturation };
-    const gifParams = { delay: 0.15, numberOfFrames: 3, loop: true };
+    const gifParams = { delay: delayGif, numberOfFrames: numberOfFramesGif, boomerang: boomerangGif };
     await computePointillismGif(cv, ref.current, smoothnessGradiant/100, autoresize, brushParams, paletteParams, gifParams, progressCallback);
     showResultAnimation();
   }
@@ -106,6 +108,9 @@ function App() {
     setHue(20);
     setFormat("jpeg");
     setSaturation(20);
+    setNumberOfFramesGif(3);
+    setDelayGif(0.15);
+    setBoomerangGif(true);
   }
 
 
@@ -219,6 +224,12 @@ function App() {
                 setBrushStroke={setBrushStroke}
                 brushOpacity={brushOpacity}
                 setBrushOpacity={setBrushOpacity}
+                numberOfFramesGif={numberOfFramesGif}
+                setNumberOfFramesGif={setNumberOfFramesGif}
+                delayGif={delayGif}
+                setDelayGif={setDelayGif}
+                boomerangGif={boomerangGif}
+                setBoomerangGif={setBoomerangGif}
                 validForm={validForm}
                 submit={submit}
                 resetDefaultParams={resetDefaultParams}

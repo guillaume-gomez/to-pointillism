@@ -12,13 +12,13 @@ interface SliderWithLabelInterface {
 
 function SliderWithLabel({ value, onChange, min = 1, max = 100, step = 1, label } : SliderWithLabelInterface): React.ReactElement {
   return (
-   <>
+   <div className="flex flex-col gap-1">
      <div className="flex justify-between">
        <label className="text-base font-semibold">{label}</label>
        <p className="badge badge-lg">{value}</p>
      </div>
      <Slider value={value} onChange={onChange} min={min} max={max} />
-    </>
+    </div>
   );
 }
 

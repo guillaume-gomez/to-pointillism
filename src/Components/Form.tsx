@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import BrushComponent from "./BrushComponent";
 import ColorComponent from "./ColorComponent";
+import GifComponent from "./GifComponent";
 import UploadButton from "./UploadButton";
 import Loader from "./Loader";
 import ThicknessSlider from "./ThicknessSlider";
@@ -30,6 +31,12 @@ interface FormInterface {
   setBrushStroke: (brushStroke: number) => void;
   brushOpacity: number;
   setBrushOpacity: (brushOpacity: number) => void;
+  numberOfFramesGif: number;
+  setNumberOfFramesGif: (numberOfFramesGif: number ) => void;
+  delayGif: number;
+  setDelayGif: (delayGif: number) => void;
+  boomerangGif: boolean;
+  setBoomerangGif: (boomerangGif: boolean) => void;
   validForm: boolean;
   submit: () => void;
   resetDefaultParams: () => void;
@@ -56,6 +63,12 @@ function Form({
   setBrushStroke,
   brushOpacity,
   setBrushOpacity,
+  numberOfFramesGif,
+  setNumberOfFramesGif,
+  delayGif,
+  setDelayGif,
+  boomerangGif,
+  setBoomerangGif,
   validForm,
   submit,
   resetDefaultParams
@@ -119,14 +132,28 @@ function Form({
                 onChangeSaturation={setSaturation}
               />
             </div>
-            <div className="flex flex-col gap-8 pt-4">
-              <BrushComponent
-                brushStroke={brushStroke}
-                brushOpacity={brushOpacity}
-                onChangeBrushStroke={setBrushStroke}
-                onChangeBrushOpacity={setBrushOpacity}
-              />
-            </div>
+            {format !== "gif" ?
+              <div className="flex flex-col gap-8 pt-4">
+                <BrushComponent
+                  brushStroke={brushStroke}
+                  brushOpacity={brushOpacity}
+                  onChangeBrushStroke={setBrushStroke}
+                  onChangeBrushOpacity={setBrushOpacity}
+                />
+              </div> : <></>
+            }
+            {format === "gif" ?
+              <div className="flex flex-col gap-8 pt-4">
+                <GifComponent
+                  numberOfFrame={numberOfFramesGif}
+                  delay={delayGif}
+                  boomerang={boomerangGif}
+                  onChangeNumberOfFrame={setNumberOfFramesGif}
+                  onChangeDelay={setDelayGif}
+                  onChangeBoomerang={setBoomerangGif}
+                />
+              </div> : <></>
+            }
           </details>
           <div className="w-2/4 flex flex-col gap-5">
             <div className="flex flex-col">

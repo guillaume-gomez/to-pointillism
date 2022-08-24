@@ -41,7 +41,7 @@ export interface BrushParams {
 export interface GifParams {
   delay: number;
   numberOfFrames: number;
-  loop: boolean;
+  boomerang: boolean;
 }
 export interface PaletteParams {
   paletteSize: number;
@@ -282,7 +282,7 @@ export async function computePointillismGif(
     images.push(getImageFromCanvas());
   }
 
-  if(gifParams.loop) {
+  if(gifParams.boomerang) {
     images = [...images, ...reverse(images)];
   }
 
