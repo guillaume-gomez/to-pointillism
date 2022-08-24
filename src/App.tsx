@@ -3,7 +3,7 @@ import './App.css';
 import DataForm from "./reducers/usePointillismParams";
 import Footer from "./Components/Footer";
 import NavBar from "./Components/NavBar";
-import Body from "./AppBody";
+import Body from "./Components/AppBody";
 
 function App() {
 
