@@ -8,35 +8,12 @@ import ThicknessSlider from "./ThicknessSlider";
 import SmoothnessSlider from "./SmoothnessSlider";
 import PaletteSizeSlider from "./PaletteSizeSlider";
 import { MAX_GRADIANT_SMOOTH_RATIO } from "../Pointillism/pointillism";
+import DataForm from "../reducers/usePointillismParams";
 
 
 interface FormInterface {
   runAlgo: boolean;
   loadImage: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  smoothnessGradiant: number;
-  setSmoothnessGradiant: (smoothnessGradiant: number) => void;
-  brushThickness: number;
-  setBrushThickness: (brushThickness: number) => void;
-  autoresize: boolean;
-  setAutoresize: (autoresize: boolean) => void;
-  format: string;
-  setFormat: (format: string) => void;
-  paletteSize: number;
-  setPaletteSize: (paletteSize: number) => void;
-  hue: number;
-  setHue: (hue: number) => void;
-  saturation: number;
-  setSaturation: (saturation: number) => void;
-  brushStroke: number;
-  setBrushStroke: (brushStroke: number) => void;
-  brushOpacity: number;
-  setBrushOpacity: (brushOpacity: number) => void;
-  numberOfFramesGif: number;
-  setNumberOfFramesGif: (numberOfFramesGif: number ) => void;
-  delayGif: number;
-  setDelayGif: (delayGif: number) => void;
-  boomerangGif: boolean;
-  setBoomerangGif: (boomerangGif: boolean) => void;
   validForm: boolean;
   submit: () => void;
   resetDefaultParams: () => void;
@@ -45,40 +22,22 @@ interface FormInterface {
 function Form({
   runAlgo,
   loadImage,
-  smoothnessGradiant,
-  setSmoothnessGradiant,
-  brushThickness,
-  setBrushThickness,
-  autoresize,
-  setAutoresize,
-  format,
-  setFormat,
-  paletteSize,
-  setPaletteSize,
-  hue,
-  setHue,
-  saturation,
-  setSaturation,
-  brushStroke,
-  setBrushStroke,
-  brushOpacity,
-  setBrushOpacity,
-  numberOfFramesGif,
-  setNumberOfFramesGif,
-  delayGif,
-  setDelayGif,
-  boomerangGif,
-  setBoomerangGif,
   validForm,
   submit,
   resetDefaultParams
 }: FormInterface): React.ReactElement {
-
-  useEffect(() => {
-    if(format === "gif") {
-      setBrushStroke(1);
-    }
-  }, [format]);
+  const { 
+    smoothnessGradiant,
+    setSmoothnessGradiant,
+    brushThickness,
+    setBrushThickness,
+    autoresize,
+    setAutoresize,
+    format,
+    setFormat,
+    paletteSize,
+    setPaletteSize
+  } = DataForm.useContainer();
 
   if(runAlgo) {
     return (
@@ -125,33 +84,16 @@ function Form({
             <summary className="text-xl">Advanced</summary>
             <div className="flex flex-col gap-8 pt-4">
               <PaletteSizeSlider value={paletteSize} onChange={(value) => setPaletteSize(parseInt(value, 10))}/>
-              <ColorComponent
-                hue={hue}
-                saturation={saturation}
-                onChangeHue={setHue}
-                onChangeSaturation={setSaturation}
-              />
+              <ColorComponent />
             </div>
             {format !== "gif" ?
               <div className="flex flex-col gap-8 pt-4">
-                <BrushComponent
-                  brushStroke={brushStroke}
-                  brushOpacity={brushOpacity}
-                  onChangeBrushStroke={setBrushStroke}
-                  onChangeBrushOpacity={setBrushOpacity}
-                />
+                <BrushComponent/>
               </div> : <></>
             }
             {format === "gif" ?
               <div className="flex flex-col gap-8 pt-4">
-                <GifComponent
-                  numberOfFrame={numberOfFramesGif}
-                  delay={delayGif}
-                  boomerang={boomerangGif}
-                  onChangeNumberOfFrame={setNumberOfFramesGif}
-                  onChangeDelay={setDelayGif}
-                  onChangeBoomerang={setBoomerangGif}
-                />
+                <GifComponent/>
               </div> : <></>
             }
           </details>
