@@ -11,23 +11,33 @@ function GifComponent( props : GifComponentInterface): React.ReactElement {
     delayGif,
     setDelayGif,
     boomerangGif,
-    setBoomerangGif
+    setBoomerangGif,
+    changingBrushStrokeGif,
+    setChangingBrushStrokeGif
   } = DataForm.useContainer();
 
   return (
     <div>
       <label className="text-lg">Gif settings</label>
-      <div className="flex flex-row justify-between items-center gap-5 pt-2">
-        <div className="w-1/3">
+      <div className="flex flex-wrap pt-2 -mx-2">
+        <div className="sm:w-1/2 lg:w-1/4 px-2">
+          <div className="form-control">
+            <label className="cursor-pointer flex justify-between gap-2">
+              <span className="label-text text-neutral-content text-base font-semibold">Boomerang Gif </span> 
+              <input type="checkbox" checked={boomerangGif} onChange={() => { setBoomerangGif(!boomerangGif) } } className="checkbox checkbox-primary checkbox-md" />
+            </label>
+            <span className="text-xs">Append reversed frames to make a boomerang effect on your gif</span>
+          </div>
+        </div>
+        <div className="sm:w-1/2 lg:w-1/4 px-2">
           <SliderWithLabel label="Number of frame" value={numberOfFramesGif} onChange={(value) => setNumberOfFramesGif(parseInt(value, 10))} min={1} max={7} />
           <span className="text-xs">Number of pointillist images generated for the gif</span>
         </div>
-        <div className="divider divider-vertical"></div>
-        <div className="w-1/3">
+        <div className="sm:w-1/2 lg:w-1/4 px-2">
           <SliderWithLabel label="Delay" value={delayGif} onChange={(value) => setDelayGif(parseInt(value, 10))} step={0.1} min={0.1} max={10} />
           <span className="text-xs">Delay between each frame</span>
         </div>
-        <div className="w-1/3">
+        <div className="sm:w-1/2 lg:w-1/4 px-2">
           <div className="form-control">
             <label className="cursor-pointer flex justify-between gap-2">
               <span className="label-text text-neutral-content text-base font-semibold">Boomerang Gif </span> 

@@ -57,8 +57,8 @@ function Form({
           <UploadButton onChange={loadImage} />
           <SmoothnessSlider value={smoothnessGradiant} min={1 * 100} max={MAX_GRADIANT_SMOOTH_RATIO * 100} onChange={(value) => setSmoothnessGradiant(parseInt(value, 10))} />
           <ThicknessSlider value={brushThickness} min={1} max={20} onChange={(value) => setBrushThickness(parseInt(value, 10))} />
-          <div className="w-full flex gap-5 items-center">
-            <div className="w-2/4">
+          <div className="w-full flex flex-col md:flex-row gap-5 items-center">
+            <div className="w-full md:w-2/4">
               <div className="form-control">
                 <label className="cursor-pointer flex justify-between gap-2">
                   <span className="label-text text-neutral-content text-base font-semibold">Resize Image </span> 
@@ -67,10 +67,7 @@ function Form({
               </div>
               <span className="text-xs">Recommanded for heavy images on low configuration.</span>
             </div>
-            
-            <div className="divider divider-vertical"></div>
-
-            <div className="w-2/4 flex flex-col gap-2">
+            <div className="w-full md:w-2/4 flex flex-col gap-2">
               <select onChange={(e) =>setFormat(e.target.value)} value={format} className="select select-bordered select-primary max-w-xs text-primary bg-opacity-40">
                 <option className="bg-accent" disabled>Select output format</option>
                 <option className="bg-accent" value="png">Png</option>
