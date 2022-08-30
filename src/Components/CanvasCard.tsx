@@ -1,5 +1,7 @@
 import React, { useRef, ReactNode } from 'react';
 import { format as formatFns } from "date-fns";
+import { GIF_IMG_ID } from "../Pointillism/pointillism";
+
 interface CanvasCardInterface {
   toggleCanvas: () => void;
   title: string;
@@ -23,6 +25,16 @@ function CanvasCard({ toggleCanvas, title, canvasId, collapsible, collapse, form
     }
   }
 
+  function saveGif() {
+    // the image tag is insert and generated in computePointillismGif function (see pointillism)
+    const imageTag = document.getElementById(GIF_IMG_ID) as HTMLImageElement;
+    if(imageTag && refA.current) {
+      const dateString = formatFns(new Date(), "dd-MM-yyyy-hh-mm");
+      (refA.current as any).download = `${dateString}-pointillism.${format}`;
+      refA.current.href = imageTag.src;
+    }
+  }
+
   return (
     <div className={`bg-neutral text-neutral-content collapse w-full border rounded-box border-base-300 collapse-arrow ${collapsible ? "" : "collapse-close"}`}>
       <input type="checkbox" checked={collapse} onChange={() => toggleCanvas()}/>
@@ -35,10 +47,9 @@ function CanvasCard({ toggleCanvas, title, canvasId, collapsible, collapse, form
             children
             : null
         }
-        { format !== "gif" && <div className="flex flex-row self-end">
-          <a ref={refA} className="btn btn-primary" onClick={saveImage}>Save</a>
+        <div className="flex flex-row self-end">
+          <a ref={refA} className="btn btn-primary" onClick={format !== "gif" ? saveImage : saveGif}>Save</a>
         </div>
-        }
       </div>
     </div>
   );

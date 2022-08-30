@@ -6,7 +6,7 @@ import { toGray, resizeWithRatio } from "./imageProcessingTool";
 import { createGradient, smooth, direction, magnitude } from "./gradient";
 import gifShot from "gifshot";
 
-const GIF_IMG_ID = "gif-id";
+export const GIF_IMG_ID = "gif-id";
 
 function radiansToDegrees(radians: number) : number
 {
