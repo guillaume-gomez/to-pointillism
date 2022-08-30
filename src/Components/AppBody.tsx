@@ -54,7 +54,8 @@ function AppBody() {
     delayGif,
     setDelayGif,
     boomerangGif,
-    setBoomerangGif
+    setBoomerangGif,
+    changingBrushStrokeGif
   } = DataForm.useContainer();
 
   const ref = useRef<HTMLImageElement>(null);
@@ -92,7 +93,7 @@ function AppBody() {
     }
     const brushParams = { brushThickness, brushOpacity, brushStroke };
     const paletteParams = { paletteSize, hue, saturation };
-    const gifParams = { delay: delayGif, numberOfFrames: numberOfFramesGif, boomerang: boomerangGif };
+    const gifParams = { delay: delayGif, numberOfFrames: numberOfFramesGif, boomerang: boomerangGif, changingBrushStroke: changingBrushStrokeGif };
     await computePointillismGif(cv, ref.current, smoothnessGradiant/100, autoresize, brushParams, paletteParams, gifParams, progressCallback);
     showResultAnimation();
   }
@@ -198,11 +199,11 @@ function AppBody() {
   return (
       <div className="flex flex-col px-4 flex flex-col gap-5" >
         <div className="alert alert-warning">
-          <div className="flex-1">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="w-6 h-6 mx-2 stroke-current"> 
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-            </svg> 
-            <label>The algorithm is resource intensive. So it may not finish on mobile phone or low configuration. Please consider using resize option.</label>
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <span>The algorithm is resource intensive. So it may not finish on mobile phone or low configuration. Please consider using resize option.</span>
           </div>
         </div>
           {

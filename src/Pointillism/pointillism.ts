@@ -42,6 +42,7 @@ export interface GifParams {
   delay: number;
   numberOfFrames: number;
   boomerang: boolean;
+  changingBrushStroke: boolean;
 }
 export interface PaletteParams {
   paletteSize: number;
@@ -271,15 +272,17 @@ export async function computePointillismGif(
 
   const startTime = performance.now();
 
-  let images = []
+  let images = [];
   for(let i = 1; i < gifParams.numberOfFrames; i++) {
-    const customBrushParams = {
-      ...brushParams,
-      brushStroke: i
-    }
-    console.log(customBrushParams);
-    await drawPointillism(cv, src, medianBlur, dstxSmooth, dstySmooth, grid, palette, brushParams, delay);
-    console.log(`gifParams frame ${i}`);
+    const customBrushParams = 
+      gifParams.changingBrushStroke ? 
+      {
+        ...brushParams,
+        brushStroke: i
+      } 
+      :
+      brushParams;
+    await drawPointillism(cv, src, medianBlur, dstxSmooth, dstySmooth, grid, palette, customBrushParams, delay);
     images.push(getImageFromCanvas());
   }
 
