@@ -55,7 +55,8 @@ function AppBody() {
     setDelayGif,
     boomerangGif,
     setBoomerangGif,
-    changingBrushStrokeGif
+    changingBrushStrokeGif,
+    setChangingBrushStrokeGif
   } = DataForm.useContainer();
 
   const ref = useRef<HTMLImageElement>(null);
@@ -122,9 +123,8 @@ function AppBody() {
     setNumberOfFramesGif(3);
     setDelayGif(0.15);
     setBoomerangGif(true);
+    setChangingBrushStrokeGif(false);
   }
-
-
 
 
   function loadImage(event: React.ChangeEvent<HTMLInputElement>) {
@@ -160,39 +160,17 @@ function AppBody() {
   }
 
   function renderAllCanvas() {
-    return CANVAS_IDS.map((id, index) => {
-        if(id === "finalResult") {
-          return (
-            <div className="w-full" key={id} ref={refFinalResult}>
-              <CanvasCard
-                toggleCanvas={() => toggleCanvas(index)}
-                title={TITLE_FROM_CANVAS_IDS[index]}
-                canvasId={id}
-                collapsible={validForm}
-                collapse={visibilityCanvas[index]}
-                format={format}
-              >
-                <p className="text-base font-semibold">
-                  Not fully satisfied 😅.
-                  Try again by changing default parameters.
-                </p>
-              </CanvasCard>
-            </div>
-          );
-        } else {
-          return (
-            <CanvasCard
-              key={id}
-              toggleCanvas={() => toggleCanvas(index)}
-              title={TITLE_FROM_CANVAS_IDS[index]}
-              canvasId={id}
-              collapsible={validForm}
-              collapse={visibilityCanvas[index]}
-              format={format}
-            />
-          );
-        }
-      });
+    return CANVAS_IDS.map((id, index) => 
+      <CanvasCard
+        key={id}
+        toggleCanvas={() => toggleCanvas(index)}
+        title={TITLE_FROM_CANVAS_IDS[index]}
+        canvasId={id}
+        collapsible={validForm}
+        collapse={visibilityCanvas[index]}
+        format={format}
+      />
+    );
   }
 
 
