@@ -17,7 +17,7 @@ function SliderWithLabel({ value, onChange, min = 1, max = 100, step = 1, label 
        <label className="text-base font-semibold">{label}</label>
        <p className="badge badge-lg">{value}</p>
      </div>
-     <Slider value={value} onChange={onChange} min={min} max={max} />
+     <Slider value={value} onChange={onChange} min={min} max={max} step={step} />
     </div>
   );
 }
