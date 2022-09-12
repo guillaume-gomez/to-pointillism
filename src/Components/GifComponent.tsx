@@ -30,11 +30,11 @@ function GifComponent( props : GifComponentInterface): React.ReactElement {
           </div>
         </div>
         <div className="sm:w-1/2 lg:w-1/4 px-5 py-3">
-          <SliderWithLabel label="Number of frame" value={numberOfFramesGif} onChange={(value) => setNumberOfFramesGif(parseInt(value, 10))} min={1} max={7} />
+          <SliderWithLabel label="Number of frame" value={numberOfFramesGif} onChange={(value) => setNumberOfFramesGif(parseInt(value, 10))} min={1} max={10} />
           <span className="text-xs">Number of pointillist images generated for the gif</span>
         </div>
         <div className="sm:w-1/2 lg:w-1/4 px-5 py-3">
-          <SliderWithLabel label="Delay" value={delayGif} onChange={(value) => setDelayGif(parseInt(value, 10))} step={1} min={1} max={10} />
+          <SliderWithLabel label="Delay" value={delayGif} onChange={(value) => setDelayGif(parseFloat(value))} step={0.01} min={0.1} max={3} />
           <span className="text-xs">Delay between each frame</span>
         </div>
         <div className="sm:w-1/2 lg:w-1/4 px-5 py-3">
