@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Stepper from "./Stepper";
 import Loader from "./Loader";
-import CanvasCard from "./CanvasCard";
+import CardStepImage from "./CardStepImage";
+import CardStepGif from "./CardStepGif";
 import Form from "./Form";
 import DataForm from "../reducers/usePointillismParams";
 
@@ -26,6 +27,8 @@ export const TITLE_FROM_CANVAS_IDS = [
   "Generate Median Blur Image",
   "Final Result"
 ];
+
+const PARENT_GIF_ID = "gif-parent-id";
 
 const initialCanvasCollapse = [false, false, false, false, false, false, false, false];
 
@@ -95,7 +98,7 @@ function AppBody() {
     const brushParams = { brushThickness, brushOpacity, brushStroke };
     const paletteParams = { paletteSize, hue, saturation };
     const gifParams = { delay: delayGif, numberOfFrames: numberOfFramesGif, boomerang: boomerangGif, changingBrushStroke: changingBrushStrokeGif };
-    await computePointillismGif(cv, ref.current, smoothnessGradiant/100, autoresize, brushParams, paletteParams, gifParams, progressCallback);
+    await computePointillismGif(cv, ref.current, smoothnessGradiant/100, autoresize, brushParams, paletteParams, gifParams, PARENT_GIF_ID, progressCallback);
     showResultAnimation();
   }
 
@@ -103,7 +106,7 @@ function AppBody() {
     setRunAlgo(false);
     // show last canvas with the pointillism result
     if(visibilityCanvas[visibilityCanvas.length - 1] === false) {
-      toggleCanvas(visibilityCanvas.length - 1);
+      toggleCardStep(visibilityCanvas.length - 1);
     }
 
     if(refFinalResult.current) {
@@ -149,7 +152,7 @@ function AppBody() {
     setRunAlgo(true);
   }
 
-  function toggleCanvas(index: number) {
+  function toggleCardStep(index: number) {
     const newVisibiltyCanvas = visibilityCanvas.map((value, i) => {
       if(index === i) {
         return !value;
@@ -159,20 +162,62 @@ function AppBody() {
     setVisibilityCanvas(newVisibiltyCanvas);
   }
 
-  function renderAllCanvas() {
-    return CANVAS_IDS.map((id, index) => 
-      <CanvasCard
-        key={id}
-        toggleCanvas={() => toggleCanvas(index)}
-        title={TITLE_FROM_CANVAS_IDS[index]}
-        canvasId={id}
-        collapsible={validForm}
-        collapse={visibilityCanvas[index]}
-        format={format}
-      />
+  function renderAllSteps() {
+    const infoMessage = (
+      <p className="text-base font-semibold">
+        Not fully satisfied 😅.
+        Try again by changing default parameters.
+      </p>
     );
-  }
 
+    return CANVAS_IDS.map((id, index) => {
+        if(id === "finalResult") {
+          switch(format) {
+            case "gif":
+              return (
+                <div className="w-full" key={id} ref={refFinalResult}>
+                  <CardStepGif
+                    toggleCard={() => toggleCardStep(index)}
+                    title={TITLE_FROM_CANVAS_IDS[index]}
+                    collapsible={validForm}
+                    collapse={visibilityCanvas[index]}
+                    canvasId={id}
+                    gifParentId={PARENT_GIF_ID}
+                  >
+                    {infoMessage}
+                  </CardStepGif>
+                </div>
+              );
+            default:
+              return (
+                <CardStepImage
+                  key={id}
+                  toggleCard={() => toggleCardStep(index)}
+                  title={TITLE_FROM_CANVAS_IDS[index]}
+                  canvasId={id}
+                  collapsible={validForm}
+                  collapse={visibilityCanvas[index]}
+                  format={format}
+                >
+                  {infoMessage}
+                </CardStepImage>
+              );
+          }
+        } else {
+          return (
+            <CardStepImage
+              key={id}
+              toggleCard={() => toggleCardStep(index)}
+              title={TITLE_FROM_CANVAS_IDS[index]}
+              canvasId={id}
+              collapsible={validForm}
+              collapse={visibilityCanvas[index]}
+              format={format}
+            />
+          );
+        }
+      });
+  }
 
   return (
       <div className="flex flex-col px-4 flex flex-col gap-5" >
@@ -204,7 +249,7 @@ function AppBody() {
             <h2 className="text-3xl font-bold text-neutral-content">Results</h2>
             <Stepper steps={ProcessStateMachineArray} currentStep={progress} />
             <div className="w-full flex flex-col items-center gap-2">
-              {renderAllCanvas()}
+              {renderAllSteps()}
             </div>
           </div>
       </div>
