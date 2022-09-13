@@ -239,6 +239,7 @@ export async function computePointillismGif(
     brushParams: BrushParams,
     paletteParams: PaletteParams,
     gifParams: GifParams,
+    imageGifId: string,
     progressCallback: (progress: ProcessStateMachine) => void,
     delay: number = 100
   ) {
@@ -297,24 +298,12 @@ export async function computePointillismGif(
       interval: gifParams.delay,
     },function(obj: any) {
       if(!obj.error) {
-        const finalCanvas = document.getElementById(CANVAS_IDS[7]) as HTMLCanvasElement;
-        if(!finalCanvas) {
-          throw new Error(`Cannot find the canvas ${CANVAS_IDS[7]}`);
-        }
-
         const image = obj.image;
-
-        let animatedImage = document.getElementById(GIF_IMG_ID) as HTMLImageElement;
+        let animatedImage = document.getElementById(imageGifId) as HTMLImageElement;
         if(!animatedImage) {
-          animatedImage = document.createElement('img');
-          animatedImage.id = GIF_IMG_ID;
-
-          finalCanvas.parentElement!.prepend(animatedImage);
+          throw new Error(`cannot find the image with the id ${imageGifId}`)
         }
         animatedImage.src = image;
-        // hide canvas 7
-        finalCanvas.width = 0;
-        finalCanvas.height = 0;
       }
     });
 
