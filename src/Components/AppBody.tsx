@@ -185,6 +185,7 @@ function AppBody() {
                     gifParentId={PARENT_GIF_ID}
                   >
                     {infoMessage}
+                    <p className="text-base font-semibold">⌛ Please wait for the gif to play before downloading it.</p>
                   </CardStepGif>
                 </div>
               );
