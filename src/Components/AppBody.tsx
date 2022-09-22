@@ -212,7 +212,7 @@ function AppBody() {
               canvasId={id}
               collapsible={validForm}
               collapse={visibilityCanvas[index]}
-              format={format}
+              format={format === "gif" ? "jpg" : format}
             />
           );
         }
