@@ -1,6 +1,4 @@
 import React, { useRef, ReactNode, RefObject } from 'react';
-import { format as formatFns } from "date-fns";
-import { GIF_IMG_ID } from "../Pointillism/pointillism";
 
 export interface CardStepInterface {
   toggleCard: () => void;
@@ -30,5 +28,3 @@ function CardStep({ toggleCard, title, collapsible, collapse, save, children }: 
 }
 
 export default CardStep;
-
-
