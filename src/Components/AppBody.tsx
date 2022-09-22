@@ -1,12 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Stepper from "./Stepper";
 import Loader from "./Loader";
-import CanvasCard from "./CanvasCard";
+import CardStepImage from "./CardStepImage";
+import CardStepGif from "./CardStepGif";
 import Form from "./Form";
 import DataForm from "../reducers/usePointillismParams";
 
 import UseOpenCV from "../Hooks/UseOpenCV";
-import { computePointillism, MAX_GRADIANT_SMOOTH_RATIO, CANVAS_IDS, ProcessStateMachineArray, computeBrushThickness } from "../Pointillism/pointillism";
+import { 
+  computePointillism,
+  computePointillismGif,
+  hideGifID,
+  MAX_GRADIANT_SMOOTH_RATIO,
+  CANVAS_IDS,
+  ProcessStateMachineArray,
+  computeBrushThickness
+} from "../Pointillism/pointillism";
 
 export const TITLE_FROM_CANVAS_IDS = [
   "Generate Palette",
@@ -18,6 +27,8 @@ export const TITLE_FROM_CANVAS_IDS = [
   "Generate Median Blur Image",
   "Final Result"
 ];
+
+const PARENT_GIF_ID = "gif-parent-id";
 
 const initialCanvasCollapse = [false, false, false, false, false, false, false, false];
 
@@ -41,6 +52,14 @@ function AppBody() {
     setHue,
     setFormat,
     setSaturation,
+    numberOfFramesGif,
+    setNumberOfFramesGif,
+    delayGif,
+    setDelayGif,
+    boomerangGif,
+    setBoomerangGif,
+    changingBrushStrokeGif,
+    setChangingBrushStrokeGif
   } = DataForm.useContainer();
 
   const ref = useRef<HTMLImageElement>(null);
@@ -51,24 +70,49 @@ function AppBody() {
   const [visibilityCanvas, setVisibilityCanvas] = useState<boolean[]>(initialCanvasCollapse);
   
   useEffect(() => {
-    if(runAlgo && ref.current) {
-      const brushParams = { brushThickness, brushOpacity, brushStroke };
-      const paletterParams ={ paletteSize, hue, saturation };
-
-      computePointillism(cv, ref.current, smoothnessGradiant/100, autoresize,  brushParams, paletterParams, progressCallback).then(() => {
-        setRunAlgo(false);
-        // show last canvas with the pointillism result
-        if(visibilityCanvas[visibilityCanvas.length - 1] === false) {
-          toggleCanvas(visibilityCanvas.length - 1);
-        }
-
-        if(refFinalResult.current) {
-          refFinalResult.current.scrollIntoView({behavior: "smooth"});
-        }
-      })
+    if(runAlgo) {
+      hideGifID();
+      if(format === "gif") {
+        runGif();
+      } else {
+        runImage();
+      }
     }
   }, [cv, runAlgo]);
 
+
+  async function runImage() {
+    if(!ref.current) {
+      return;
+    }
+    const brushParams = { brushThickness, brushOpacity, brushStroke };
+    const paletteParams = { paletteSize, hue, saturation };
+    await computePointillism(cv, ref.current, smoothnessGradiant/100, autoresize, brushParams, paletteParams, progressCallback);
+    showResultAnimation();
+  }
+
+  async function runGif() {
+    if(!ref.current) {
+      return;
+    }
+    const brushParams = { brushThickness, brushOpacity, brushStroke };
+    const paletteParams = { paletteSize, hue, saturation };
+    const gifParams = { delay: delayGif, numberOfFrames: numberOfFramesGif, boomerang: boomerangGif, changingBrushStroke: changingBrushStrokeGif };
+    await computePointillismGif(cv, ref.current, smoothnessGradiant/100, autoresize, brushParams, paletteParams, gifParams, PARENT_GIF_ID, progressCallback);
+    showResultAnimation();
+  }
+
+  function showResultAnimation() {
+    setRunAlgo(false);
+    // show last canvas with the pointillism result
+    if(visibilityCanvas[visibilityCanvas.length - 1] === false) {
+      toggleCardStep(visibilityCanvas.length - 1);
+    }
+
+    if(refFinalResult.current) {
+      refFinalResult.current.scrollIntoView({behavior: "smooth"});
+    }
+  }
 
   function resetDefaultParams() {
     setSmoothnessGradiant((MAX_GRADIANT_SMOOTH_RATIO * 100) /2);
@@ -79,6 +123,10 @@ function AppBody() {
     setHue(20);
     setFormat("jpeg");
     setSaturation(20);
+    setNumberOfFramesGif(3);
+    setDelayGif(0.15);
+    setBoomerangGif(true);
+    setChangingBrushStrokeGif(false);
   }
 
 
@@ -104,7 +152,7 @@ function AppBody() {
     setRunAlgo(true);
   }
 
-  function toggleCanvas(index: number) {
+  function toggleCardStep(index: number) {
     const newVisibiltyCanvas = visibilityCanvas.map((value, i) => {
       if(index === i) {
         return !value;
@@ -114,51 +162,72 @@ function AppBody() {
     setVisibilityCanvas(newVisibiltyCanvas);
   }
 
-  function renderAllCanvas() {
+  function renderAllSteps() {
+    const infoMessage = (
+      <p className="text-base font-semibold">
+        Not fully satisfied 😅.
+        Try again by changing default parameters.
+      </p>
+    );
+
     return CANVAS_IDS.map((id, index) => {
         if(id === "finalResult") {
-          return (
-            <div className="w-full" key={id} ref={refFinalResult}>
-              <CanvasCard
-                toggleCanvas={() => toggleCanvas(index)}
-                title={TITLE_FROM_CANVAS_IDS[index]}
-                canvasId={id}
-                collapsible={validForm}
-                collapse={visibilityCanvas[index]}
-                format={format}
-              >
-                <p className="text-base font-semibold">
-                  Not fully satisfied 😅.
-                  Try again by changing default parameters.
-                </p>
-              </CanvasCard>
-            </div>
-          );
+          switch(format) {
+            case "gif":
+              return (
+                <div className="w-full" key={id} ref={refFinalResult}>
+                  <CardStepGif
+                    toggleCard={() => toggleCardStep(index)}
+                    title={TITLE_FROM_CANVAS_IDS[index]}
+                    collapsible={validForm}
+                    collapse={visibilityCanvas[index]}
+                    canvasId={id}
+                    gifParentId={PARENT_GIF_ID}
+                  >
+                    {infoMessage}
+                    <p className="text-base font-semibold">⌛ Please wait for the gif to play before downloading it.</p>
+                  </CardStepGif>
+                </div>
+              );
+            default:
+              return (
+                <CardStepImage
+                  key={id}
+                  toggleCard={() => toggleCardStep(index)}
+                  title={TITLE_FROM_CANVAS_IDS[index]}
+                  canvasId={id}
+                  collapsible={validForm}
+                  collapse={visibilityCanvas[index]}
+                  format={format}
+                >
+                  {infoMessage}
+                </CardStepImage>
+              );
+          }
         } else {
           return (
-            <CanvasCard
+            <CardStepImage
               key={id}
-              toggleCanvas={() => toggleCanvas(index)}
+              toggleCard={() => toggleCardStep(index)}
               title={TITLE_FROM_CANVAS_IDS[index]}
               canvasId={id}
               collapsible={validForm}
               collapse={visibilityCanvas[index]}
-              format={format}
+              format={format === "gif" ? "jpg" : format}
             />
           );
         }
       });
   }
 
-
   return (
       <div className="flex flex-col px-4 flex flex-col gap-5" >
         <div className="alert alert-warning">
-          <div className="flex-1">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="w-6 h-6 mx-2 stroke-current"> 
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-            </svg> 
-            <label>The algorithm is resource intensive. So it may not finish on mobile phone or low configuration. Please consider using resize option.</label>
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <span>The algorithm is resource intensive. So it may not finish on mobile phone or low configuration. Please consider using resize option.</span>
           </div>
         </div>
           {
@@ -181,7 +250,7 @@ function AppBody() {
             <h2 className="text-3xl font-bold text-neutral-content">Results</h2>
             <Stepper steps={ProcessStateMachineArray} currentStep={progress} />
             <div className="w-full flex flex-col items-center gap-2">
-              {renderAllCanvas()}
+              {renderAllSteps()}
             </div>
           </div>
       </div>

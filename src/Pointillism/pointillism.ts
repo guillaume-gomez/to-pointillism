@@ -1,11 +1,12 @@
 import { Mat } from "opencv-ts";
-import { range } from "lodash";
- 
+import { range, reverse } from "lodash";
 import { colorSelect, rangeOfPixels, generateRandomGrid, computeColorProbabilities } from "./tools";
 import { generateColorPalette, drawPalette, extendPalette, pixel } from "./palette";
 import { toGray, resizeWithRatio } from "./imageProcessingTool";
 import { createGradient, smooth, direction, magnitude } from "./gradient";
+import gifShot from "gifshot";
 
+export const GIF_IMG_ID = "gif-id";
 
 function radiansToDegrees(radians: number) : number
 {
@@ -20,7 +21,15 @@ export function computeBrushThickness(width: number, height: number) :number {
     return Math.max(1, empiricalRatio);
 }
 
-type ProcessStateMachine = "palette" | "grey" |"gradiants" |"gradiantSmooth" |"generateGrid" |"medianBlur" | "done";
+type ProcessStateMachine = 
+  "palette"|
+  "grey" |
+  "gradiants" |
+  "gradiantSmooth" |
+  "generateGrid" |
+  "medianBlur" |
+  "generatePointillism" |
+  "done";
 
 
 export interface BrushParams {
@@ -29,6 +38,12 @@ export interface BrushParams {
   brushStroke: number
 }
 
+export interface GifParams {
+  delay: number;
+  numberOfFrames: number;
+  boomerang: boolean;
+  changingBrushStroke: boolean;
+}
 export interface PaletteParams {
   paletteSize: number;
   hue: number;
@@ -63,7 +78,7 @@ export const ProcessStateMachineArray = [
 /////////////////////////////////////////////////////////////////////////////////
 
 
-export async function generatePalette(
+async function generatePalette(
     imgElement: HTMLImageElement,
     {paletteSize, hue, saturation }: PaletteParams,
     delay: number = 100
@@ -77,7 +92,7 @@ export async function generatePalette(
   });
 }
 
-export async function generateGreyImage(cv: any, src: Mat, delay: number = 100) : Promise<Mat> {
+async function generateGreyImage(cv: any, src: Mat, delay: number = 100) : Promise<Mat> {
   return new Promise((resolve) => {
     let grey: Mat = toGray(src);
     cv.imshow(CANVAS_IDS[1], grey);
@@ -85,7 +100,7 @@ export async function generateGreyImage(cv: any, src: Mat, delay: number = 100) 
   });
 }
 
-export async function generateGradiant(cv: any, grey: Mat, smoothnessGradiant: number, delay: number = 100): Promise<[Mat, Mat]> {
+async function generateGradiant(cv: any, grey: Mat, smoothnessGradiant: number, delay: number = 100): Promise<[Mat, Mat]> {
   return new Promise((resolve) => {
     const gradiants = createGradient(grey, smoothnessGradiant);
     cv.imshow(CANVAS_IDS[2], gradiants[0]);
@@ -95,7 +110,7 @@ export async function generateGradiant(cv: any, grey: Mat, smoothnessGradiant: n
   });
 }
 
-export async function generateSmoothGradiant(cv: any, rows: number, cols: number, dstx: Mat, dsty: Mat, delay: number = 100): Promise<[Mat, Mat]> {
+async function generateSmoothGradiant(cv: any, rows: number, cols: number, dstx: Mat, dsty: Mat, delay: number = 100): Promise<[Mat, Mat]> {
   return new Promise((resolve) => {
     const gradientSmoothingRadius = Math.round(Math.max(rows, cols) / 50);
     const gradientSmooths = smooth(dstx, dsty, gradientSmoothingRadius);
@@ -106,7 +121,7 @@ export async function generateSmoothGradiant(cv: any, rows: number, cols: number
   });
 }
 
-export async function generateBlurMedian(cv: any, src: Mat, delay: number = 100) : Promise<Mat> {
+async function generateBlurMedian(cv: any, src: Mat, delay: number = 100) : Promise<Mat> {
   return new Promise((resolve) => {
     let medianBlur = cv.Mat.zeros(src.cols, src.rows, cv.CV_32F);
     cv.medianBlur(src, medianBlur, 11);
@@ -116,7 +131,7 @@ export async function generateBlurMedian(cv: any, src: Mat, delay: number = 100)
   });
 }
 
-export async function drawPointillism(
+async function drawPointillism(
   cv: any,
   src: Mat,
   medianBlur: Mat,
@@ -149,6 +164,22 @@ export async function drawPointillism(
     });
 }
 
+function getImageFromCanvas() : string {
+  const canvas = document.getElementById(CANVAS_IDS[7]) as HTMLCanvasElement;
+  if(!canvas) {
+    throw new Error(`Cannot find the canvas ${CANVAS_IDS[7]}`);
+  }
+  return canvas.toDataURL(`image/jpeg`)
+}
+
+export function hideGifID() {
+  let animatedImage = document.getElementById(GIF_IMG_ID) as HTMLImageElement;
+  if(!animatedImage) {
+    // we assume the gif image is not created yet
+    return;
+  }
+  animatedImage.src = "";
+}
 
 export async function computePointillism(
     cv: any,
@@ -157,7 +188,8 @@ export async function computePointillism(
     autoResize: boolean,
     brushParams: BrushParams, 
     paletteParams: PaletteParams,
-    progressCallback: (progress: ProcessStateMachine) => void, delay: number = 100
+    progressCallback: (progress: ProcessStateMachine) => void,
+    delay: number = 100
   ) {
   const palette = await generatePalette(imgElement, paletteParams);
   progressCallback("palette");
@@ -190,6 +222,92 @@ export async function computePointillism(
   const startTime = performance.now();
   await drawPointillism(cv, src, medianBlur, dstxSmooth, dstySmooth, grid, palette, brushParams, delay);
   progressCallback("done");
+  const endTime = performance.now();
+  console.log("Pointillism ->", endTime - startTime);
+
+  src.delete();
+  medianBlur.delete();
+  dstxSmooth.delete();
+  dstySmooth.delete();
+}
+
+export async function computePointillismGif(
+    cv: any,
+    imgElement: HTMLImageElement,
+    smoothnessGradiant: number,
+    autoResize: boolean,
+    brushParams: BrushParams,
+    paletteParams: PaletteParams,
+    gifParams: GifParams,
+    imageGifId: string,
+    progressCallback: (progress: ProcessStateMachine) => void,
+    delay: number = 100
+  ) {
+  const palette = await generatePalette(imgElement, paletteParams);
+  progressCallback("palette");
+
+  let src = await cv.imread(imgElement);
+  if(autoResize) {
+    src = resizeWithRatio(src, 1280, 780);
+  }
+
+  const grey = await generateGreyImage(cv, src, delay);
+  progressCallback("grey");
+  
+  const [dstX, dstY] = await generateGradiant(cv, grey, smoothnessGradiant, delay);
+  progressCallback("gradiants")
+
+  const [dstxSmooth, dstySmooth] = await generateSmoothGradiant(cv, src.rows, src.cols, dstX, dstY, delay);
+  progressCallback("gradiantSmooth")
+  
+  grey.delete();
+  dstX.delete();
+  dstY.delete();
+
+
+  let medianBlur = await generateBlurMedian(cv, src, delay);
+  progressCallback("medianBlur")
+
+  const grid = generateRandomGrid(src.cols, src.rows);
+  setTimeout(() =>  progressCallback("generateGrid"), delay);
+
+  const startTime = performance.now();
+
+  let images = [];
+  for(let i = 1; i < gifParams.numberOfFrames; i++) {
+    const customBrushParams = 
+      gifParams.changingBrushStroke ? 
+      {
+        ...brushParams,
+        brushStroke: i
+      } 
+      :
+      brushParams;
+    await drawPointillism(cv, src, medianBlur, dstxSmooth, dstySmooth, grid, palette, customBrushParams, delay);
+    images.push(getImageFromCanvas());
+  }
+
+  if(gifParams.boomerang) {
+    images = [...images, ...reverse(images)];
+  }
+
+  gifShot.createGIF({
+      images: images,
+      gifWidth: src.cols,
+      gifHeight: src.rows,
+      interval: gifParams.delay,
+    },function(obj: any) {
+      if(!obj.error) {
+        const image = obj.image;
+        let animatedImage = document.getElementById(imageGifId) as HTMLImageElement;
+        if(!animatedImage) {
+          throw new Error(`cannot find the image with the id ${imageGifId}`)
+        }
+        animatedImage.src = image;
+      }
+    });
+
+  progressCallback("done")
   const endTime = performance.now();
   console.log("Pointillism ->", endTime - startTime);
 

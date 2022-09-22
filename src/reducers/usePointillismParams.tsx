@@ -13,6 +13,10 @@ function useCreateLifeInGridReducer() {
   const [hue, setHue] = useState<number>(20);
   const [format, setFormat] = useState<string>("jpeg");
   const [saturation, setSaturation] = useState<number>(20);
+  const [numberOfFramesGif, setNumberOfFramesGif] = useState<number>(3);
+  const [delayGif, setDelayGif] = useState<number>(0.15);
+  const [boomerangGif, setBoomerangGif] = useState<boolean>(true);
+  const [changingBrushStrokeGif, setChangingBrushStrokeGif] = useState<boolean>(false);
 
 
   return {
@@ -33,7 +37,15 @@ function useCreateLifeInGridReducer() {
     format,
     setFormat,
     saturation,
-    setSaturation
+    setSaturation,
+    numberOfFramesGif,
+    setNumberOfFramesGif,
+    delayGif,
+    setDelayGif,
+    boomerangGif,
+    setBoomerangGif,
+    changingBrushStrokeGif,
+    setChangingBrushStrokeGif
   }
 }
 
