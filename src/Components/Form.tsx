@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import BrushComponent from "./BrushComponent";
 import ColorComponent from "./ColorComponent";
 import GifComponent from "./GifComponent";

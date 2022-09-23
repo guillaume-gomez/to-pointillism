@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { createContainer } from "unstated-next";
 import { MAX_GRADIANT_SMOOTH_RATIO } from "../Pointillism/pointillism";
 

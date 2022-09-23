@@ -286,7 +286,6 @@ export async function computePointillismGif(
     await drawPointillism(cv, src, medianBlur, dstxSmooth, dstySmooth, grid, palette, customBrushParams, delay);
     images.push(getImageFromCanvas());
   }
-
   if(gifParams.boomerang) {
     images = [...images, ...reverse(images)];
   }

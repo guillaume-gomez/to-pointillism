@@ -1,4 +1,4 @@
-import React, { useRef, ReactNode, RefObject } from 'react';
+import React, { useRef, ReactNode } from 'react';
 import { format as formatFns } from "date-fns";
 import CardStep, { CardStepInterface } from "./CardStep";
 
