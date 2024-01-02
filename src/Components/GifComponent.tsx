@@ -22,11 +22,17 @@ function GifComponent( props : GifComponentInterface): React.ReactElement {
       <div className="flex flex-wrap pt-2 -mx-5">
         <div className="sm:w-1/2 lg:w-1/4 px-5 py-3">
           <div className="form-control">
-            <label className="cursor-pointer flex justify-between gap-2">
-              <span className="label-text text-neutral-content text-base font-semibold">Modify Brush Stroke </span> 
-              <input type="checkbox" checked={changingBrushStrokeGif} onChange={() => { setChangingBrushStrokeGif(!changingBrushStrokeGif) } } className="checkbox checkbox-primary checkbox-md" />
-            </label>
-            <span className="text-xs">Increase the brush stroke between each frame</span>
+            <span className="label-text text-neutral-content text-base font-semibold">Modify Brush Stroke </span>
+            <select
+              onChange={(e) =>setChangingBrushStrokeGif(parseInt(e.target.value))}
+              value={changingBrushStrokeGif}
+              className="select select-bordered select-primary max-w-xs text-black bg-opacity-40"
+              >
+              <option className="bg-primary" value="0">keep it as it is</option>
+              <option className="bg-primary" value="1">Increase</option>
+              <option className="bg-primary" value="-1">Decrease</option>
+            </select>
+            <span className="text-xs">Increase/Decrease the brush stroke between each frame</span>
           </div>
         </div>
         <div className="sm:w-1/2 lg:w-1/4 px-5 py-3">

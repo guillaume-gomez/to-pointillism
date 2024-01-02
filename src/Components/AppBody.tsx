@@ -126,7 +126,7 @@ function AppBody() {
     setNumberOfFramesGif(3);
     setDelayGif(0.15);
     setBoomerangGif(true);
-    setChangingBrushStrokeGif(false);
+    setChangingBrushStrokeGif(0);
   }
 
 
