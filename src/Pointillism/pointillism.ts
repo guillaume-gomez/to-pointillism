@@ -42,7 +42,7 @@ export interface GifParams {
   delay: number;
   numberOfFrames: number;
   boomerang: boolean;
-  changingBrushStroke: boolean;
+  changingBrushStroke: number;
 }
 export interface PaletteParams {
   paletteSize: number;
@@ -231,6 +231,30 @@ export async function computePointillism(
   dstySmooth.delete();
 }
 
+function computeCurrentBrushStroke(
+    changingBrushStroke: number,
+    currentFrame: number,
+    numberOfFrames: number,
+    brushParams: BrushParams
+  ) : BrushParams {
+  if(!changingBrushStroke || changingBrushStroke === 0) {
+    return brushParams;
+  }
+
+  if(changingBrushStroke === 1) {
+    return {
+      ...brushParams,
+      brushStroke: currentFrame
+    }
+  }
+  // changingBrushStroke === -1
+  return {
+    ...brushParams,
+    brushStroke: numberOfFrames - currentFrame
+  }
+
+}
+
 export async function computePointillismGif(
     cv: any,
     imgElement: HTMLImageElement,
@@ -275,14 +299,12 @@ export async function computePointillismGif(
 
   let images = [];
   for(let i = 1; i < gifParams.numberOfFrames; i++) {
-    const customBrushParams = 
-      gifParams.changingBrushStroke ? 
-      {
-        ...brushParams,
-        brushStroke: i
-      } 
-      :
-      brushParams;
+    const customBrushParams = computeCurrentBrushStroke(
+      gifParams.changingBrushStroke,
+      i,
+      gifParams.numberOfFrames,
+      brushParams
+    );
     await drawPointillism(cv, src, medianBlur, dstxSmooth, dstySmooth, grid, palette, customBrushParams, delay);
     images.push(getImageFromCanvas());
   }
