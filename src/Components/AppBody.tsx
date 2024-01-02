@@ -131,9 +131,12 @@ function AppBody() {
 
 
   function loadImage(event: React.ChangeEvent<HTMLInputElement>) {
+    console.log(1)
     if(event && event.target && event.target.files && ref.current) {
+      console.log(2)
       ref.current.src = URL.createObjectURL(event.target.files[0]);
       ref.current.onload =  (event: any) => {
+        console.log(3)
           const brushThickness = computeBrushThickness(event.target.width, event.target.height);
           setBrushThickness(brushThickness)
       };
@@ -242,6 +245,7 @@ function AppBody() {
                 loadImage={loadImage}
                 validForm={validForm}
                 submit={submit}
+                imageBase64={ref.current? ref.current.src : undefined}
                 resetDefaultParams={resetDefaultParams}
               />
           }
