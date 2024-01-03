@@ -3,7 +3,7 @@ import Logo from "../monaLisa.jpeg";
 
 function NavBar(): React.ReactElement {
   return (
-     <div className="navbar mb-2 bg-neutral-focus text-neutral-content p-6">
+     <div className="navbar mb-2 bg-secondary text-neutral-content p-6">
      <img className="rounded-lg" src={Logo} width="64px" />
       <div className="px-2 mx-2 navbar-start flex flex-col gap-1 items-start">
         <span className="text-2xl font-bold">
