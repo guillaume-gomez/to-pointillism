@@ -68,11 +68,11 @@ function Form({
               <span className="text-xs">Recommanded for heavy images on low configuration.</span>
             </div>
             <div className="w-full md:w-2/4 flex flex-col gap-2">
-              <select onChange={(e) =>setFormat(e.target.value)} value={format} className="select select-bordered select-primary max-w-xs text-black bg-opacity-40">
-                <option className="bg-primary" disabled>Select output format</option>
-                <option className="bg-primary" value="png">Png</option>
-                <option className="bg-primary" value="jpeg">Jpeg</option>
-                <option className="bg-primary" value="gif">Gif</option>
+              <select onChange={(e) =>setFormat(e.target.value)} value={format} className="select select-bordered select-primary max-w-xs text-primary bg-secondary bg-opacity-40">
+                <option className="bg-secondary" disabled>Select output format</option>
+                <option className="bg-secondary" value="png">Png</option>
+                <option className="bg-secondary" value="jpeg">Jpeg</option>
+                <option className="bg-secondary" value="gif">Gif</option>
               </select>
               <span className="text-xs">Output format of the image. While Png preserve quality, Jpeg is a lightweight format. Brush opacity works only on Png. </span>
             </div>
