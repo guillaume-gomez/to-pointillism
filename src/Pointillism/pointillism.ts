@@ -232,25 +232,24 @@ export async function computePointillism(
 }
 
 function computeCurrentBrushStroke(
-    changingBrushStroke: number,
     currentFrame: number,
-    numberOfFrames: number,
+    gifParams : GifParams,
     brushParams: BrushParams
   ) : BrushParams {
-  if(!changingBrushStroke || changingBrushStroke === 0) {
+  if(!gifParams.changingBrushStroke || gifParams.changingBrushStroke === 0) {
     return brushParams;
   }
 
-  if(changingBrushStroke === 1) {
+  if(gifParams.changingBrushStroke === 1) {
     return {
       ...brushParams,
-      brushStroke: currentFrame
+      brushStroke: brushParams.brushStroke + currentFrame
     }
   }
-  // changingBrushStroke === -1
+  // gifParams.changingBrushStroke === -1
   return {
     ...brushParams,
-    brushStroke: numberOfFrames - currentFrame
+    brushStroke: (brushParams.brushStroke + gifParams.numberOfFrames) - currentFrame
   }
 
 }
@@ -300,9 +299,8 @@ export async function computePointillismGif(
   let images = [];
   for(let i = 1; i < gifParams.numberOfFrames; i++) {
     const customBrushParams = computeCurrentBrushStroke(
-      gifParams.changingBrushStroke,
       i,
-      gifParams.numberOfFrames,
+      gifParams,
       brushParams
     );
     await drawPointillism(cv, src, medianBlur, dstxSmooth, dstySmooth, grid, palette, customBrushParams, delay);
