@@ -51,6 +51,8 @@ function Form({
     );
   }
 
+  console.log("form ", imageBase64)
+
   return (
     <div className="card glass text-neutral-content">
       <div className="flex justify-center">
@@ -70,11 +72,11 @@ function Form({
               <span className="text-xs">Recommanded for heavy images on low configuration.</span>
             </div>
             <div className="w-full md:w-2/4 flex flex-col gap-2">
-              <select onChange={(e) =>setFormat(e.target.value)} value={format} className="select select-bordered select-primary max-w-xs text-primary bg-opacity-40">
-                <option className="bg-accent" disabled>Select output format</option>
-                <option className="bg-accent" value="png">Png</option>
-                <option className="bg-accent" value="jpeg">Jpeg</option>
-                <option className="bg-accent" value="gif">Gif</option>
+              <select onChange={(e) =>setFormat(e.target.value)} value={format} className="select select-bordered select-primary max-w-xs bg-secondary text-primary bg-opacity-40">
+                <option className="bg-secondary" disabled>Select output format</option>
+                <option className="bg-secondary" value="png">Png</option>
+                <option className="bg-secondary" value="jpeg">Jpeg</option>
+                <option className="bg-secondary" value="gif">Gif</option>
               </select>
               <span className="text-xs">Output format of the image. While Png preserve quality, Jpeg is a lightweight format. Brush opacity works only on Png. </span>
             </div>
