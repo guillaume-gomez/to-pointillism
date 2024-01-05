@@ -1,18 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 interface UploadButtonInterface {
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (imageBase64: string, width: number, height: number) => void;
   imageBase64?: string;
 }
 
 function UploadButton({ onChange, imageBase64 } : UploadButtonInterface): React.ReactElement {
-  console.log(imageBase64)
+  const [preview, setPreview] = useState<string>("")
+
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    if(event && event.target && event.target.files) {
+      const imageBase64 = URL.createObjectURL(event.target.files[0]);
+      onChange(imageBase64, event.target.width, event.target.height);
+      setPreview(imageBase64);
+    }
+  }
+
   return (
       <label className="w-full flex flex-col items-center px-4 py-6 bg-white text-primary rounded-lg shadow-lg tracking-wide uppercase border-2 border-primary transition duration-300 ease-in-out bg-opacity-40 cursor-pointer hover:bg-primary hover:text-white">
         {
-          imageBase64 ?
+          preview !== "" ?
             <div className="flex flex-col gap-2 items-center">
-              <img src={imageBase64} width={126}/>
+              <img src={preview} width={126}/>
               <label>Your image</label>
             </div> :
             <>
@@ -22,7 +31,7 @@ function UploadButton({ onChange, imageBase64 } : UploadButtonInterface): React.
               <span className="mt-2 leading-normal">Select a picture</span>
             </>
         }
-        <input type='file' accept="image/*" className="hidden" onChange={onChange} />
+        <input type='file' accept="image/*" className="hidden" onChange={handleChange} />
       </label>
     
   );
