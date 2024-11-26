@@ -13,7 +13,7 @@ import DataForm from "../reducers/usePointillismParams";
 
 interface FormInterface {
   runAlgo: boolean;
-  loadImage: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  loadImage: (imageBase64: string, width: number, height: number) => void;
   validForm: boolean;
   submit: () => void;
   resetDefaultParams: () => void;

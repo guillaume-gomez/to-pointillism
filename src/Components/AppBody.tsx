@@ -130,13 +130,11 @@ function AppBody() {
   }
 
 
-  function loadImage(event: React.ChangeEvent<HTMLInputElement>) {
-    if(event && event.target && event.target.files && ref.current) {
-      ref.current.src = URL.createObjectURL(event.target.files[0]);
-      ref.current.onload =  (event: any) => {
-          const brushThickness = computeBrushThickness(event.target.width, event.target.height);
-          setBrushThickness(brushThickness)
-      };
+  function loadImage(imageBase64: string, width: number, height: number) {
+    const brushThickness = computeBrushThickness(width, height);
+    setBrushThickness(brushThickness);
+    if(ref.current) {
+      ref.current.src = imageBase64;
     }
   }
 
