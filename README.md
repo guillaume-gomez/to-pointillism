@@ -20,6 +20,10 @@ Convert any images to pointillism painting.
 
 <img width="2400" height="1600" alt="22-09-2025-01-18-pointillism" src="https://github.com/user-attachments/assets/b8da7f35-98db-438b-8152-9505fa1bf833" />
 
+### Converted (as gif)
+
+[caravaggio-gif.webm](https://github.com/user-attachments/assets/31b8941c-ec08-48b6-88b1-ec520a3ab749)
+
 
 ## references
 
