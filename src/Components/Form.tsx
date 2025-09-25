@@ -13,7 +13,7 @@ import DataForm from "../reducers/usePointillismParams";
 
 interface FormInterface {
   runAlgo: boolean;
-  loadImage: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  loadImage: (imageBase64: string, width: number, height: number) => void;
   validForm: boolean;
   submit: () => void;
   resetDefaultParams: () => void;
@@ -68,7 +68,7 @@ function Form({
               <span className="text-xs">Recommanded for heavy images on low configuration.</span>
             </div>
             <div className="w-full md:w-2/4 flex flex-col gap-2">
-              <select onChange={(e) =>setFormat(e.target.value)} value={format} className="select select-bordered select-primary max-w-xs text-primary bg-secondary bg-opacity-40">
+              <select onChange={(e) =>setFormat(e.target.value)} value={format} className="select select-bordered select-primary max-w-xs bg-secondary text-primary bg-opacity-40">
                 <option className="bg-secondary" disabled>Select output format</option>
                 <option className="bg-secondary" value="png">Png</option>
                 <option className="bg-secondary" value="jpeg">Jpeg</option>
