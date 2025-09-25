@@ -15,7 +15,7 @@ function UploadButton({ onChange, imageBase64 } : UploadButtonInterface): React.
   }
 
   return (
-      <label className="w-full flex flex-col items-center px-4 py-6 bg-secondary text-primary rounded-lg shadow-lg tracking-wide uppercase border-2 border-primary transition duration-300 ease-in-out bg-opacity-40 cursor-pointer hover:bg-primary hover:text-white">
+      <label className="w-full flex flex-col items-center px-4 py-6 bg-secondary text-primary rounded-lg shadow-lg tracking-wide uppercase border-2 border-primary transition duration-300 ease-in-out bg-opacity-40 cursor-pointer hover:bg-primary hover:text-neutral">
         {
           imageBase64 !== "" ?
             <div className="flex flex-col gap-1 items-center">
