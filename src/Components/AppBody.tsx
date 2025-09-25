@@ -236,6 +236,7 @@ function AppBody() {
               <Form
                 runAlgo={runAlgo}
                 loadImage={loadImage}
+                imageBase64={ref?.current?.src}
                 validForm={validForm}
                 submit={submit}
                 resetDefaultParams={resetDefaultParams}
