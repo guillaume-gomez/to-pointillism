@@ -20,6 +20,7 @@ function UploadButton({ onChange, imageBase64 } : UploadButtonInterface): React.
           imageBase64 !== "" ?
             <div className="flex flex-col gap-1 items-center">
               <img src={imageBase64} width={124}/>
+              <span> Click again to upload another image </span>
             </div> :
             <>
               <svg className="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
