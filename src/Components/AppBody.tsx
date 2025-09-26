@@ -108,6 +108,7 @@ function AppBody() {
     if(visibilityCanvas[visibilityCanvas.length - 1] === false) {
       toggleCardStep(visibilityCanvas.length - 1);
     }
+    debugger
 
     if(refFinalResult.current) {
       refFinalResult.current.scrollIntoView({behavior: "smooth"});
