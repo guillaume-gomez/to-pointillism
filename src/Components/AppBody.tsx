@@ -63,7 +63,6 @@ function AppBody() {
   } = DataForm.useContainer();
 
   const ref = useRef<HTMLImageElement>(null);
-  const refFinalResult = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState<string>("");
   const [validForm, setValidForm] = useState<boolean>(false);
   const [runAlgo, setRunAlgo] = useState<boolean>(false);
@@ -108,9 +107,9 @@ function AppBody() {
     if(visibilityCanvas[visibilityCanvas.length - 1] === false) {
       toggleCardStep(visibilityCanvas.length - 1);
     }
-
-    if(refFinalResult.current) {
-      refFinalResult.current.scrollIntoView({behavior: "smooth"});
+    const divTarget = document.getElementById('finalResult'); // point the canvases (on both format)
+    if(divTarget) {
+      divTarget.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});  
     }
   }
 
@@ -173,19 +172,17 @@ function AppBody() {
           switch(format) {
             case "gif":
               return (
-                <div className="w-full" key={id} ref={refFinalResult}>
-                  <CardStepGif
-                    toggleCard={() => toggleCardStep(index)}
-                    title={TITLE_FROM_CANVAS_IDS[index]}
-                    collapsible={validForm}
-                    collapse={visibilityCanvas[index]}
-                    canvasId={id}
-                    gifParentId={PARENT_GIF_ID}
-                  >
-                    {infoMessage}
-                    <p className="text-base font-semibold">⌛ Please wait for the gif to play before downloading it.</p>
-                  </CardStepGif>
-                </div>
+                <CardStepGif
+                  toggleCard={() => toggleCardStep(index)}
+                  title={TITLE_FROM_CANVAS_IDS[index]}
+                  collapsible={validForm}
+                  collapse={visibilityCanvas[index]}
+                  canvasId={id}
+                  gifParentId={PARENT_GIF_ID}
+                >
+                  {infoMessage}
+                  <p className="text-base font-semibold">⌛ Please wait for the gif to play before downloading it.</p>
+                </CardStepGif>
               );
             default:
               return (
