@@ -14,22 +14,23 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.13",
+    "@types/lodash": "^4.17.20",
     "aureooms-js-bisect": "^3.0.1",
+    "autoprefixer": "^10",
     "color-convert": "^2.0.1",
     "colorthief": "2.3.1",
+    "daisyui": "^4",
     "date-fns": "^2.25.0",
     "gh-pages": "^3.1.0",
     "gifshot": "^0.4.5",
     "gpu.js": "gpujs/gpu.js#f66631c4fc1ba3b30f991dac7f6577efdd6f17c6",
     "lodash": "^4.17.21",
     "opencv-ts": "^1.2.18",
+    "postcss": "^8",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "unstated-next": "^1.1.0",
-    "autoprefixer": "^10",
-    "daisyui": "^4",
-    "postcss": "^8",
-    "tailwindcss": "^3"
+    "tailwindcss": "^3",
+    "unstated-next": "^1.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
