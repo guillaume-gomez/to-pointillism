@@ -16,7 +16,7 @@ function useCreateLifeInGridReducer() {
   const [numberOfFramesGif, setNumberOfFramesGif] = useState<number>(3);
   const [delayGif, setDelayGif] = useState<number>(0.15);
   const [boomerangGif, setBoomerangGif] = useState<boolean>(true);
-  const [changingBrushStrokeGif, setChangingBrushStrokeGif] = useState<boolean>(false);
+  const [changingBrushStrokeGif, setChangingBrushStrokeGif] = useState<number>(0);
 
 
   return {
