@@ -1,9 +1,9 @@
-import cv, { Mat } from "opencv-ts";
+import cv, { type Mat } from "opencv-ts";
 
 // thickness brush has a value from 1 to 15.36
 export function createGradient(grey: Mat, thicknessBrush: number) : [Mat, Mat] {
-  function divideByNumber(data: number[], x: number) : number[] {
-    return data.map(d => d/x);
+  function divideByNumber(data: Float32Array<ArrayBufferLike>, x: number) : number[] {
+    return data.map(d => d/x) as unknown as number[];
   }
 
   let dstX = new cv.Mat();

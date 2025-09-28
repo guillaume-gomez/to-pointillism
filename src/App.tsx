@@ -1,4 +1,3 @@
-import React from 'react';
 import DataForm from "./reducers/usePointillismParams";
 import Footer from "./Components/Footer";
 import NavBar from "./Components/NavBar";

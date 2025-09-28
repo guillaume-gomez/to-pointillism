@@ -5,7 +5,7 @@ import DataForm from "../reducers/usePointillismParams";
 interface ColorComponentInterface {
 }
 
-function ColorComponent(props : ColorComponentInterface): React.ReactElement {
+function ColorComponent({} : ColorComponentInterface): React.ReactElement {
     const { 
     hue,
     setHue,
