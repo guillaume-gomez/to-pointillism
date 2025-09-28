@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css';
 import DataForm from "./reducers/usePointillismParams";
 import Footer from "./Components/Footer";
 import NavBar from "./Components/NavBar";

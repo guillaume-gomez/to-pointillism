@@ -1,60 +1,48 @@
 {
   "name": "pointillism-converter",
   "homepage": "./",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "predeploy": "yarn run build",
+    "deploy": "gh-pages -d build"
+  },
   "dependencies": {
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "@types/color-convert": "^2.0.0",
-    "@types/date-fns": "^2.6.0",
-    "@types/jest": "^26.0.15",
-    "@types/lodash": "^4.14.172",
-    "@types/node": "^12.0.0",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
+    "@tailwindcss/vite": "^4.1.13",
+    "@types/lodash": "^4.17.20",
     "aureooms-js-bisect": "^3.0.1",
+    "autoprefixer": "^10",
     "color-convert": "^2.0.1",
     "colorthief": "2.3.1",
-    "daisyui": "^4.5",
+    "daisyui": "^4",
     "date-fns": "^2.25.0",
     "gh-pages": "^3.1.0",
     "gifshot": "^0.4.5",
     "gpu.js": "gpujs/gpu.js#f66631c4fc1ba3b30f991dac7f6577efdd6f17c6",
     "lodash": "^4.17.21",
     "opencv-ts": "^1.2.18",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1",
-    "typescript": "^4.7.4",
-    "unstated-next": "^1.1.0",
-    "web-vitals": "^2.1.4"
+    "postcss": "^8",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "tailwindcss": "^3",
+    "unstated-next": "^1.1.0"
   },
-  "scripts": {
-    "predeploy": "yarn run build",
-    "deploy": "gh-pages -d build",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "devDependencies": {
+    "@eslint/js": "^9.36.0",
+    "@types/react": "^19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react-swc": "^4.1.0",
+    "eslint": "^9.36.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^16.4.0",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.44.0",
+    "vite": "^7.1.7"
   }
 }

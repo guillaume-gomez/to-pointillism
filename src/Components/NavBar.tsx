@@ -1,5 +1,5 @@
 import React from 'react';
-import Logo from "../monaLisa.jpeg";
+import Logo from "../assets/monaLisa.jpeg";
 
 function NavBar(): React.ReactElement {
   return (

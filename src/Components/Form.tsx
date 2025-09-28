@@ -96,7 +96,7 @@ function Form({
           </details>
           <div className="w-2/4 flex flex-col gap-5">
             <div className="flex flex-col">
-              <button className="btn btn-primary w-full h-16" disabled={!validForm} onClick={submit}>Generate</button>
+              <button className="btn btn-primary w-full h-16 uppercase text-lg" disabled={!validForm} onClick={submit}>Generate</button>
               <button className="self-end btn btn-link btn-xs italic opacity-80" onClick={resetDefaultParams}>Reset to default params</button>
             </div>
             <p className="text-xs text-center italic opacity-60">We don't collect or share images. Everything is done locally.</p>

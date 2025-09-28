@@ -31,6 +31,11 @@ Convert any images to pointillism painting.
 
 ![25-09-2025-09-33-pointillism_no_change](https://github.com/user-attachments/assets/e5a411d5-2bab-4e01-8309-4e6781edab3d)
 
+### converted (with opacity)
+
+![25-09-2025-09-33-pointillism_with_opacity](https://github.com/user-attachments/assets/7e310d8c-748d-4e80-a7c1-ea2ad120006b)
+
+
 ## references
 
 background made by [Dung Tran](https://pixabay.com/users/kollsd-14736411/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=4922621) (modified by the algorithm)
