@@ -1,4 +1,4 @@
-import React, { useRef, ReactNode, RefObject } from 'react';
+import React, { useRef, type ReactNode, type RefObject } from 'react';
 
 export interface CardStepInterface {
   toggleCard: () => void;
@@ -11,6 +11,13 @@ export interface CardStepInterface {
 
 function CardStep({ toggleCard, title, collapsible, collapse, save, children }: CardStepInterface): React.ReactElement {
   const refA = useRef<HTMLAnchorElement>(null);
+
+  function onClick() {
+    if(!refA === null) {
+      save(refA as RefObject<HTMLAnchorElement>)
+    }
+  }
+
   return (
     <div className={`bg-neutral text-neutral-content collapse w-full border rounded-box border-base-300 collapse-arrow ${collapsible ? "" : "collapse-close"}`}>
       <input type="checkbox" checked={collapse} onChange={() => toggleCard()}/>
@@ -20,7 +27,7 @@ function CardStep({ toggleCard, title, collapsible, collapse, save, children }: 
       <div className="collapse-content flex flex-col justify-center items-center gap-3">
         {children}
         <div className="flex flex-row self-end">
-          <a ref={refA} className="btn btn-primary" onClick={ () => save(refA)}>Save</a>
+          <a ref={refA} className="btn btn-primary" onClick={onClick}>Save</a>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
-import React, { useRef, RefObject, ReactNode } from 'react';
+import React, { useRef, type RefObject } from 'react';
 import { format as formatFns } from "date-fns";
-import CardStep, { CardStepInterface } from "./CardStep";
+import CardStep, { type CardStepInterface } from "./CardStep";
 
 interface CardStepImageInterface extends Omit<CardStepInterface, 'save'> {
   canvasId: string;

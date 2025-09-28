@@ -1,4 +1,4 @@
-import cv, { Mat, Size } from "opencv-ts";
+import cv, { type Mat, type Size } from "opencv-ts";
 
 export function resize(image: Mat, width: number, height: number) : Mat {
   const newImage: Mat = new cv.Mat(image.cols, image.rows, cv.CV_8UC4);

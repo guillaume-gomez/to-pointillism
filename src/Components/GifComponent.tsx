@@ -4,7 +4,7 @@ import DataForm from "../reducers/usePointillismParams";
 
 interface GifComponentInterface {}
 
-function GifComponent( props : GifComponentInterface): React.ReactElement {
+function GifComponent( {} : GifComponentInterface): React.ReactElement {
     const {
     numberOfFramesGif,
     setNumberOfFramesGif,

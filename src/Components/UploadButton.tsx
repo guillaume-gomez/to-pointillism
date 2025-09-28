@@ -5,7 +5,7 @@ interface UploadButtonInterface {
   imageBase64?: string;
 }
 
-function UploadButton({ onChange, imageBase64 } : UploadButtonInterface): React.ReactElement {
+function UploadButton({ onChange } : UploadButtonInterface): React.ReactElement {
   const [preview, setPreview] = useState<string>("")
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {

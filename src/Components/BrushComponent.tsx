@@ -5,7 +5,7 @@ import DataForm from "../reducers/usePointillismParams";
 interface BrushComponentInterface {
 }
 
-function BrushComponent(props : BrushComponentInterface): React.ReactElement {
+function BrushComponent({} : BrushComponentInterface): React.ReactElement {
   const {
     brushStroke,
     setBrushStroke,
