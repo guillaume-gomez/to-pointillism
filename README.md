@@ -35,6 +35,12 @@ Convert any images to pointillism painting.
 
 ![25-09-2025-09-33-pointillism_with_opacity](https://github.com/user-attachments/assets/7e310d8c-748d-4e80-a7c1-ea2ad120006b)
 
+### Original (Soulages)
+![thumb_large](https://github.com/user-attachments/assets/347e1328-5631-45a6-a48b-83f71ecc5369)
+
+### Converted
+
+[22-09-2025-01-14-pointillism.webm](https://github.com/user-attachments/assets/8349c797-26f2-4433-979c-63f33fdaa500)
 
 ## references
 
