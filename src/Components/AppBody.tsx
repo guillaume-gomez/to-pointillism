@@ -109,7 +109,9 @@ function AppBody() {
     }
     const divTarget = document.getElementById('finalResult'); // point the canvases (on both format)
     if(divTarget) {
-      divTarget.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});  
+      setTimeout(() => {
+        divTarget.scrollIntoView({behavior: "smooth"});
+      }, 10);
     }
   }
 
