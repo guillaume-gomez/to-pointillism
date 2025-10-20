@@ -24,6 +24,16 @@ Convert any images to pointillism painting.
 
 [caravaggio-gif.webm](https://github.com/user-attachments/assets/31b8941c-ec08-48b6-88b1-ec520a3ab749)
 
+### Original 
+
+![1_pinede_de_miho_hiroshige jpg](https://github.com/user-attachments/assets/671b158c-055e-4f67-afd6-e1fdc16acd73)
+
+### Converted
+
+<img width="1227" height="1890" alt="20-10-2025-pointillism" src="https://github.com/user-attachments/assets/375be4e3-5a17-47c7-98cd-058602e392dc" />
+
+
+
 ### Original (mondrian generation from my repo mondrian verse)
 ![mondrian-verse-24-09-2025-09-29](https://github.com/user-attachments/assets/a36f8171-75ea-42ce-a704-e51dc8773389)
 
