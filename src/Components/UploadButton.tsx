@@ -2,27 +2,25 @@ import React, { useState } from 'react';
 
 interface UploadButtonInterface {
   onChange: (imageBase64: string, width: number, height: number) => void;
-  imageBase64?: string;
+  imageBase64?: string
 }
 
 function UploadButton({ onChange, imageBase64 } : UploadButtonInterface): React.ReactElement {
-  const [preview, setPreview] = useState<string>("")
-
+  
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     if(event && event.target && event.target.files) {
       const imageBase64 = URL.createObjectURL(event.target.files[0]);
       onChange(imageBase64, event.target.width, event.target.height);
-      setPreview(imageBase64);
     }
   }
 
   return (
       <label className="w-full flex flex-col items-center px-4 py-6 bg-secondary text-primary rounded-lg shadow-lg tracking-wide uppercase border-2 border-primary transition duration-300 ease-in-out bg-opacity-40 cursor-pointer hover:bg-primary hover:text-neutral">
         {
-          preview !== "" ?
+          imageBase64 !== "" ?
             <div className="flex flex-col gap-1 items-center">
-              <img src={preview} width={96}/>
-              <label className="text-xs">Your image</label>
+              <img src={imageBase64} width={124}/>
+              <span> Click again to upload another image </span>
             </div> :
             <>
               <svg className="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
