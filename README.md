@@ -34,7 +34,7 @@ Convert any images to pointillism painting.
 
 
 
-### Original (mondrian generation from my repo mondrian verse)
+### Original (mondrian generation from [mondrian verse](https://github.com/guillaume-gomez/mondrian-verse))
 ![mondrian-verse-24-09-2025-09-29](https://github.com/user-attachments/assets/a36f8171-75ea-42ce-a704-e51dc8773389)
 
 ### converted 
