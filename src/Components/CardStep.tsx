@@ -1,4 +1,4 @@
-import React, { useRef, ReactNode, RefObject } from 'react';
+import React, { useRef, type ReactNode, type RefObject } from 'react';
 
 export interface CardStepInterface {
   toggleCard: () => void;

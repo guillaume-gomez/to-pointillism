@@ -2,10 +2,7 @@ import React from 'react';
 import SliderWithLabel from "./SliderWithLabel";
 import DataForm from "../reducers/usePointillismParams";
 
-interface BrushComponentInterface {
-}
-
-function BrushComponent(props : BrushComponentInterface): React.ReactElement {
+function BrushComponent(): React.ReactElement {
   const {
     brushStroke,
     setBrushStroke,

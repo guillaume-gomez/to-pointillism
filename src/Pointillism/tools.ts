@@ -1,4 +1,4 @@
-import { Mat } from "opencv-ts";
+import { type Mat } from "opencv-ts";
 import { shuffle, max, sum } from "lodash";
 import { bisect_left } from "aureooms-js-bisect";
 import { GPU } from "gpu.js";

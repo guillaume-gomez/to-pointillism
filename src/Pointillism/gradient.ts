@@ -1,4 +1,4 @@
-import cv, { Mat } from "opencv-ts";
+import cv, { type Mat } from "opencv-ts";
 
 // thickness brush has a value from 1 to 15.36
 export function createGradient(grey: Mat, thicknessBrush: number) : [Mat, Mat] {

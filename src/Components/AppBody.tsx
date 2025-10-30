@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Stepper from "./Stepper";
 import Loader from "./Loader";
 import CardStepImage from "./CardStepImage";

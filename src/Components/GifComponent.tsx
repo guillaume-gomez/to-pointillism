@@ -2,9 +2,7 @@ import React from 'react';
 import SliderWithLabel from "./SliderWithLabel";
 import DataForm from "../reducers/usePointillismParams";
 
-interface GifComponentInterface {}
-
-function GifComponent( props : GifComponentInterface): React.ReactElement {
+function GifComponent(): React.ReactElement {
     const {
     numberOfFramesGif,
     setNumberOfFramesGif,
