@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 interface UploadButtonInterface {
   onChange: (imageBase64: string, width: number, height: number) => void;
   imageBase64?: string
