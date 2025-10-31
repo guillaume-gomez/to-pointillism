@@ -970,6 +970,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/color-convert@npm:^2.0.4":
+  version: 2.0.4
+  resolution: "@types/color-convert@npm:2.0.4"
+  dependencies:
+    "@types/color-name": "npm:^1.1.0"
+  checksum: 10c0/fdd2cea0ccf593055c8d952760286a4c114ed72a9940798d13f159823bf71d40a6b124009865e2e066f062d6d5611b677ddb61fd0ed05f6494170454cc6457c2
+  languageName: node
+  linkType: hard
+
+"@types/color-name@npm:^1.1.0":
+  version: 1.1.5
+  resolution: "@types/color-name@npm:1.1.5"
+  checksum: 10c0/ce566d98ab1c2622a2e9d9d1d5cbde403e731a4fc084e8b0f56e89901cd3c46981feafb797d4505918d5eb5a7fd897fce2332d489f450ddf1c58bc4986bd9d76
+  languageName: node
+  linkType: hard
+
 "@types/estree@npm:1.0.8, @types/estree@npm:^1.0.6":
   version: 1.0.8
   resolution: "@types/estree@npm:1.0.8"
@@ -3983,6 +3999,7 @@ __metadata:
   dependencies:
     "@eslint/js": "npm:^9.36.0"
     "@tailwindcss/vite": "npm:^4.1.13"
+    "@types/color-convert": "npm:^2.0.4"
     "@types/lodash": "npm:^4.17.20"
     "@types/react": "npm:^19.1.13"
     "@types/react-dom": "npm:^19.1.9"

@@ -1,6 +1,6 @@
 {
   "name": "pointillism-converter",
-  "homepage": "./",
+  "homepage": "https://guillaume-gomez.github.io/to-pointillism/",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -10,10 +10,11 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "yarn run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.13",
+    "@types/color-convert": "^2.0.4",
     "@types/lodash": "^4.17.20",
     "aureooms-js-bisect": "^3.0.1",
     "autoprefixer": "^10",
