@@ -6,7 +6,7 @@ interface UploadButtonInterface {
 }
 
 function UploadButton({ onChange, imageBase64 } : UploadButtonInterface): React.ReactElement {
-  const [image, setImage] = useState<string>(imageBase64)
+  const [image, setImage] = useState<string | undefined >(imageBase64)
   
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     if(event && event.target && event.target.files) {

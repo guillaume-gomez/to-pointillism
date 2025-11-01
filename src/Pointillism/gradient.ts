@@ -11,8 +11,8 @@ export function createGradient(grey: Mat, thicknessBrush: number) : [Mat, Mat] {
   cv.Scharr(grey, dstX, cv.CV_32F, 1, 0, 1, 0, cv.BORDER_DEFAULT);
   cv.Scharr(grey, dstY, cv.CV_32F, 0, 1, 1, 0, cv.BORDER_DEFAULT);
 
-  const dstxDiv = cv.matFromArray(dstX.rows, dstX.cols, cv.CV_32F, divideByNumber(dstX.data32F, thicknessBrush));
-  const dstyDiv = cv.matFromArray(dstY.rows, dstY.cols, cv.CV_32F, divideByNumber(dstY.data32F, thicknessBrush));
+  const dstxDiv = cv.matFromArray(dstX.rows, dstX.cols, cv.CV_32F, divideByNumber(dstX.data32F as unknown as number[], thicknessBrush));
+  const dstyDiv = cv.matFromArray(dstY.rows, dstY.cols, cv.CV_32F, divideByNumber(dstY.data32F as unknown as number[], thicknessBrush));
   dstX.delete();
   dstY.delete();
   return [dstxDiv, dstyDiv];

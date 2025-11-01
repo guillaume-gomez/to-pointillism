@@ -1,4 +1,4 @@
-import React, { useRef, type RefObject } from 'react';
+import React, { useRef } from 'react';
 import { format as formatFns } from "date-fns";
 import CardStep, { type CardStepInterface } from "./CardStep";
 
@@ -10,12 +10,12 @@ interface CardStepGifInterface extends Omit<CardStepInterface, 'save'> {
 function CardStepGif({ toggleCard, title, collapsible, collapse, canvasId, gifParentId, children }: CardStepGifInterface): React.ReactElement {
   const refImage = useRef<HTMLImageElement>(null);
 
-  function saveGif(anchorRef: RefObject<HTMLAnchorElement>) {
+  function saveGif(anchor: HTMLAnchorElement) {
     // the image tag is insert and generated in computePointillismGif function (see pointillism)
-    if(refImage.current && anchorRef.current) {
+    if(refImage.current) {
       const dateString = formatFns(new Date(), "dd-MM-yyyy-hh-mm");
-      (anchorRef.current as any).download = `${dateString}-pointillism.gif`;
-      anchorRef.current.href = refImage.current.src;
+      anchor.download = `${dateString}-pointillism.gif`;
+      anchor.href = refImage.current.src;
     }
   }
 

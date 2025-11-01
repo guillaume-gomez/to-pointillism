@@ -34,7 +34,7 @@ export function generateRandomGrid(width: number, height: number, scale: number 
 }
 
 export function rangeOfPixels(image: Mat, grid: Array<[number, number]>, min: number, max: number ) : pixel[] {
-  return grid.slice(min, max).map(([col, row]) => image.ucharPtr(col, row) as pixel)
+  return grid.slice(min, max).map(([col, row]) => image.ucharPtr(col, row) as unknown as pixel)
 }
 
 
@@ -65,20 +65,23 @@ export function computeColorProbabilities(pixels: pixel[], palette: pixel[], k=9
   return cumulativeSum(distances);
 }
 
-function distance([x1, y1, z1]: pixel, [x2, y2, z2]: pixel): number {
-  return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2 + (z1 - z2) ** 2);
-}
 
-function arrayDist(array1: pixel[], array2: pixel[]) : number[][] {
-  let results = new Array(array1.length);
-  for(let i = 0; i < array1.length; i++) {
-    results[i] = new Array(array2.length);
-    for(let j = 0; j < array2.length; j++) {
-      results[i][j] = distance(array1[i], array2[j]);
-    }
-  }
-  return results;
-}
+// tool function only used in full vanilla js function
+// function distance([x1, y1, z1]: pixel, [x2, y2, z2]: pixel): number {
+//   return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2 + (z1 - z2) ** 2);
+// }
+
+// arrayDist full vanilla JS
+// function arrayDist(array1: pixel[], array2: pixel[]) : number[][] {
+//   let results = new Array(array1.length);
+//   for(let i = 0; i < array1.length; i++) {
+//     results[i] = new Array(array2.length);
+//     for(let j = 0; j < array2.length; j++) {
+//       results[i][j] = distance(array1[i], array2[j]);
+//     }
+//   }
+//   return results;
+// }
 
 // loop are made by gpu lib. Only Distance is rewritten
 const arrayDistGpu = gpu.createKernel(function(a: pixel[], b: pixel[]) {
@@ -97,13 +100,14 @@ function arrayMax(array: number[][]) : number[] {
   return results;
 }
 
-function subArray(a: number[], b: number[][]) : number[][] {
-  return b.map((arrayVal, index) => 
-    arrayVal.map(val =>
-      (a[index] - val)
-    )
-  );
-}
+// subArray full vanilla JS
+// function subArray(a: number[], b: number[][]) : number[][] {
+//   return b.map((arrayVal, index) => 
+//     arrayVal.map(val =>
+//       (a[index] - val)
+//     )
+//   );
+// }
 
 function subArrayMut(a: number[][], b: number[]) : void {
   for(let i = 0; i < a.length; ++i) {
@@ -113,13 +117,14 @@ function subArrayMut(a: number[][], b: number[]) : void {
   }
 }
 
-function divideArray(a: number[], b: number[][]) : number[][] {
-  return b.map((arrayVal, index) => 
-    arrayVal.map(val =>
-      ( val / a[index])
-    )
-  );
-}
+// divideArray full vanilla JS
+// function divideArray(a: number[], b: number[][]) : number[][] {
+//   return b.map((arrayVal, index) => 
+//     arrayVal.map(val =>
+//       ( val / a[index])
+//     )
+//   );
+// }
 
 function divideArrayMut(a: number[][], b: number[]) : void {
   for(let i = 0; i < a.length; ++i) {
@@ -129,13 +134,14 @@ function divideArrayMut(a: number[][], b: number[]) : void {
   }
 }
 
-function expArray(a: number, b: number[][]) : number[][] {
-  return b.map((arrayVal) => 
-    arrayVal.map(val =>
-       Math.exp(val * a)
-    )
-  );
-}
+// expArray full vanilla JS
+// function expArray(a: number, b: number[][]) : number[][] {
+//   return b.map((arrayVal) => 
+//     arrayVal.map(val =>
+//        Math.exp(val * a)
+//     )
+//   );
+// }
 
 function expArrayMut(a: number[][], b: number) {
   for(let i = 0; i < a.length; ++i) {

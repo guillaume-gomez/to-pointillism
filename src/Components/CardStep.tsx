@@ -1,11 +1,11 @@
-import React, { useRef, type ReactNode, type RefObject } from 'react';
+import React, { useRef, type ReactNode } from 'react';
 
 export interface CardStepInterface {
   toggleCard: () => void;
   title: string;
   collapsible: boolean;
   collapse: boolean;
-  save: (anchorRef: RefObject<HTMLAnchorElement>) => void;
+  save: (anchorRef: HTMLAnchorElement) => void;
   children?: ReactNode
 }
 
@@ -20,7 +20,7 @@ function CardStep({ toggleCard, title, collapsible, collapse, save, children }: 
       <div className="collapse-content flex flex-col justify-center items-center gap-3">
         {children}
         <div className="flex flex-row self-end">
-          <a ref={refA} className="btn btn-primary" onClick={ () => save(refA)}>Save</a>
+          <a ref={refA} className="btn btn-primary" onClick={ () => refA.current && save(refA.current)}>Save</a>
         </div>
       </div>
     </div>

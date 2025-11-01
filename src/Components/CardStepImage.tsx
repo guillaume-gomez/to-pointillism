@@ -1,4 +1,4 @@
-import React, { useRef, type RefObject } from 'react';
+import React, { useRef } from 'react';
 import { format as formatFns } from "date-fns";
 import CardStep, { type CardStepInterface } from "./CardStep";
 
@@ -10,12 +10,12 @@ interface CardStepImageInterface extends Omit<CardStepInterface, 'save'> {
 function CardStepImage({ toggleCard, title, canvasId, collapsible, collapse, format, children }: CardStepImageInterface): React.ReactElement {
   const refCanvas = useRef<HTMLCanvasElement>(null);
 
-  function saveImage(anchorRef: RefObject<HTMLAnchorElement>) {
-    if(refCanvas.current && anchorRef.current) {
+  function saveImage(anchor: HTMLAnchorElement) {
+    if(refCanvas.current) {
       const dataURL = refCanvas.current.toDataURL(`image/${format}`);
       const dateString = formatFns(new Date(), "dd-MM-yyyy-hh-mm");
-      (anchorRef.current as any).download = `${dateString}-pointillism.${format}`;
-      anchorRef.current.href = dataURL.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
+      anchor.download = `${dateString}-pointillism.${format}`;
+      anchor.href = dataURL.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
     }
   }
 
