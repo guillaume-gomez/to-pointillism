@@ -13,10 +13,11 @@ import DataForm from "../reducers/usePointillismParams";
 
 interface FormInterface {
   runAlgo: boolean;
-  loadImage: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  loadImage: (imageBase64: string, width: number, height: number) => void;
   validForm: boolean;
   submit: () => void;
   resetDefaultParams: () => void;
+  imageBase64?: string;
 }
 
 function Form({
@@ -24,7 +25,8 @@ function Form({
   loadImage,
   validForm,
   submit,
-  resetDefaultParams
+  resetDefaultParams,
+  imageBase64
 }: FormInterface): React.ReactElement {
   const { 
     smoothnessGradiant,
@@ -54,7 +56,7 @@ function Form({
       <div className="flex justify-center">
         <div className="flex flex-col items-center justify-center gap-8 py-4 w-4/5">
           <h2 className="flex text-3xl font-bold">Settings</h2>
-          <UploadButton onChange={loadImage} />
+          <UploadButton onChange={loadImage} imageBase64={imageBase64} />
           <SmoothnessSlider value={smoothnessGradiant} min={1 * 100} max={MAX_GRADIANT_SMOOTH_RATIO * 100} onChange={(value) => setSmoothnessGradiant(parseInt(value, 10))} />
           <ThicknessSlider value={brushThickness} min={1} max={20} onChange={(value) => setBrushThickness(parseInt(value, 10))} />
           <div className="w-full flex flex-col md:flex-row gap-5 items-center">
@@ -68,7 +70,7 @@ function Form({
               <span className="text-xs">Recommanded for heavy images on low configuration.</span>
             </div>
             <div className="w-full md:w-2/4 flex flex-col gap-2">
-              <select onChange={(e) =>setFormat(e.target.value)} value={format} className="select select-bordered select-primary max-w-xs text-primary bg-secondary bg-opacity-40">
+              <select onChange={(e) =>setFormat(e.target.value)} value={format} className="select select-bordered select-primary max-w-xs bg-secondary text-primary bg-opacity-40">
                 <option className="bg-secondary" disabled>Select output format</option>
                 <option className="bg-secondary" value="png">Png</option>
                 <option className="bg-secondary" value="jpeg">Jpeg</option>
@@ -96,7 +98,7 @@ function Form({
           </details>
           <div className="w-2/4 flex flex-col gap-5">
             <div className="flex flex-col">
-              <button className="btn btn-primary w-full h-16" disabled={!validForm} onClick={submit}>Generate</button>
+              <button className="btn btn-primary w-full h-16 uppercase text-lg" disabled={!validForm} onClick={submit}>Generate</button>
               <button className="self-end btn btn-link btn-xs italic opacity-80" onClick={resetDefaultParams}>Reset to default params</button>
             </div>
             <p className="text-xs text-center italic opacity-60">We don't collect or share images. Everything is done locally.</p>

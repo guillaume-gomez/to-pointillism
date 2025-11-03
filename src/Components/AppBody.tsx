@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Stepper from "./Stepper";
 import Loader from "./Loader";
 import CardStepImage from "./CardStepImage";
@@ -63,7 +63,6 @@ function AppBody() {
   } = DataForm.useContainer();
 
   const ref = useRef<HTMLImageElement>(null);
-  const refFinalResult = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState<string>("");
   const [validForm, setValidForm] = useState<boolean>(false);
   const [runAlgo, setRunAlgo] = useState<boolean>(false);
@@ -108,9 +107,11 @@ function AppBody() {
     if(visibilityCanvas[visibilityCanvas.length - 1] === false) {
       toggleCardStep(visibilityCanvas.length - 1);
     }
-
-    if(refFinalResult.current) {
-      refFinalResult.current.scrollIntoView({behavior: "smooth"});
+    const divTarget = document.getElementById('finalResult'); // point the canvases (on both format)
+    if(divTarget) {
+      setTimeout(() => {
+        divTarget.scrollIntoView({behavior: "smooth"});
+      }, 10);
     }
   }
 
@@ -130,13 +131,11 @@ function AppBody() {
   }
 
 
-  function loadImage(event: React.ChangeEvent<HTMLInputElement>) {
-    if(event && event.target && event.target.files && ref.current) {
-      ref.current.src = URL.createObjectURL(event.target.files[0]);
-      ref.current.onload =  (event: any) => {
-          const brushThickness = computeBrushThickness(event.target.width, event.target.height);
-          setBrushThickness(brushThickness)
-      };
+  function loadImage(imageBase64: string, width: number, height: number) {
+    const brushThickness = computeBrushThickness(width, height);
+    setBrushThickness(brushThickness);
+    if(ref.current) {
+      ref.current.src = imageBase64;
     }
   }
 
@@ -175,19 +174,17 @@ function AppBody() {
           switch(format) {
             case "gif":
               return (
-                <div className="w-full" key={id} ref={refFinalResult}>
-                  <CardStepGif
-                    toggleCard={() => toggleCardStep(index)}
-                    title={TITLE_FROM_CANVAS_IDS[index]}
-                    collapsible={validForm}
-                    collapse={visibilityCanvas[index]}
-                    canvasId={id}
-                    gifParentId={PARENT_GIF_ID}
-                  >
-                    {infoMessage}
-                    <p className="text-base font-semibold">⌛ Please wait for the gif to play before downloading it.</p>
-                  </CardStepGif>
-                </div>
+                <CardStepGif
+                  toggleCard={() => toggleCardStep(index)}
+                  title={TITLE_FROM_CANVAS_IDS[index]}
+                  collapsible={validForm}
+                  collapse={visibilityCanvas[index]}
+                  canvasId={id}
+                  gifParentId={PARENT_GIF_ID}
+                >
+                  {infoMessage}
+                  <p className="text-base font-semibold">⌛ Please wait for the gif to play before downloading it.</p>
+                </CardStepGif>
               );
             default:
               return (
@@ -223,12 +220,10 @@ function AppBody() {
   return (
       <div className="flex flex-col px-4 flex flex-col gap-5" >
         <div className="alert alert-warning">
-          <div>
-            <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-            </svg>
-            <span>The algorithm is resource intensive. So it may not finish on mobile phone or low configuration. Please consider using resize option.</span>
-          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+          <span>The algorithm is resource intensive. So it may not finish on mobile phone or low configuration. Please consider using resize option.</span>
         </div>
           {
             !openCVLoaded ?
@@ -240,6 +235,7 @@ function AppBody() {
               <Form
                 runAlgo={runAlgo}
                 loadImage={loadImage}
+                imageBase64={ref?.current?.src}
                 validForm={validForm}
                 submit={submit}
                 resetDefaultParams={resetDefaultParams}

@@ -2,10 +2,7 @@ import React from 'react';
 import SliderWithLabel from "./SliderWithLabel";
 import DataForm from "../reducers/usePointillismParams";
 
-interface ColorComponentInterface {
-}
-
-function ColorComponent(props : ColorComponentInterface): React.ReactElement {
+function ColorComponent(): React.ReactElement {
     const { 
     hue,
     setHue,

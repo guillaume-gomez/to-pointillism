@@ -1,7 +1,7 @@
-import { Mat } from "opencv-ts";
+import { type Mat } from "opencv-ts";
 import { range, reverse } from "lodash";
 import { colorSelect, rangeOfPixels, generateRandomGrid, computeColorProbabilities } from "./tools";
-import { generateColorPalette, drawPalette, extendPalette, pixel } from "./palette";
+import { generateColorPalette, drawPalette, extendPalette, type pixel } from "./palette";
 import { toGray, resizeWithRatio } from "./imageProcessingTool";
 import { createGradient, smooth, direction, magnitude } from "./gradient";
 import gifShot from "gifshot";

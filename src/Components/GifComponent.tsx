@@ -2,9 +2,7 @@ import React from 'react';
 import SliderWithLabel from "./SliderWithLabel";
 import DataForm from "../reducers/usePointillismParams";
 
-interface GifComponentInterface {}
-
-function GifComponent( props : GifComponentInterface): React.ReactElement {
+function GifComponent(): React.ReactElement {
     const {
     numberOfFramesGif,
     setNumberOfFramesGif,
@@ -26,7 +24,7 @@ function GifComponent( props : GifComponentInterface): React.ReactElement {
             <select
               onChange={(e) =>setChangingBrushStrokeGif(parseInt(e.target.value))}
               value={changingBrushStrokeGif}
-              className="select select-bordered select-primary max-w-xs text-black bg-opacity-40"
+              className="select select-bordered select-primary max-w-xs bg-secondary text-primary bg-opacity-40"
               >
               <option className="bg-primary" value="0">keep it as it is</option>
               <option className="bg-primary" value="1">Increase</option>

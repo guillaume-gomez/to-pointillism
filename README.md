@@ -4,13 +4,53 @@ Convert any images to pointillism painting.
 
 [Try by yourself 🙂 ](https://guillaume-gomez.github.io/to-pointillism/) 
 
-## Example
+## Examples
 
-### Original
+### Original (Avignon bridge)
 <img src="samples/original.jpeg" width="50%">
 
-### Converted
+### Converted (Avignon bridge)
 <img src="samples/to-pointillism.jpeg" width="50%">
+
+### Original (Caravaggio)
+
+![CaravaggioTheIncredulityofSaintThomasc1601FineGicleePrint-thumb-1136806315](https://github.com/user-attachments/assets/5f655fbc-dc32-4364-99a2-9848db9c5ec9)
+
+### Converted (Caravaggio)
+
+<img width="2400" height="1600" alt="22-09-2025-01-18-pointillism" src="https://github.com/user-attachments/assets/b8da7f35-98db-438b-8152-9505fa1bf833" />
+
+### Converted (as gif)
+
+[caravaggio-gif.webm](https://github.com/user-attachments/assets/31b8941c-ec08-48b6-88b1-ec520a3ab749)
+
+### Original 
+
+![1_pinede_de_miho_hiroshige jpg](https://github.com/user-attachments/assets/671b158c-055e-4f67-afd6-e1fdc16acd73)
+
+### Converted
+
+<img width="1227" height="1890" alt="20-10-2025-pointillism" src="https://github.com/user-attachments/assets/375be4e3-5a17-47c7-98cd-058602e392dc" />
+
+
+
+### Original (mondrian generation from [mondrian verse](https://github.com/guillaume-gomez/mondrian-verse))
+![mondrian-verse-24-09-2025-09-29](https://github.com/user-attachments/assets/a36f8171-75ea-42ce-a704-e51dc8773389)
+
+### converted 
+
+![25-09-2025-09-33-pointillism_no_change](https://github.com/user-attachments/assets/e5a411d5-2bab-4e01-8309-4e6781edab3d)
+
+### converted (with opacity)
+
+![25-09-2025-09-33-pointillism_with_opacity](https://github.com/user-attachments/assets/7e310d8c-748d-4e80-a7c1-ea2ad120006b)
+
+### Original (Soulages)
+![thumb_large](https://github.com/user-attachments/assets/347e1328-5631-45a6-a48b-83f71ecc5369)
+
+### Converted
+
+[22-09-2025-01-14-pointillism.webm](https://github.com/user-attachments/assets/8349c797-26f2-4433-979c-63f33fdaa500)
 
 ## references
 

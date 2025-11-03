@@ -18,7 +18,7 @@ function SmoothnessSlider({ value, onChange, min = 1, max = 100 } : SmoothnessSl
       <Slider value={value} onChange={onChange} min={min} max={max} step={1}/>
       <div className="flex justify-between">
         <span className="text-xs">The more the algorithm is artistic, the more it will apply distortion on base image.</span>
-        <span className="badge badge-lg">{value}</span>
+        <span className="badge badge-secondary badge-lg">{value}</span>
       </div>
    </div>
   );
