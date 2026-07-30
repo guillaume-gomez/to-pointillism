@@ -85,11 +85,9 @@ function Form({
               <PaletteSizeSlider value={paletteSize} onChange={(value) => setPaletteSize(parseInt(value, 10))}/>
               <ColorComponent />
             </div>
-            {format !== "gif" ?
-              <div className="flex flex-col gap-8 pt-4">
-                <BrushComponent/>
-              </div> : <></>
-            }
+            <div className="flex flex-col gap-8 pt-4">
+              <BrushComponent/>
+            </div>
             {format === "gif" ?
               <div className="flex flex-col gap-8 pt-4">
                 <GifComponent/>
